@@ -1,11 +1,9 @@
-import {
-  Gauge,
-} from "lucide-react";
+import { Gauge } from "lucide-react";
 
 export const adminSidebarData = [
   {
     routeNames: ["/admin/dashboard"],
-    name: "title.dashboard",
+    name: "Dashboard",
     icon: Gauge,
   },
   {

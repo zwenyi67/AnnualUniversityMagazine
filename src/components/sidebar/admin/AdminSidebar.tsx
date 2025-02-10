@@ -2,6 +2,7 @@ import { ChevronRightIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { adminSidebarData } from "./adminSidebarData";
+import { SidebarItemType, SidebarSubItemType } from "../type";
 
 const AdminSidebar = () => {
   const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
@@ -11,15 +12,14 @@ const AdminSidebar = () => {
       ...prev,
       [itemName]: !prev[itemName],
     }));
-
   };
 
-  const ActiveMainMenu = (item: any): string => {
+  const ActiveMainMenu = (item: SidebarItemType): string => {
     const currentPath = window.location.pathname;
 
     // Check if any submenu is active
     if (item.subMenu) {
-      const isSubMenuActive = item.subMenu.some((subMenu: any) =>
+      const isSubMenuActive = item.subMenu.some((subMenu: SidebarSubItemType) =>
         subMenu.routeNames.some((path: string) => currentPath.startsWith(path))
       );
 
@@ -42,7 +42,6 @@ const AdminSidebar = () => {
     return "";
   };
 
-
   const ActiveSubMenu = (paths: string[]): string => {
     const currentPath = window.location.pathname;
 
@@ -59,19 +58,19 @@ const AdminSidebar = () => {
     return "";
   };
 
-
   return (
     <div className="h-full">
       <div className="px-3">
         {adminSidebarData.map((item) => (
-          <div
-            key={item.name}
-            className={`flex flex-col`}>
-            <div className={`p-2 rounded-sm cursor-pointer ${ActiveMainMenu(item)} 
-            ${openSubMenus[item.name] ? "" : "hover:bg-accent mb-3"}`}>
+          <div key={item.name} className={`flex flex-col`}>
+            <div
+              className={`p-2 rounded-sm cursor-pointer ${ActiveMainMenu(item)} 
+            ${openSubMenus[item.name] ? "" : "hover:bg-accent mb-3"}`}
+            >
               {/* Main Menu */}
               {item.routeNames[0] === "" ? (
-                <div className="flex items-center justify-between"
+                <div
+                  className="flex items-center justify-between"
                   onClick={() => toggleSubMenu(item.name)}
                 >
                   <div className="flex items-center gap-2">
@@ -79,8 +78,9 @@ const AdminSidebar = () => {
                     <p className="text-[13px]">{item.name}</p>
                   </div>
                   <ChevronRightIcon
-                    className={`w-4 h-4 transform transition-transform ${openSubMenus[item.name] ? "rotate-90" : ""
-                      }`}
+                    className={`w-4 h-4 transform transition-transform ${
+                      openSubMenus[item.name] ? "rotate-90" : ""
+                    }`}
                   />
                 </div>
               ) : (
@@ -100,7 +100,9 @@ const AdminSidebar = () => {
                 {item.subMenu.map((subItem) => (
                   <div
                     key={subItem.name}
-                    className={`p-2 flex flex-col rounded-sm cursor-pointer mt-2 ${ActiveSubMenu(subItem.routeNames)} hover:bg-accent`}
+                    className={`p-2 flex flex-col rounded-sm cursor-pointer mt-2 ${ActiveSubMenu(
+                      subItem.routeNames
+                    )} hover:bg-accent`}
                   >
                     <NavLink to={subItem.routeNames[0]}>
                       <div className="flex items-center justify-between">

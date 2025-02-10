@@ -66,7 +66,6 @@ const LoginView = () => {
   //   },
   // });
 
-
   // async function onSubmit(data: z.infer<typeof FormSchema>) {
   //   // loginUser(data);
   //   userLogin("data.token", "data.role");
@@ -85,8 +84,7 @@ const LoginView = () => {
     <div className="">
       <div className="absolute top-0 left-0 z-10 flex items-center justify-center flex-col w-full h-screen bg-transparent p-2">
         <div className="w-[90vw] p-6 md:p-10 md:px-12 gap-1 flex flex-col items-center justify-center max-w-[480px] my-auto">
-          <div className="w-[200px] h-[80px] mb-4">
-          </div>
+          <div className="w-[200px] h-[80px] mb-4"></div>
 
           <Form {...form}>
             <form
