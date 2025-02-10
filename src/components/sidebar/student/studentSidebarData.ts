@@ -2,9 +2,9 @@ import {
   Gauge,
 } from "lucide-react";
 
-export const sidebarData = [
+export const studentSidebarData = [
   {
-    routeNames: ["/dashboard"],
+    routeNames: ["/student/dashboard"],
     name: "title.dashboard",
     icon: Gauge,
   },
@@ -14,12 +14,12 @@ export const sidebarData = [
     icon: Gauge,
     subMenu: [
       {
-        routeNames: ["/menu1"],
+        routeNames: ["/student/menu1"],
         name: "Menu 1",
         icon: Gauge,
       },
       {
-        routeNames: ["/menu2"],
+        routeNames: ["/student/menu2"],
         name: "Menu 2",
         icon: Gauge,
       },

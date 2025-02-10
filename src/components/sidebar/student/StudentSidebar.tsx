@@ -1,10 +1,9 @@
-import { sidebarData } from "@/components/sidebar/sidebarData";
-import { t } from "i18next";
 import { ChevronRightIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { studentSidebarData } from "./studentSidebarData";
 
-const Sidebar = () => {
+const StudentSidebar = () => {
   const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
 
   const toggleSubMenu = (itemName: string) => {
@@ -64,7 +63,7 @@ const Sidebar = () => {
   return (
     <div className="h-full">
       <div className="px-3">
-        {sidebarData.map((item) => (
+        {studentSidebarData.map((item) => (
           <div
             key={item.name}
             className={`flex flex-col`}>
@@ -77,7 +76,7 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center gap-2">
                     {item.icon && <item.icon className="w-4 h-4" />}
-                    <p className="text-[13px]">{t(item.name)}</p>
+                    <p className="text-[13px]">{item.name}</p>
                   </div>
                   <ChevronRightIcon
                     className={`w-4 h-4 transform transition-transform ${openSubMenus[item.name] ? "rotate-90" : ""
@@ -89,7 +88,7 @@ const Sidebar = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {item.icon && <item.icon className="w-4 h-4" />}
-                      <p className="text-[13px]">{t(item.name)}</p>
+                      <p className="text-[13px]">{item.name}</p>
                     </div>
                   </div>
                 </NavLink>
@@ -107,7 +106,7 @@ const Sidebar = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           {subItem.icon && <subItem.icon className="w-4 h-4" />}
-                          <p className="text-[13px]">{t(subItem.name)}</p>
+                          <p className="text-[13px]">{subItem.name}</p>
                         </div>
                       </div>
                     </NavLink>
@@ -122,4 +121,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default StudentSidebar;

@@ -16,14 +16,23 @@ import LoginView from "@/modules/auth/login/LoginView";
 import NotFoundView from "@/modules/not-found/NotFoundView";
 
 import ErrorView from "@/modules/error/ErrorView";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import DashboardView from "@/modules/dashboard/DashboardView";
 import Menu1View from "@/modules/dropdown/Menu1View";
+import AdminLayout from "@/layouts/AdminLayout";
+import StudentLayout from "@/layouts/StudentLayout";
+import CoordinatorLayout from "@/layouts/CoordinatorLayout";
+import ManagerLayout from "@/layouts/ManagerLayout";
+import GuestLayout from "@/layouts/GuestLayout";
+import AdminDashboardView from "@/modules/admin/dashboard/AdminDashboardView";
+import ManagerDashboardView from "@/modules/manager/dashboard/ManagerDashboardView";
+import CoordinatorDashboardView from "@/modules/coordinator/dashboard/CoordinatorDashboardView";
+import StudentDashboardView from "@/modules/student/dashboard/StudentDashboardView";
+import HomeView from "@/modules/guest/home/HomeView";
 
 const router = createBrowserRouter([
   {
+    // Guest Layout
     path: "/",
-    element: <DefaultLayout />,
+    element: <GuestLayout />,
     errorElement: <ErrorView />,
     children: [
       {
@@ -33,7 +42,107 @@ const router = createBrowserRouter([
       // Dashboard Start
       {
         path: "dashboard",
-        element: <DashboardView />,
+        element: <HomeView />,
+      },
+      {
+        path: "menu1",
+        element: <Menu1View />,
+      },
+      {
+        path: "menu2",
+        element: <Menu1View />,
+      },
+    ],
+  },
+  {
+    // Admin Layout
+    path: "/admin",
+    element: <AdminLayout />,
+    errorElement: <ErrorView />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" replace />,
+      },
+      // Dashboard Start
+      {
+        path: "dashboard",
+        element: <AdminDashboardView />,
+      },
+      {
+        path: "menu1",
+        element: <Menu1View />,
+      },
+      {
+        path: "menu2",
+        element: <Menu1View />,
+      },
+    ],
+  },
+  {
+    // Manager Layout
+    path: "/manager",
+    element: <ManagerLayout />,
+    errorElement: <ErrorView />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" replace />,
+      },
+      // Dashboard Start
+      {
+        path: "dashboard",
+        element: <ManagerDashboardView />,
+      },
+      {
+        path: "menu1",
+        element: <Menu1View />,
+      },
+      {
+        path: "menu2",
+        element: <Menu1View />,
+      },
+    ],
+  },
+  {
+    // Coordinator Layout
+    path: "/coordinator",
+    element: <CoordinatorLayout />,
+    errorElement: <ErrorView />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" replace />,
+      },
+      // Dashboard Start
+      {
+        path: "dashboard",
+        element: <CoordinatorDashboardView />,
+      },
+      {
+        path: "menu1",
+        element: <Menu1View />,
+      },
+      {
+        path: "menu2",
+        element: <Menu1View />,
+      },
+    ],
+  },
+  {
+    // Student 
+    path: "/student",
+    element: <StudentLayout />,
+    errorElement: <ErrorView />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" replace />,
+      },
+      // Dashboard Start
+      {
+        path: "dashboard",
+        element: <StudentDashboardView />,
       },
       {
         path: "menu1",

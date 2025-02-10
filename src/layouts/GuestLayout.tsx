@@ -4,10 +4,10 @@ import ProfileBox from "./common/ProfileBox";
 import { useState } from "react";
 import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import Sidebar from "@/components/sidebar/Sidebar";
+import GuestSidebar from "@/components/sidebar/guest/GuestSidebar";
 
-const DefaultLayout = () => {
-  const { isAuthenticated } = useAuth();
+const GuestLayout = () => {
+  const { isAuthenticated, role } = useAuth();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -16,6 +16,24 @@ const DefaultLayout = () => {
   if (!isAuthenticated) {
     return <Navigate to={"/auth/login"} state={{ from: location }} replace />;
   }
+
+  if (role === "admin" ) {
+    return <Navigate to="/admin/dashboard" />;
+  }
+
+  if (role === "manager" ) {
+    return <Navigate to="/manager/dashboard" />;
+  }
+
+  if (role === "student" ) {
+    return <Navigate to="/stuent/dashboard" />;
+  }
+
+  if (role === "coordinator" ) {
+    return <Navigate to="/coordinator/dashboard" />;
+  }
+
+  
 
   return (
     <div className="h-screen flex overflow-hidden">
@@ -27,7 +45,7 @@ const DefaultLayout = () => {
           <div className="flex flex-col items-center justify-center h-20">
             <div className="">Template</div>
           </div>
-          <Sidebar />
+          <GuestSidebar />
         </div>
       </div>
 
@@ -44,7 +62,7 @@ const DefaultLayout = () => {
               </button>
             </div>
             <div>
-              <Sidebar />
+              <GuestSidebar />
             </div>
           </div>
         </div>
@@ -80,4 +98,4 @@ const DefaultLayout = () => {
   );
 };
 
-export default DefaultLayout;
+export default GuestLayout;
