@@ -48,3 +48,10 @@ export default tseslint.config({
   },
 })
 ```
+
+## Setups
+1. Install [`pnpm`](https://pnpm.io/installation)
+
+## To start
+1. Run `pnpm install` from the root of the project.
+2. Run `pnpm dev` to start the development server.

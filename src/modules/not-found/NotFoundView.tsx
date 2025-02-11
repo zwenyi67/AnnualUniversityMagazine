@@ -4,11 +4,27 @@ import { useNavigate } from "react-router-dom";
 
 const NotFoundView = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
 
 
   const back = () => {
-    if (isAuthenticated) {
+    if (isAuthenticated && role === "admin") {
+      navigate('/admin/dashboard')
+    }
+
+    if (isAuthenticated && role === "manager") {
+      navigate('/manager/dashboard')
+    }
+
+    if (isAuthenticated && role === "coordinator") {
+      navigate('/coordinator/dashboard')
+    }
+
+    if (isAuthenticated && role === "student") {
+      navigate('/student/dashboard')
+    }
+
+    if (isAuthenticated && role === "guest") {
       navigate('/')
     }
 

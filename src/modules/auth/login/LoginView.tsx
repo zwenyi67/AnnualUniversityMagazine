@@ -75,7 +75,9 @@ const LoginView = () => {
 
   async function onSubmit() {
     // loginUser(data);
-    userLogin("data.token", "data.role");
+    // Role -> admin, manager, coordinator, student, guest
+    // please insert the role in second param
+    userLogin("data.token", "admin");
     navigate("/", { replace: true });
   }
 

@@ -8,7 +8,7 @@ const Menu1View = () => {
       </section>
     );
   };
-  
+
   
   export default Menu1View;
   
