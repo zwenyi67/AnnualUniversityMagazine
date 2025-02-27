@@ -11,5 +11,5 @@ export type TimeChoiceType = {
 
 export interface TimeStamps {
   created_at: string;
-  updated_at: string;
+  updated_at?: string;
 }

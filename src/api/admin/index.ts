@@ -1,62 +1,243 @@
-import type { FileUploadResponse, LoginPayload, LoginResponse } from "./types"
-
-import { useMutation, UseMutationOptions } from "@tanstack/react-query"
+import { useMutation, UseMutationOptions, useQuery, UseQueryOptions } from "@tanstack/react-query"
 import axios from "axios"
+import { AddFacultyPayloadType, AddManagerPayloadType, GetFacultiesType, getManagersType, PostResponse, UpdateFacultyPayloadType, UpdateManagerPayloadType } from "./types";
 
-const BASE_URL = "/authorization"
+const Faculty_URL = "/admin/faculties"
+const Manager_URL = "/admin/manager-users"
 
-export const loginMutation = {
+  export const getManagers = {
+	useQuery: (opt?: UseQueryOptions<getManagersType[], Error>) =>
+	  useQuery<getManagersType[], Error>({
+		queryKey: ["getManagers"],
+		queryFn: async () => {
+		  const response = await axios.get(`${Manager_URL}`);
+  
+		  const { data, status, message } = response.data;
+  
+		  if (status !== 0) {
+			throw new Error(message);
+		  }
+  
+		  return data;
+		},
+		throwOnError: true,
+		...opt,
+	  }),
+  };
+
+  export const addManager = {
 	useMutation: (
-		opt?: UseMutationOptions<LoginResponse, Error, LoginPayload, void>
-	) =>
-		useMutation({
-			mutationKey: ["login"],
-			mutationFn: async (payload: LoginPayload) => {
-				const response = await axios.post(`${BASE_URL}/login`, payload);
+	  opt?: UseMutationOptions<
+		PostResponse,
+		Error,
+		AddManagerPayloadType,
+		unknown
+	  >
+	) => {
+	  return useMutation({
+		mutationKey: ["addManager"],
+		mutationFn: async (payload: AddManagerPayloadType) => {
+		  const response = await axios.post(
+			`${Manager_URL}/create`,
+			payload
+		  )
+  
+		  const { data, status, message } = response.data
+  
+		  if (status !== 0) {
+			throw new Error(
+			  message ||
+			  "An error occurred while processing the request."
+			)
+		  }
+  
+		  return data
+		},
+		...opt,
+	  })
+	},
+  }
 
-				const { data, status, message } = response.data;
-
-				if (status !== 0) {
-					throw new Error(
-					  message || "An error occurred while processing the request."
-					);
-				  }
-		  
-				  return data;
-
-				// return success now (don't have login api)
-				// return {
-				// 	token: "fake-token",
-				// }
-			},
-			...opt, // additional options
-		}),
-}
-
-export const uploadFileDocument = {
+  export const updateManager = {
 	useMutation: (
-		opt?: UseMutationOptions<FileUploadResponse, Error, File, void>
-	) =>
-		useMutation({
-			mutationKey: ["uploadFileDocument"],
-			mutationFn: async (file: File) => {
-				const formData = new FormData()
+	  opt?: UseMutationOptions<
+		PostResponse,
+		Error,
+		UpdateManagerPayloadType,
+		unknown
+	  >
+	) => {
+	  return useMutation({
+		mutationKey: ["updateManager"],
+		mutationFn: async (payload: UpdateManagerPayloadType) => {
+		  const response = await axios.post(
+			`${Manager_URL}/edit`,
+			payload
+		  )
+  
+		  const { data, status, message } = response.data
+  
+		  if (status !== 0) {
+			throw new Error(
+			  message ||
+			  "An error occurred while processing the request."
+			)
+		  }
+  
+		  return data
+		},
+		...opt,
+	  })
+	},
+  }
 
-				const blob = new Blob([file], {
-					type: file.type,
-				})
-				formData.append("file", blob, file.name)
+  export const deleteManager = {
+	useMutation: (
+	  opt?: UseMutationOptions<
+		PostResponse,
+		Error,
+		number,
+		unknown
+	  >
+	) => {
+	  return useMutation({
+		mutationKey: ["deleteManager"],
+		mutationFn: async (id: number) => {
+		  const response = await axios.post(
+			`${Manager_URL}/${id}/delete`
+		  );
+  
+		  const { data, status, message } = response.data;
+  
+		  if (status !== 0) {
+			throw new Error(
+			  message || "An error occurred while processing the request."
+			);
+		  }
+  
+		  return data;
+		},
+		...opt,
+	  });
+	},
+  };
 
-				const response = await axios.post(
-					`${BASE_URL}/UploadFileDocument`,
-					formData
-				)
 
-				if (response.status !== 200) throw new Error()
 
-				return response.data
-			},
-			throwOnError: true,
-			...opt,
-		}),
-}
+
+export const getFaculties = {
+	useQuery: (opt?: UseQueryOptions<GetFacultiesType[], Error>) =>
+	  useQuery<GetFacultiesType[], Error>({
+		queryKey: ["getFaculties"],
+		queryFn: async () => {
+		  const response = await axios.get(`${Faculty_URL}`);
+  
+		  const { data, status, message } = response.data;
+  
+		  if (status !== 0) {
+			throw new Error(message);
+		  }
+  
+		  return data;
+		},
+		throwOnError: true,
+		...opt,
+	  }),
+  };
+  
+  export const addFaculty = {
+	useMutation: (
+	  opt?: UseMutationOptions<
+		PostResponse,
+		Error,
+		AddFacultyPayloadType,
+		unknown
+	  >
+	) => {
+	  return useMutation({
+		mutationKey: ["addFaculty"],
+		mutationFn: async (payload: AddFacultyPayloadType) => {
+		  const response = await axios.post(
+			`${Faculty_URL}/create`,
+			payload
+		  )
+  
+		  const { data, status, message } = response.data
+  
+		  if (status !== 0) {
+			throw new Error(
+			  message ||
+			  "An error occurred while processing the request."
+			)
+		  }
+  
+		  return data
+		},
+		...opt,
+	  })
+	},
+  }
+  
+  export const updateFaculty = {
+	useMutation: (
+	  opt?: UseMutationOptions<
+		PostResponse,
+		Error,
+		UpdateFacultyPayloadType,
+		unknown
+	  >
+	) => {
+	  return useMutation({
+		mutationKey: ["updateFaculty"],
+		mutationFn: async (payload: UpdateFacultyPayloadType) => {
+		  const response = await axios.post(
+			`${Faculty_URL}/edit`,
+			payload
+		  )
+  
+		  const { data, status, message } = response.data
+  
+		  if (status !== 0) {
+			throw new Error(
+			  message ||
+			  "An error occurred while processing the request."
+			)
+		  }
+  
+		  return data
+		},
+		...opt,
+	  })
+	},
+  }
+  
+  export const deleteFaculty = {
+	useMutation: (
+	  opt?: UseMutationOptions<
+		PostResponse,
+		Error,
+		number,
+		unknown
+	  >
+	) => {
+	  return useMutation({
+		mutationKey: ["deleteFaculty"],
+		mutationFn: async (id: number) => {
+		  const response = await axios.post(
+			`${Faculty_URL}/${id}/delete`
+		  );
+  
+		  const { data, status, message } = response.data;
+  
+		  if (status !== 0) {
+			throw new Error(
+			  message || "An error occurred while processing the request."
+			);
+		  }
+  
+		  return data;
+		},
+		...opt,
+	  });
+	},
+  };

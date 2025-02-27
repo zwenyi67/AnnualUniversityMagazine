@@ -27,6 +27,10 @@ import ManagerDashboardView from "@/modules/manager/dashboard/ManagerDashboardVi
 import CoordinatorDashboardView from "@/modules/coordinator/dashboard/CoordinatorDashboardView";
 import StudentDashboardView from "@/modules/student/dashboard/StudentDashboardView";
 import HomeView from "@/modules/guest/home/HomeView";
+import ManagerView from "@/modules/admin/user-management/manager/ManagerView";
+import FacultyView from "@/modules/admin/faculty-management/faculty/FacultyView";
+import FacultyFormView from "@/modules/admin/faculty-management/faculty/FacultyFormView";
+import ManagerFormView from "@/modules/admin/user-management/manager/ManagerFormView";
 
 const router = createBrowserRouter([
   {
@@ -69,13 +73,50 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: <AdminDashboardView />,
       },
+      // User Management 
+      // Admin
+      // {
+      //   path: "user-management/admins",
+      //   element: <AdminView />,
+      // },
+      // Manager
       {
-        path: "menu1",
-        element: <Menu1View />,
+        path: "user-management/managers",
+        element: <ManagerView />,
       },
       {
-        path: "menu2",
-        element: <Menu1View />,
+        path: "user-management/managers/create",
+        element: <ManagerFormView />,
+      },
+      // Coordinator
+      // {
+      //   path: "user-management/coordinators",
+      //   element: <CoordinatorView />,
+      // },
+      // Student
+      // {
+      //   path: "user-management/students",
+      //   element: <StudentView />,
+      // },
+      // Guest
+      // {
+      //   path: "user-management/guests",
+      //   element: <AdminView />,
+      // },
+      // User Management End
+
+      // Faculty Management
+      {
+        path: "faculty-management/faculties",
+        element: <FacultyView />,
+      },
+      {
+        path: "faculty-management/faculties/create",
+        element: <FacultyFormView />,
+      },
+      {
+        path: "faculty-management/faculties/:id/edit",
+        element: <FacultyFormView />,
       },
     ],
   },

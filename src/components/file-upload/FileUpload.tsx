@@ -9,7 +9,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { Button } from "../ui/button";
 import { PDFViewer } from "../viewers";
@@ -38,7 +37,6 @@ const FileUpload = ({
   fileUrl,
   setFileUrl,
 }: FileUploadType) => {
-  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -204,12 +202,12 @@ const FileUpload = ({
                             variant="link"
                             className="text-secondary p-0 text-xs"
                           >
-                            {t("common.preview")}
+                            {"Preview"}
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[600px] bg-white">
                           <DialogHeader>
-                            <DialogTitle>{t("common.preview")}</DialogTitle>
+                            <DialogTitle>{"Preview"}</DialogTitle>
                             <DialogDescription className="flex items-center gap-2">
                               {fileName} | {fileSize}
                             </DialogDescription>
@@ -219,7 +217,7 @@ const FileUpload = ({
                           </div>
                           <DialogFooter>
                             <DialogClose asChild>
-                              <Button type="button">{t("common.close")}</Button>
+                              <Button type="button">{"Close"}</Button>
                             </DialogClose>
                           </DialogFooter>
                         </DialogContent>
@@ -244,10 +242,10 @@ const FileUpload = ({
                 strokeWidth={"1"}
               />
               <p className="px-1 text-sm text-center">
-                {t("upload.select-or-drag-and-drop-here")}
+              {"Select Or Drag and Drop"}
               </p>
               <p className="text-xs text-center px-3 text-[#666]">
-                {t("upload.image-pdf-type-less-than-10mb")}
+              {"Upload Image"}
               </p>
               <Button
                 type="button"
@@ -255,7 +253,7 @@ const FileUpload = ({
                 className="border-secondary text-secondary hover:text-secondary/80 active:text-secondary/80 mt-3"
                 onClick={handleSelectFile}
               >
-                {t("common.select-file")}
+                {"Select File"}
               </Button>
             </div>
           )}

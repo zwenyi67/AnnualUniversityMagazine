@@ -1,4 +1,4 @@
-import { Gauge } from "lucide-react";
+import { Gauge, School, User, Users } from "lucide-react";
 
 export const adminSidebarData = [
   {
@@ -8,19 +8,39 @@ export const adminSidebarData = [
   },
   {
     routeNames: [""],
-    name: "DropDown Menu",
-    icon: Gauge,
+    name: "User Management",
+    icon: Users,
     subMenu: [
       {
-        routeNames: ["/admin/menu1"],
-        name: "Menu 1",
-        icon: Gauge,
+        routeNames: ["/admin/user-management/admins"],
+        name: "Admin",
+        icon: User,
       },
       {
-        routeNames: ["/admin/menu2"],
-        name: "Menu 2",
-        icon: Gauge,
+        routeNames: ["/admin/user-management/managers"],
+        name: "Manager",
+        icon: User,
+      },
+      {
+        routeNames: ["/admin/user-management/coordinators"],
+        name: "Coordinator",
+        icon: User,
+      },
+      {
+        routeNames: ["/admin/user-management/students"],
+        name: "Student",
+        icon: User,
+      },
+      {
+        routeNames: ["/admin/user-management/guests"],
+        name: "Guest",
+        icon: User,
       },
     ],
+  },
+  {
+    routeNames: ["/admin/faculty-management/faculties"],
+    name: "Faculty Management",
+    icon: School,
   },
 ];

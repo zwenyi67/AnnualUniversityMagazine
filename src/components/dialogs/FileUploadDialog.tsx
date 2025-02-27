@@ -11,7 +11,6 @@ import {
 	useRef,
 	useState,
 } from "react"
-import { useTranslation } from "react-i18next"
 import { useDispatch } from "react-redux"
 import { Button } from "../ui/button"
 import { PDFViewer } from "../viewers"
@@ -27,7 +26,6 @@ const FileUploadDialog = ({
 	children,
 	onFileUpload,
 }: FileUploadDialogType) => {
-	const { t } = useTranslation()
 	const dispatch = useDispatch()
 
 	const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -144,22 +142,22 @@ const FileUploadDialog = ({
 						) : (
 							<div className="min-h-[320px] flex flex-col items-center justify-center gap-2">
 								<p className="px-1 text-sm text-center">
-									{t("upload.select-or-drag-and-drop-here")}
+									{"Select Or Drag and Drop"}
 								</p>
 								<p className="text-xs text-center px-3 text-[#666]">
-									{t("upload.image-pdf-type-less-than-10mb")}
+									{"Upload Image"}
 								</p>
 								<Button
 									variant="outline"
 									className="border-secondary text-secondary hover:text-secondary/80 active:text-secondary/80 mt-3"
 									onClick={handleSelectFile}
 								>
-									{t("common.select-file")}
+									{"select file"}
 								</Button>
 							</div>
 						)}
 					</div>
-					<Button onClick={handleUpload}>{t("common.upload")}</Button>
+					<Button onClick={handleUpload}>{"upload"}</Button>
 				</div>
 			</DialogContent>
 

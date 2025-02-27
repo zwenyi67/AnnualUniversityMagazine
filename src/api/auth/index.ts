@@ -3,7 +3,7 @@ import type { FileUploadResponse, LoginPayload, LoginResponse } from "./types"
 import { useMutation, UseMutationOptions } from "@tanstack/react-query"
 import axios from "axios"
 
-const BASE_URL = "/authorization"
+const BASE_URL = "/auth"
 
 export const loginMutation = {
 	useMutation: (
