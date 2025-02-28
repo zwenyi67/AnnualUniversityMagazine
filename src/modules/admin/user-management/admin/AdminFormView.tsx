@@ -41,9 +41,8 @@ export default function ManagerFormView() {
   const item: AddManagerPayloadType = id
     ? { ...passedData }
     : {
-      first_name: "",
-      last_name: "",
-      email: "",
+      name: "",
+      description: "",
       createby: 1,
     };
 
@@ -52,7 +51,6 @@ export default function ManagerFormView() {
     defaultValues: {
       first_name: item?.first_name || "",
       last_name: item?.last_name || "",
-      email: item?.email || "",
       createby: item?.createby || 1,
     },
   });

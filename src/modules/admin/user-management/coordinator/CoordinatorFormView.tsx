@@ -11,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { hideLoader, openLoader } from '@/store/features/loaderSlice';
 import FormHeader from '@/components/common/FormHeader';
-import { AddManagerPayloadType, UpdateManagerPayloadType } from '@/api/admin/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { AddCoordinatorPayloadType, GetFacultiesType, UpdateCoordinatorPayloadType } from '@/api/admin/types';
 
 const formSchema = z.object({
   first_name: z.string().min(2, {
@@ -20,29 +21,35 @@ const formSchema = z.object({
   last_name: z.string().min(2, {
     message: "Last name must be at least 2 characters.",
   }),
+  faculty_id: z.string().min(1, {
+    message: "Faculty is required.",
+  }),
   email: z.string().email(),
   password: z.string().min(6, {
     message: "Password must contain at least 6 characters.",
-  }),
+  }).optional().or(z.literal("")),
   createby: z.number().optional(),
 });
 
-export default function ManagerFormView() {
+export default function CoordinatorFormView() {
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+
+  const { data: faculties, isFetching: isFacultyFetching } = api.admin.getFaculties.useQuery();
 
   const location = useLocation();
   const { id } = useParams();
 
   const passedData = location.state?.data;
 
-  const item: AddManagerPayloadType = id
+  const item: AddCoordinatorPayloadType = id
     ? { ...passedData }
     : {
       first_name: "",
       last_name: "",
+      faculty_id: "",
       email: "",
       createby: 1,
     };
@@ -53,21 +60,22 @@ export default function ManagerFormView() {
       first_name: item?.first_name || "",
       last_name: item?.last_name || "",
       email: item?.email || "",
+      faculty_id: item?.faculty_id.toString() || "",
       createby: item?.createby || 1,
     },
   });
 
-  const { mutate: addManager } =
-    api.admin.addManager.useMutation({
+  const { mutate: addCoordinator } =
+    api.admin.addCoordinator.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
       onSuccess: () => {
         toast({
-          title: "New Manager added successfully",
+          title: "New Coordinator added successfully",
           variant: "success",
         });
-        navigate("/admin/user-management/managers");
+        navigate("/admin/user-management/coordinators");
       },
       onError: (error) => {
         form.setError("first_name", { type: "custom", message: error.message });
@@ -81,17 +89,17 @@ export default function ManagerFormView() {
       },
     });
 
-  const { mutate: updateManager } =
-    api.admin.updateManager.useMutation({
+  const { mutate: updateCoordinator } =
+    api.admin.updateCoordinator.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
       onSuccess: () => {
         toast({
-          title: "Manager updated successfully",
+          title: "Coordinator updated successfully",
           variant: "success",
         });
-        navigate("/admin/admin/user-management/managers");
+        navigate("/admin/user-management/coordinators");
       },
       onError: (error) => {
         form.setError("first_name", { type: "custom", message: error.message });
@@ -113,7 +121,8 @@ export default function ManagerFormView() {
       formData.append("first_name", item.first_name);
       formData.append("last_name", item.last_name);
       formData.append("email", item.email);
-      formData.append("password", item.password);
+      formData.append("password", item.password ?? "");
+      formData.append("faculty_id", item.faculty_id);
 
       if (id) {
         // For edit form
@@ -121,13 +130,13 @@ export default function ManagerFormView() {
         formData.append("id", id);
 
         // Call update API
-        await updateManager(formData as unknown as UpdateManagerPayloadType);
+        await updateCoordinator(formData as unknown as UpdateCoordinatorPayloadType);
       } else {
         // For add form
         formData.append("createby", (item.createby || 1).toString());
 
         // Call add API
-        await addManager(formData as unknown as AddManagerPayloadType);
+        await addCoordinator(formData as unknown as AddCoordinatorPayloadType);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -137,22 +146,36 @@ export default function ManagerFormView() {
   return (
     <section className="m-4">
       <FormHeader
-				title="User Management - Manager"
+				title="User Management - Coordinator"
 			/>
       <div className="p-6 bg-white rounded-lg">
         <div className='flex mb-8'>
           <div className='me-5'>
-            <Link to={'/admin/user-management/managers'}>
+            <Link to={'/admin/user-management/coordinators'}>
               <CircleChevronLeft className='w-8 h-8 text-secondary hover:text-blue-500' />
             </Link>
           </div>
           <div className='text-base font-semibold mt-1 text-secondary'>
-            {id ? "Edit Manager" : "Add New Manager"}
+            {id ? "Edit Coordinator" : "Add New Coordinator"}
           </div>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className='grid grid-cols-2 gap-6 mt-5'>
+              {/* Email*/}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem >
+                    <FormLabel>Email <span className='text-primary font-extrabold text-base'>*</span></FormLabel>
+                    <FormControl>
+                      <Input placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {/* First Name */}
               <FormField
                 control={form.control}
@@ -181,20 +204,34 @@ export default function ManagerFormView() {
                   </FormItem>
                 )}
               />
-              {/* Email*/}
+              {/* Faculty */}
               <FormField
                 control={form.control}
-                name="email"
+                name="faculty_id"
                 render={({ field }) => (
                   <FormItem >
-                    <FormLabel>Email <span className='text-primary font-extrabold text-base'>*</span></FormLabel>
+                    <FormLabel>Faculty <span className='text-primary font-extrabold text-base'>*</span></FormLabel>
                     <FormControl>
-                      <Input placeholder="Email" {...field} />
+                      <Select
+                        value={field.value}
+                        onValueChange={(value) => field.onChange(value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={isFacultyFetching ? 'Loading' : 'Select Faculty'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {faculties?.map((item: GetFacultiesType) => (
+                            <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
+                          ))}
+
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              
               {/* Password */}
               <FormField
                 control={form.control}

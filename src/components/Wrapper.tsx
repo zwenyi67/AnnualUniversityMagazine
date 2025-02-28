@@ -31,6 +31,11 @@ import ManagerView from "@/modules/admin/user-management/manager/ManagerView";
 import FacultyView from "@/modules/admin/faculty-management/faculty/FacultyView";
 import FacultyFormView from "@/modules/admin/faculty-management/faculty/FacultyFormView";
 import ManagerFormView from "@/modules/admin/user-management/manager/ManagerFormView";
+import AdminView from "@/modules/admin/user-management/admin/AdminView";
+import CoordinatorView from "@/modules/admin/user-management/coordinator/CoordinatorView";
+import CoordinatorFormView from "@/modules/admin/user-management/coordinator/CoordinatorFormView";
+import StudentView from "@/modules/admin/user-management/student/StudentView";
+import StudentFormView from "@/modules/admin/user-management/student/StudentFormView";
 
 const router = createBrowserRouter([
   {
@@ -75,10 +80,10 @@ const router = createBrowserRouter([
       },
       // User Management 
       // Admin
-      // {
-      //   path: "user-management/admins",
-      //   element: <AdminView />,
-      // },
+      {
+        path: "user-management/admins",
+        element: <AdminView />,
+      },
       // Manager
       {
         path: "user-management/managers",
@@ -88,21 +93,41 @@ const router = createBrowserRouter([
         path: "user-management/managers/create",
         element: <ManagerFormView />,
       },
+      {
+        path: "user-management/managers/:id/edit",
+        element: <ManagerFormView />,
+      },
       // Coordinator
-      // {
-      //   path: "user-management/coordinators",
-      //   element: <CoordinatorView />,
-      // },
+      {
+        path: "user-management/coordinators",
+        element: <CoordinatorView />,
+      },
+      {
+        path: "user-management/coordinators/create",
+        element: <CoordinatorFormView />,
+      },
+      {
+        path: "user-management/coordinators/:id/edit",
+        element: <CoordinatorFormView />,
+      },
       // Student
-      // {
-      //   path: "user-management/students",
-      //   element: <StudentView />,
-      // },
+      {
+        path: "user-management/students",
+        element: <StudentView />,
+      },
+      {
+        path: "user-management/students/create",
+        element: <StudentFormView />,
+      },
+      {
+        path: "user-management/students/:id/edit",
+        element: <StudentFormView />,
+      },
       // Guest
-      // {
-      //   path: "user-management/guests",
-      //   element: <AdminView />,
-      // },
+      {
+        path: "user-management/guests",
+        element: <AdminView />,
+      },
       // User Management End
 
       // Faculty Management
