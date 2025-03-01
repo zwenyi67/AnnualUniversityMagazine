@@ -14,7 +14,7 @@ const ManageColumn = ({ data }: { data: getCoordinatorsType }) => {
 	const queryClient = useQueryClient();
 
 
-	const { mutate: deleteCoordinator } = api.admin.deleteCoordinator.useMutation({
+	const { mutate: deleteCoordinator } = api.admin.coordinatorUsers.deleteCoordinator.useMutation({
 		onSuccess: () => {
 			toast({
 				title: "Coordinator Deleted successfully",

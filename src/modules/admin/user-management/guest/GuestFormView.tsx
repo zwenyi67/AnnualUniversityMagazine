@@ -12,8 +12,7 @@ import { useDispatch } from 'react-redux';
 import { hideLoader, openLoader } from '@/store/features/loaderSlice';
 import FormHeader from '@/components/common/FormHeader';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AddCoordinatorPayloadType, GetFacultiesType, UpdateCoordinatorPayloadType } from '@/api/admin/types';
-
+import { AddGuestPayloadType, GetFacultiesType, UpdateGuestPayloadType } from '@/api/admin/types';
 const formSchema = z.object({
   first_name: z.string().min(2, {
     message: "First name must be at least 2 characters.",
@@ -31,7 +30,7 @@ const formSchema = z.object({
   createby: z.number().optional(),
 });
 
-export default function CoordinatorFormView() {
+export default function GuestFormView() {
 
   const navigate = useNavigate();
 
@@ -44,7 +43,7 @@ export default function CoordinatorFormView() {
 
   const passedData = location.state?.data;
 
-  const item: AddCoordinatorPayloadType = id
+  const item: AddGuestPayloadType = id
     ? { ...passedData }
     : {
       first_name: "",
@@ -65,17 +64,17 @@ export default function CoordinatorFormView() {
     },
   });
 
-  const { mutate: addCoordinator } =
-    api.admin.coordinatorUsers.addCoordinator.useMutation({
+  const { mutate: addGuest } =
+    api.admin.guestUsers.addGuest.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
       onSuccess: () => {
         toast({
-          title: "New Coordinator added successfully",
+          title: "New Guest added successfully",
           variant: "success",
         });
-        navigate("/admin/user-management/coordinators");
+        navigate("/admin/user-management/guests");
       },
       onError: (error) => {
         form.setError("first_name", { type: "custom", message: error.message });
@@ -89,17 +88,17 @@ export default function CoordinatorFormView() {
       },
     });
 
-  const { mutate: updateCoordinator } =
-    api.admin.coordinatorUsers.updateCoordinator.useMutation({
+  const { mutate: updateGuest } =
+    api.admin.guestUsers.updateGuest.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
       onSuccess: () => {
         toast({
-          title: "Coordinator updated successfully",
+          title: "Guest updated successfully",
           variant: "success",
         });
-        navigate("/admin/user-management/coordinators");
+        navigate("/admin/user-management/guests");
       },
       onError: (error) => {
         form.setError("first_name", { type: "custom", message: error.message });
@@ -130,13 +129,13 @@ export default function CoordinatorFormView() {
         formData.append("id", id);
 
         // Call update API
-        await updateCoordinator(formData as unknown as UpdateCoordinatorPayloadType);
+        await updateGuest(formData as unknown as UpdateGuestPayloadType);
       } else {
         // For add form
         formData.append("createby", (item.createby || 1).toString());
 
         // Call add API
-        await addCoordinator(formData as unknown as AddCoordinatorPayloadType);
+        await addGuest(formData as unknown as AddGuestPayloadType);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -146,17 +145,17 @@ export default function CoordinatorFormView() {
   return (
     <section className="m-4">
       <FormHeader
-				title="User Management - Coordinator"
+				title="User Management - Guest"
 			/>
       <div className="p-6 bg-white rounded-lg">
         <div className='flex mb-8'>
           <div className='me-5'>
-            <Link to={'/admin/user-management/coordinators'}>
+            <Link to={'/admin/user-management/guests'}>
               <CircleChevronLeft className='w-8 h-8 text-secondary hover:text-blue-500' />
             </Link>
           </div>
           <div className='text-base font-semibold mt-1 text-secondary'>
-            {id ? "Edit Coordinator" : "Add New Coordinator"}
+            {id ? "Edit Guest" : "Add New Guest"}
           </div>
         </div>
         <Form {...form}>

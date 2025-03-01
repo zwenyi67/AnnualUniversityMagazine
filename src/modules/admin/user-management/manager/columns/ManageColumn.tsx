@@ -14,7 +14,7 @@ const ManageColumn = ({ data }: { data: getManagersType }) => {
 	const queryClient = useQueryClient();
 
 
-	const { mutate: deleteManager } = api.admin.deleteManager.useMutation({
+	const { mutate: deleteManager } = api.admin.managerUsers.deleteManager.useMutation({
 		onSuccess: () => {
 			toast({
 				title: "Manager Deleted successfully",

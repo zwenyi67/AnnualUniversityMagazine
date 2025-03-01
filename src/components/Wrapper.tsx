@@ -36,6 +36,9 @@ import CoordinatorView from "@/modules/admin/user-management/coordinator/Coordin
 import CoordinatorFormView from "@/modules/admin/user-management/coordinator/CoordinatorFormView";
 import StudentView from "@/modules/admin/user-management/student/StudentView";
 import StudentFormView from "@/modules/admin/user-management/student/StudentFormView";
+import GuestView from "@/modules/admin/user-management/guest/GuestView";
+import GuestFormView from "@/modules/admin/user-management/guest/GuestFormView";
+import AdminFormView from "@/modules/admin/user-management/admin/AdminFormView";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +87,14 @@ const router = createBrowserRouter([
         path: "user-management/admins",
         element: <AdminView />,
       },
+      {
+        path: "user-management/admins/create",
+        element: <AdminFormView />,
+      },
+      {
+        path: "user-management/admins/:id/edit",
+        element: <AdminFormView />,
+      },
       // Manager
       {
         path: "user-management/managers",
@@ -126,7 +137,15 @@ const router = createBrowserRouter([
       // Guest
       {
         path: "user-management/guests",
-        element: <AdminView />,
+        element: <GuestView />,
+      },
+      {
+        path: "user-management/guests/create",
+        element: <GuestFormView />,
+      },
+      {
+        path: "user-management/guests/:id/edit",
+        element: <GuestFormView />,
       },
       // User Management End
 

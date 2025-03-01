@@ -5,7 +5,7 @@ import FormHeader from "@/components/common/FormHeader"
 
 const AdminView = () => {
 
-	const { data, isFetching, refetch, isRefetching} = api.admin.getAdmins.useQuery()
+	const { data, isFetching, refetch, isRefetching} = api.admin.adminUsers.getAdmins.useQuery()
 
 	return (
 		<section className="m-4">

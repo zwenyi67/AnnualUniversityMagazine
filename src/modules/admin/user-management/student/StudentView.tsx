@@ -5,7 +5,7 @@ import FormHeader from "@/components/common/FormHeader"
 
 const StudentView = () => {
 
-	const { data, isFetching, refetch, isRefetching} = api.admin.getStudents.useQuery()
+	const { data, isFetching, refetch, isRefetching} = api.admin.studentUsers.getStudents.useQuery()
 
 	return (
 		<section className="m-4">

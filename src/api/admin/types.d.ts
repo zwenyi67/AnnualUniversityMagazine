@@ -1,161 +1,117 @@
-import { TimeStamps } from "@/shared/types";
+import { CommonUserPayload, TimeStamps } from "@/shared/types";
 
 
 // Admin Management Type
 
-export interface getAdminsType extends TimeStamps {
+export interface getAdminsType extends TimeStamps, CommonUserPayload {
   id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
   faculty_id: number;
-  status: string;
 }
 
-export interface AddAdminPayloadType {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
+export interface AddAdminPayloadType extends CommonUserPayload {
   createby?: number;
 }
 
-export interface UpdateAdminPayloadType {
+export interface UpdateAdminPayloadType extends CommonUserPayload {
   id: string | number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
   updateby?: number;
 }
 
 // Manager Management Type
 
-export interface getManagersType extends TimeStamps {
+export interface getManagersType extends TimeStamps, CommonUserPayload  {
   id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
   faculty_id?: number;
-  status: string;
 }
 
-export interface AddManagerPayloadType {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
+export interface AddManagerPayloadType extends CommonUserPayload {
   createby?: number;
 }
 
-export interface UpdateManagerPayloadType {
+export interface UpdateManagerPayloadType extends CommonUserPayload {
   id: string | number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
   updateby?: number;
 }
 
 // Coordinator Management Type
 
-export interface getCoordinatorsType extends TimeStamps {
+export interface getCoordinatorsType extends TimeStamps, CommonUserPayload  {
   id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
   faculty_id: number;
   status: string;
   faculty: Faculty;
 }
 
-export interface Faculty {
+export interface Faculty extends CommonUserPayload {
   id: number;
   name: string;
 }
 
-export interface AddCoordinatorPayloadType {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
+export interface AddCoordinatorPayloadType extends CommonUserPayload {
   faculty_id: number;
   createby?: number;
 }
 
-export interface UpdateCoordinatorPayloadType {
+export interface UpdateCoordinatorPayloadType extends CommonUserPayload {
   id: string | number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
   faculty_id: number;
   updateby?: number;
 }
 
 // Student Management Type
 
-export interface getStudentsType extends TimeStamps {
+export interface getStudentsType extends TimeStamps, CommonUserPayload {
   id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
   faculty_id: number;
-  status: string;
   faculty: Faculty;
 }
 
-export interface AddStudentPayloadType {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
+export interface AddStudentPayloadType extends CommonUserPayload {
   faculty_id: number;
   createby?: number;
 }
 
-export interface UpdateStudentPayloadType {
+export interface UpdateStudentPayloadType extends CommonUserPayload {
   id: string | number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  role_id: number;
+  faculty_id: number;
+  updateby?: number;
+}
+
+// Guest Management Type
+
+export interface getGuestsType extends TimeStamps, CommonUserPayload  {
+  id: number;
+  faculty_id: number;
+  faculty: Faculty;
+}
+
+export interface AddGuestPayloadType extends CommonUserPayload {
+  faculty_id: number;
+  createby?: number;
+}
+
+export interface UpdateGuestPayloadType extends CommonUserPayload {
+  id: string | number;
   faculty_id: number;
   updateby?: number;
 }
 
 // Faculty Management Type
 
-export interface GetFacultiesType extends TimeStamps {
+export interface GetFacultiesType extends TimeStamps, CommonUserPayload  {
   id: number;
   name: string;
   description: string;
   status: string;
 }
 
-export interface AddFacultyPayloadType {
+export interface AddFacultyPayloadType extends CommonUserPayload {
   name: string;
   description: string;
   createby?: number;
 }
 
-export interface UpdateFacultyPayloadType {
+export interface UpdateFacultyPayloadType extends CommonUserPayload {
   id: string | number;
   name: string;
   description: string;

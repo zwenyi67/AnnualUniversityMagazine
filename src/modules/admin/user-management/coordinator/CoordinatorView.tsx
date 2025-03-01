@@ -5,7 +5,7 @@ import FormHeader from "@/components/common/FormHeader"
 
 const CoordinatorView = () => {
 
-	const { data, isFetching, refetch, isRefetching} = api.admin.getCoordinators.useQuery()
+	const { data, isFetching, refetch, isRefetching} = api.admin.coordinatorUsers.getCoordinators.useQuery()
 
 	return (
 		<section className="m-4">

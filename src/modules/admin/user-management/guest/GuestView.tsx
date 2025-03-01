@@ -3,14 +3,14 @@ import TableUI from "@/components/table/TableUI"
 import { columns } from "./columns"
 import FormHeader from "@/components/common/FormHeader"
 
-const FacultyView = () => {
+const GuestView = () => {
 
-	const { data, isFetching, refetch, isRefetching } = api.admin.faculties.getFaculties.useQuery()
+	const { data, isFetching, refetch, isRefetching} = api.admin.guestUsers.getGuests.useQuery()
 
 	return (
 		<section className="m-4">
 			<FormHeader
-				title="Faculty Management"
+				title="User Management - Guest"
 				onRefresh={() => refetch()}
 				isLoading={isFetching || isRefetching}
 			/>
@@ -18,11 +18,11 @@ const FacultyView = () => {
 				<TableUI
 					data={data}
 					columns={columns}
-					header={"Faculty Management"}
+					header={"User Management"}
 					columnVisibility={{ created_at: false }}
-					filterColumns={["name"]}
+					filterColumns={["first_name"]}
 					sortColumn="created_at"
-					newCreate="/admin/faculty-management/faculties/create"
+					newCreate="/admin/user-management/guests/create"
 				>
 				</TableUI>
 			</div>
@@ -30,4 +30,4 @@ const FacultyView = () => {
 	)
 }
 
-export default FacultyView
+export default GuestView

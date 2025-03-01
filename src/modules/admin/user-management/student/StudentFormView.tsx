@@ -37,7 +37,7 @@ export default function StudentFormView() {
 
   const dispatch = useDispatch();
 
-  const { data: faculties, isFetching: isFacultyFetching } = api.admin.getFaculties.useQuery();
+  const { data: faculties, isFetching: isFacultyFetching } = api.admin.faculties.getFaculties.useQuery();
 
   const location = useLocation();
   const { id } = useParams();
@@ -66,7 +66,7 @@ export default function StudentFormView() {
   });
 
   const { mutate: addStudent } =
-    api.admin.addStudent.useMutation({
+    api.admin.studentUsers.addStudent.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
@@ -90,7 +90,7 @@ export default function StudentFormView() {
     });
 
   const { mutate: updateStudent } =
-    api.admin.updateStudent.useMutation({
+    api.admin.studentUsers.updateStudent.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },

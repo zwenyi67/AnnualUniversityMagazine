@@ -50,7 +50,7 @@ export default function FacultyFormView() {
   });
 
   const { mutate: addFaculty } =
-    api.admin.addFaculty.useMutation({
+    api.admin.faculties.addFaculty.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
@@ -74,7 +74,7 @@ export default function FacultyFormView() {
     });
 
   const { mutate: updateFaculty } =
-    api.admin.updateFaculty.useMutation({
+    api.admin.faculties.updateFaculty.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },

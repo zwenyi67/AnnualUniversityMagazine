@@ -5,7 +5,7 @@ import FormHeader from "@/components/common/FormHeader"
 
 const ManagerView = () => {
 
-	const { data, isFetching, refetch, isRefetching} = api.admin.getManagers.useQuery()
+	const { data, isFetching, refetch, isRefetching} = api.admin.managerUsers.getManagers.useQuery()
 
 	return (
 		<section className="m-4">

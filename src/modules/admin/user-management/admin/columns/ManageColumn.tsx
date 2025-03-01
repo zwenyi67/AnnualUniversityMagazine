@@ -6,23 +6,23 @@ import { useState } from "react"
 import api from '@/api';
 import { toast } from "@/hooks/use-toast"
 import { useQueryClient } from "@tanstack/react-query"
-import { getManagersType } from "@/api/admin/types"
+import { getAdminsType } from "@/api/admin/types"
 
-const ManageColumn = ({ data }: { data: getManagersType }) => {
+const ManageColumn = ({ data }: { data: getAdminsType }) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const [isDetailOpen, setIsDetailOpen] = useState(false);
 	const queryClient = useQueryClient();
 
 
-	const { mutate: deleteManager } = api.admin.deleteManager.useMutation({
+	const { mutate: deleteAdmin } = api.admin.adminUsers.deleteAdmin.useMutation({
 		onSuccess: () => {
 			toast({
-				title: "Manager Deleted successfully",
+				title: "Admin Deleted successfully",
 				variant: "success",
 			});
 
 			queryClient.invalidateQueries({
-				queryKey: ["getManagers"],
+				queryKey: ["getAdmins"],
 			});
 		},
 		onError: (error) => {
@@ -35,7 +35,7 @@ const ManageColumn = ({ data }: { data: getManagersType }) => {
 	});
 
 	const handleDelete = (id: number) => {
-		deleteManager(id);
+		deleteAdmin(id);
 		setIsDialogOpen(false);
 	};
 
@@ -45,7 +45,7 @@ const ManageColumn = ({ data }: { data: getManagersType }) => {
 				<Info color="blue" />
 			</Button>
 			<Button variant={"columnIcon"} size={"icon"}>
-				<Link to={`/admin/user-management/managers/${data.id}/edit`} state={{ data }}>
+				<Link to={`/admin/user-management/admins/${data.id}/edit`} state={{ data }}>
 					<Pencil2Icon color="green" />
 				</Link>
 			</Button>
@@ -80,7 +80,7 @@ const ManageColumn = ({ data }: { data: getManagersType }) => {
 					<div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
 						<div className="flex items-center justify-between mb-4">
 							<h2 className="text-xl font-bold text-gray-800">
-								Manager Details
+								Admin Details
 							</h2>
 							<button
 								onClick={() => setIsDetailOpen(false)}

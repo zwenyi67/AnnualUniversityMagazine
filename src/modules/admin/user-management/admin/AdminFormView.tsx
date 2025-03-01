@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { hideLoader, openLoader } from '@/store/features/loaderSlice';
 import FormHeader from '@/components/common/FormHeader';
-import { AddManagerPayloadType, UpdateManagerPayloadType } from '@/api/admin/types';
+import { AddAdminPayloadType, UpdateAdminPayloadType } from '@/api/admin/types';
 
 const formSchema = z.object({
   first_name: z.string().min(2, {
@@ -27,7 +27,7 @@ const formSchema = z.object({
   createby: z.number().optional(),
 });
 
-export default function ManagerFormView() {
+export default function AdminFormView() {
 
   const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ export default function ManagerFormView() {
 
   const passedData = location.state?.data;
 
-  const item: AddManagerPayloadType = id
+  const item: AddAdminPayloadType = id
     ? { ...passedData }
     : {
       name: "",
@@ -55,17 +55,17 @@ export default function ManagerFormView() {
     },
   });
 
-  const { mutate: addManager } =
-    api.admin.addManager.useMutation({
+  const { mutate: addAdmin } =
+    api.admin.adminUsers.addAdmin.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
       onSuccess: () => {
         toast({
-          title: "New Manager added successfully",
+          title: "New Admin added successfully",
           variant: "success",
         });
-        navigate("/admin/user-management/managers");
+        navigate("/admin/user-management/admins");
       },
       onError: (error) => {
         form.setError("first_name", { type: "custom", message: error.message });
@@ -79,17 +79,17 @@ export default function ManagerFormView() {
       },
     });
 
-  const { mutate: updateManager } =
-    api.admin.updateManager.useMutation({
+  const { mutate: updateAdmin } =
+    api.admin.adminUsers.updateAdmin.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
       onSuccess: () => {
         toast({
-          title: "Manager updated successfully",
+          title: "Admin updated successfully",
           variant: "success",
         });
-        navigate("/admin/admin/user-management/managers");
+        navigate("/admin/admin/user-management/admins");
       },
       onError: (error) => {
         form.setError("first_name", { type: "custom", message: error.message });
@@ -119,13 +119,13 @@ export default function ManagerFormView() {
         formData.append("id", id);
 
         // Call update API
-        await updateManager(formData as unknown as UpdateManagerPayloadType);
+        await updateAdmin(formData as unknown as UpdateAdminPayloadType);
       } else {
         // For add form
         formData.append("createby", (item.createby || 1).toString());
 
         // Call add API
-        await addManager(formData as unknown as AddManagerPayloadType);
+        await addAdmin(formData as unknown as AddAdminPayloadType);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -135,17 +135,17 @@ export default function ManagerFormView() {
   return (
     <section className="m-4">
       <FormHeader
-				title="User Management - Manager"
+				title="User Management - Admin"
 			/>
       <div className="p-6 bg-white rounded-lg">
         <div className='flex mb-8'>
           <div className='me-5'>
-            <Link to={'/admin/user-management/managers'}>
+            <Link to={'/admin/user-management/admins'}>
               <CircleChevronLeft className='w-8 h-8 text-secondary hover:text-blue-500' />
             </Link>
           </div>
           <div className='text-base font-semibold mt-1 text-secondary'>
-            {id ? "Edit Manager" : "Add New Manager"}
+            {id ? "Edit Admin" : "Add New Admin"}
           </div>
         </div>
         <Form {...form}>

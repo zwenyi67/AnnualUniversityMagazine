@@ -58,7 +58,7 @@ export default function ManagerFormView() {
   });
 
   const { mutate: addManager } =
-    api.admin.addManager.useMutation({
+    api.admin.managerUsers.addManager.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },
@@ -82,7 +82,7 @@ export default function ManagerFormView() {
     });
 
   const { mutate: updateManager } =
-    api.admin.updateManager.useMutation({
+    api.admin.managerUsers.updateManager.useMutation({
       onMutate: () => {
         dispatch(openLoader());
       },

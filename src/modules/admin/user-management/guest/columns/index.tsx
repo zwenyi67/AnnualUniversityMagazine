@@ -2,12 +2,12 @@ import TableHeaderCell from "@/components/table/TableHeaderCell";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "date-fns";
 import ManageColumn from "./ManageColumn";
-import { getAdminsType } from "@/api/admin/types";
+import { getStudentsType } from "@/api/admin/types";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const columns: ColumnDef<getAdminsType>[] = [
+export const columns: ColumnDef<getStudentsType>[] = [
   {
     accessorKey: "number",
     header: () => <TableHeaderCell>{`No`}</TableHeaderCell>,
@@ -19,7 +19,7 @@ export const columns: ColumnDef<getAdminsType>[] = [
     },
   },
   {
-    accessorKey: "firstName",
+    accessorKey: "first_name",
     header: () => <TableHeaderCell>{`First Name`}</TableHeaderCell>,
     cell: ({ row }) => {
       return <div>{row.original.first_name}</div>;
@@ -27,7 +27,7 @@ export const columns: ColumnDef<getAdminsType>[] = [
     filterFn: "includesString",
   },
   {
-    accessorKey: "lastName",
+    accessorKey: "last_name",
     header: () => <TableHeaderCell>{`Last Name`}</TableHeaderCell>,
     cell: ({ row }) => {
       return <div>{row.original.last_name}</div>;
@@ -39,6 +39,15 @@ export const columns: ColumnDef<getAdminsType>[] = [
     header: () => <TableHeaderCell>{`Email`}</TableHeaderCell>,
     cell: ({ row }) => {
       return <div>{row.original.email}</div>;
+    },
+    filterFn: "includesString",
+  },
+  {
+    accessorFn: (row) => row.faculty?.name,
+    id: "category", // assign an id since we're using accessorFn
+    header: () => <TableHeaderCell>{`Faculty`}</TableHeaderCell>,
+    cell: ({ row }) => {
+      return <div>{row.original.faculty?.name}</div>;
     },
     filterFn: "includesString",
   },

@@ -14,7 +14,7 @@ const ManageColumn = ({ data }: { data: GetFacultiesType }) => {
 	const queryClient = useQueryClient();
 
 
-	const { mutate: deleteFaculty } = api.admin.deleteFaculty.useMutation({
+	const { mutate: deleteFaculty } = api.admin.faculties.deleteFaculty.useMutation({
 		onSuccess: () => {
 			toast({
 				title: "Faculty Deleted successfully",
