@@ -1,5 +1,5 @@
 import * as auth from "./auth";
-import * as admin from "./admin";
+import { admin, AdminAPI } from "./admin";
 import * as manager from "./manager";
 import * as coordinator from "./coordinator";
 import * as student from "./student";
@@ -7,7 +7,7 @@ import * as guest from "./guest";
 
 class API {
   auth: typeof auth;
-  admin: typeof admin;
+  admin: AdminAPI;
   manager: typeof manager;
   coordinator: typeof coordinator;
   student: typeof student;

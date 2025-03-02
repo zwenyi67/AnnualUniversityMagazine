@@ -1,3 +1,4 @@
+import api from "@/api";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks";
+import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -16,9 +18,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const FormSchema = z.object({
-  username: z.string().min(3, {
-    message: "Username must contain at least 3 characters.",
-  }),
+  email: z.string().email(),
   password: z.string().min(6, {
     message: "Password must contain at least 6 characters.",
   }),
@@ -30,55 +30,54 @@ const LoginView = () => {
   // const { toast } = useToast();
   const { userLogin } = useAuth();
 
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
-  // const { mutate: loginUser } = api.auth.loginMutation.useMutation({
-  //   onMutate: () => setIsLoading(true),
-  //   onSuccess: (data) => {
-  //     userLogin("data.token", data.role);
+  const { mutate: loginUser } = api.auth.loginMutation.useMutation({
+    onMutate: () => setIsLoading(true),
+    onSuccess: (data) => {
+      userLogin(data.token, data.role);
 
-  //     navigate("/", { replace: true });
+      navigate("/", { replace: true });
 
-  //     toast({
-  //       description: t("success-msg.login"),
-  //       variant: "success",
-  //     });
-  //   },
-  //   onError: (error) => {
-  //     console.error("Error during login:", error);
+      toast({
+        description: "Login Success",
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      console.error("Error during login:", error);
 
-  //     toast({
-  //       title: t("error-title.login"),
-  //       description: t("error-msg.login"),
-  //       variant: "destructive",
-  //     });
-  //   },
-  //   onSettled: () => {
-  //     setIsLoading(false);
-  //   },
-  // });
+      toast({
+        title: "Failed",
+        description: "Login Failed",
+        variant: "destructive",
+      });
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
 
-  // async function onSubmit(data: z.infer<typeof FormSchema>) {
-  //   // loginUser(data);
-  //   userLogin("data.token", "data.role");
-  //   navigate("/", { replace: true });
-  // }
-
-  async function onSubmit() {
-    // loginUser(data);
-    // Role -> admin, manager, coordinator, student, guest
-    // please insert the role in second param
-    userLogin("data.token", "student");
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    loginUser(data);
     navigate("/", { replace: true });
   }
+
+  // async function onSubmit() {
+  //   // loginUser(data);
+  //   // Role -> admin, manager, coordinator, student, guest
+  //   // please insert the role in second param
+  //   userLogin("data.token", "admin");
+  //   navigate("/", { replace: true });
+  // }
 
   return (
     <div className="">
@@ -93,13 +92,13 @@ const LoginView = () => {
             >
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Username"
+                        placeholder="Email"
                         disabled={isLoading}
                         {...field}
                       />

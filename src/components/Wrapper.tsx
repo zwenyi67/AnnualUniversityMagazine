@@ -27,6 +27,18 @@ import ManagerDashboardView from "@/modules/manager/dashboard/ManagerDashboardVi
 import CoordinatorDashboardView from "@/modules/coordinator/dashboard/CoordinatorDashboardView";
 import StudentDashboardView from "@/modules/student/dashboard/StudentDashboardView";
 import HomeView from "@/modules/guest/home/HomeView";
+import ManagerView from "@/modules/admin/user-management/manager/ManagerView";
+import FacultyView from "@/modules/admin/faculty-management/faculty/FacultyView";
+import FacultyFormView from "@/modules/admin/faculty-management/faculty/FacultyFormView";
+import ManagerFormView from "@/modules/admin/user-management/manager/ManagerFormView";
+import AdminView from "@/modules/admin/user-management/admin/AdminView";
+import CoordinatorView from "@/modules/admin/user-management/coordinator/CoordinatorView";
+import CoordinatorFormView from "@/modules/admin/user-management/coordinator/CoordinatorFormView";
+import StudentView from "@/modules/admin/user-management/student/StudentView";
+import StudentFormView from "@/modules/admin/user-management/student/StudentFormView";
+import GuestView from "@/modules/admin/user-management/guest/GuestView";
+import GuestFormView from "@/modules/admin/user-management/guest/GuestFormView";
+import AdminFormView from "@/modules/admin/user-management/admin/AdminFormView";
 
 const router = createBrowserRouter([
   {
@@ -69,13 +81,86 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: <AdminDashboardView />,
       },
+      // User Management 
+      // Admin
       {
-        path: "menu1",
-        element: <Menu1View />,
+        path: "user-management/admins",
+        element: <AdminView />,
       },
       {
-        path: "menu2",
-        element: <Menu1View />,
+        path: "user-management/admins/create",
+        element: <AdminFormView />,
+      },
+      {
+        path: "user-management/admins/:id/edit",
+        element: <AdminFormView />,
+      },
+      // Manager
+      {
+        path: "user-management/managers",
+        element: <ManagerView />,
+      },
+      {
+        path: "user-management/managers/create",
+        element: <ManagerFormView />,
+      },
+      {
+        path: "user-management/managers/:id/edit",
+        element: <ManagerFormView />,
+      },
+      // Coordinator
+      {
+        path: "user-management/coordinators",
+        element: <CoordinatorView />,
+      },
+      {
+        path: "user-management/coordinators/create",
+        element: <CoordinatorFormView />,
+      },
+      {
+        path: "user-management/coordinators/:id/edit",
+        element: <CoordinatorFormView />,
+      },
+      // Student
+      {
+        path: "user-management/students",
+        element: <StudentView />,
+      },
+      {
+        path: "user-management/students/create",
+        element: <StudentFormView />,
+      },
+      {
+        path: "user-management/students/:id/edit",
+        element: <StudentFormView />,
+      },
+      // Guest
+      {
+        path: "user-management/guests",
+        element: <GuestView />,
+      },
+      {
+        path: "user-management/guests/create",
+        element: <GuestFormView />,
+      },
+      {
+        path: "user-management/guests/:id/edit",
+        element: <GuestFormView />,
+      },
+      // User Management End
+
+      // Faculty Management
+      {
+        path: "faculty-management/faculties",
+        element: <FacultyView />,
+      },
+      {
+        path: "faculty-management/faculties/create",
+        element: <FacultyFormView />,
+      },
+      {
+        path: "faculty-management/faculties/:id/edit",
+        element: <FacultyFormView />,
       },
     ],
   },

@@ -36,7 +36,7 @@ type ColumnVisibilityType = {
 
 interface TableUIProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  loading: boolean;
+  loading?: boolean;
   header?: string;
   headerDescription?: string;
   children?: React.ReactNode;
