@@ -76,7 +76,7 @@ const LoginView = () => {
     // loginUser(data);
     // Role -> admin, manager, coordinator, student, guest
     // please insert the role in second param
-    userLogin("data.token", "admin");
+    userLogin("data.token", "student");
     navigate("/", { replace: true });
   }
 

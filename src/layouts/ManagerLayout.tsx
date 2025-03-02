@@ -17,19 +17,19 @@ const ManagerLayout = () => {
     return <Navigate to={"/auth/login"} state={{ from: location }} replace />;
   }
 
-  if (role === "student" ) {
-    return <Navigate to="/stuent/dashboard" />;
+  if (role === "student") {
+    return <Navigate to="/student/dashboard" />;
   }
 
-  if (role === "coordinator" ) {
+  if (role === "coordinator") {
     return <Navigate to="/coordinator/dashboard" />;
   }
 
-  if (role === "admin" ) {
+  if (role === "admin") {
     return <Navigate to="/admin/dashboard" />;
   }
 
-  if (role === "guest" ) {
+  if (role === "guest") {
     return <Navigate to="/" />;
   }
 
@@ -48,13 +48,11 @@ const ManagerLayout = () => {
       </div>
 
       {/* Mobile Sidebar */}
-      {isSidebarOpen &&
+      {isSidebarOpen && (
         <div className="block lg:hidden fixed top-0 left-0 w-[280px] h-full bg-gray-100 z-[100] shadow-lg">
           <div className="py-4">
             <div className="flex justify-between mb-10 px-3">
-              <div className="">
-                Admin
-              </div>
+              <div className="">Admin</div>
               <button onClick={toggleSidebar}>
                 <Cross1Icon />
               </button>
@@ -64,8 +62,7 @@ const ManagerLayout = () => {
             </div>
           </div>
         </div>
-      }
-
+      )}
 
       {/* Main Content */}
       <main className="flex flex-col w-full overflow-y-auto">

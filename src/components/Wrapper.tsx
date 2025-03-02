@@ -130,7 +130,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    // Student 
+    // Student
     path: "/student",
     element: <StudentLayout />,
     errorElement: <ErrorView />,
