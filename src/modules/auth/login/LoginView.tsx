@@ -43,7 +43,7 @@ const LoginView = () => {
   const { mutate: loginUser } = api.auth.loginMutation.useMutation({
     onMutate: () => setIsLoading(true),
     onSuccess: (data) => {
-      userLogin(data.token, data.role);
+      userLogin(data.token, data.role, data.user);
 
       navigate("/", { replace: true });
 

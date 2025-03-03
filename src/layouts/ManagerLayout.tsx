@@ -5,9 +5,11 @@ import { useState } from "react";
 import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import ManagerSidebar from "@/components/sidebar/manager/ManagerSidebar";
+import { useUserData } from "@/store/AuthContext";
 
 const ManagerLayout = () => {
   const { isAuthenticated, role } = useAuth();
+  const {userData} = useUserData();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -41,7 +43,7 @@ const ManagerLayout = () => {
       <div className="hidden lg:block">
         <div className="lg:flex flex-col hidden min-h-svh bg-gray-100 h-full transition-all duration-300 lg:min-w-[280px] shadow-lg">
           <div className="flex flex-col items-center justify-center h-20">
-            <div className="">Template</div>
+            <div className="">Template{userData?.first_name}s</div>
           </div>
           <ManagerSidebar />
         </div>
@@ -52,9 +54,6 @@ const ManagerLayout = () => {
         <div className="block lg:hidden fixed top-0 left-0 w-[280px] h-full bg-gray-100 z-[100] shadow-lg">
           <div className="py-4">
             <div className="flex justify-between mb-10 px-3">
-              <div className="">
-                Admin
-              </div>
               <button onClick={toggleSidebar}>
                 <Cross1Icon />
               </button>
@@ -82,6 +81,9 @@ const ManagerLayout = () => {
               <MenuIcon className="w-6 h-6 text-gray-600" />
             )}
           </button>
+          <div>
+            {userData?.first_name}
+          </div>
           <div className="ml-auto flex items-center">
             <ProfileBox />
           </div>

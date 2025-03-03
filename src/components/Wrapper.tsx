@@ -39,6 +39,7 @@ import StudentFormView from "@/modules/admin/user-management/student/StudentForm
 import GuestView from "@/modules/admin/user-management/guest/GuestView";
 import GuestFormView from "@/modules/admin/user-management/guest/GuestFormView";
 import AdminFormView from "@/modules/admin/user-management/admin/AdminFormView";
+import { AuthProvider } from "@/store/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -270,6 +271,7 @@ const Wrapper = () => {
 
   return (
     <>
+    <AuthProvider>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <Loader />
@@ -278,6 +280,7 @@ const Wrapper = () => {
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </Provider>
+      </AuthProvider>
     </>
   );
 };
