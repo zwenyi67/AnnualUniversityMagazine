@@ -1,7 +1,8 @@
-import type { FileUploadResponse, LoginPayload, LoginResponse } from "./types"
+import type { FileUploadResponse, LoginPayload, LoginResponse, PasswordUpdatePayload } from "./types"
 
 import { useMutation, UseMutationOptions } from "@tanstack/react-query"
 import axios from "axios"
+import { PostResponse } from "../admin/types"
 
 const BASE_URL = "/auth"
 
@@ -31,6 +32,39 @@ export const loginMutation = {
 			},
 			...opt, // additional options
 		}),
+}
+
+export const passwordUpdate = {
+	useMutation: (
+		opt?: UseMutationOptions<
+			PostResponse,
+			Error,
+			PasswordUpdatePayload,
+			unknown
+		>
+	) => {
+		return useMutation({
+			mutationKey: ["passwordUpdate"],
+			mutationFn: async (payload: PasswordUpdatePayload) => {
+				const response = await axios.post(
+					`${BASE_URL}/passwordUpdate`,
+					payload
+				)
+
+				const { data, status, message } = response.data
+
+				if (status !== 0) {
+					throw new Error(
+						message ||
+						"An error occurred while processing the request."
+					)
+				}
+
+				return data
+			},
+			...opt,
+		})
+	},
 }
 
 export const uploadFileDocument = {

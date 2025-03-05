@@ -40,6 +40,7 @@ import GuestView from "@/modules/admin/user-management/guest/GuestView";
 import GuestFormView from "@/modules/admin/user-management/guest/GuestFormView";
 import AdminFormView from "@/modules/admin/user-management/admin/AdminFormView";
 import { AuthProvider } from "@/store/AuthContext";
+import ProfileView from "@/modules/manager/profile/ProfileView";
 
 const router = createBrowserRouter([
   {
@@ -179,6 +180,10 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <ManagerDashboardView />,
+      },
+      {
+        path: "profile",
+        element: <ProfileView />,
       },
       {
         path: "menu1",

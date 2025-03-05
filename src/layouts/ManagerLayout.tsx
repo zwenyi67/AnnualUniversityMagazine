@@ -15,6 +15,10 @@ const ManagerLayout = () => {
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
+  if (!userData?.is_password_change && location.pathname !== "/manager/profile") {
+    return <Navigate to="/manager/profile" replace />;
+  }
+
   if (!isAuthenticated) {
     return <Navigate to={"/auth/login"} state={{ from: location }} replace />;
   }
@@ -43,7 +47,7 @@ const ManagerLayout = () => {
       <div className="hidden lg:block">
         <div className="lg:flex flex-col hidden min-h-svh bg-gray-100 h-full transition-all duration-300 lg:min-w-[280px] shadow-lg">
           <div className="flex flex-col items-center justify-center h-20">
-            <div className="">Template{userData?.first_name}s</div>
+            <div className="">Template</div>
           </div>
           <ManagerSidebar />
         </div>
@@ -81,9 +85,6 @@ const ManagerLayout = () => {
               <MenuIcon className="w-6 h-6 text-gray-600" />
             )}
           </button>
-          <div>
-            {userData?.first_name}
-          </div>
           <div className="ml-auto flex items-center">
             <ProfileBox />
           </div>

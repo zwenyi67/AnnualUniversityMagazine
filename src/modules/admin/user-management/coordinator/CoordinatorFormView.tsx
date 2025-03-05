@@ -25,9 +25,6 @@ const formSchema = z.object({
     message: "Faculty is required.",
   }),
   email: z.string().email(),
-  password: z.string().min(6, {
-    message: "Password must contain at least 6 characters.",
-  }).optional().or(z.literal("")),
   createby: z.number().optional(),
 });
 
@@ -121,7 +118,6 @@ export default function CoordinatorFormView() {
       formData.append("first_name", item.first_name);
       formData.append("last_name", item.last_name);
       formData.append("email", item.email);
-      formData.append("password", item.password ?? "");
       formData.append("faculty_id", item.faculty_id);
 
       if (id) {
@@ -146,8 +142,8 @@ export default function CoordinatorFormView() {
   return (
     <section className="m-4">
       <FormHeader
-				title="User Management - Coordinator"
-			/>
+        title="User Management - Coordinator"
+      />
       <div className="p-6 bg-white rounded-lg">
         <div className='flex mb-8'>
           <div className='me-5'>
@@ -171,6 +167,33 @@ export default function CoordinatorFormView() {
                     <FormLabel>Email <span className='text-primary font-extrabold text-base'>*</span></FormLabel>
                     <FormControl>
                       <Input placeholder="Email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Faculty */}
+              <FormField
+                control={form.control}
+                name="faculty_id"
+                render={({ field }) => (
+                  <FormItem >
+                    <FormLabel>Faculty <span className='text-primary font-extrabold text-base'>*</span></FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value}
+                        onValueChange={(value) => field.onChange(value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={isFacultyFetching ? 'Loading' : 'Select Faculty'} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {faculties?.map((item: GetFacultiesType) => (
+                            <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
+                          ))}
+
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -204,49 +227,7 @@ export default function CoordinatorFormView() {
                   </FormItem>
                 )}
               />
-              {/* Faculty */}
-              <FormField
-                control={form.control}
-                name="faculty_id"
-                render={({ field }) => (
-                  <FormItem >
-                    <FormLabel>Faculty <span className='text-primary font-extrabold text-base'>*</span></FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={(value) => field.onChange(value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder={isFacultyFetching ? 'Loading' : 'Select Faculty'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {faculties?.map((item: GetFacultiesType) => (
-                            <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
-                          ))}
 
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              {/* Password */}
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem >
-                    <FormLabel>Password <span className='text-primary font-extrabold text-base'>*</span></FormLabel>
-                    <FormControl>
-                      <Input type="password" placeholder="Password" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
             </div>
             <div>
               <button type="submit" className="bg-secondary rounded-sm p-2 px-6 text-white mt-7">
