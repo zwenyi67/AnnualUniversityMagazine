@@ -90,6 +90,10 @@ const StudentSidebar = () => {
                       {item.icon && <item.icon className="w-4 h-4" />}
                       <p className="text-[13px]">{item.name}</p>
                     </div>
+                    {/* Show Exclamation Icon if Password is not Changed */}
+                    {item.name === "Profile" && !userData?.is_password_change && (
+                          <AlertTriangle className="w-4 h-4 text-primary animate-pulse" />
+                        )}
                   </div>
                 </NavLink>
               )}
@@ -110,10 +114,6 @@ const StudentSidebar = () => {
                           {subItem.icon && <subItem.icon className="w-4 h-4" />}
                           <p className="text-[13px]">{subItem.name}</p>
                         </div>
-                        {/* Show Exclamation Icon if Password is not Changed */}
-                        {item.name === "Profile" && !userData?.is_password_change && (
-                          <AlertTriangle className="w-4 h-4 text-primary animate-pulse" />
-                        )}
                       </div>
                     </NavLink>
                   </div>
