@@ -1,4 +1,4 @@
-import { Gauge } from "lucide-react";
+import { Gauge, User } from "lucide-react";
 
 export const studentSidebarData = [
   {
@@ -22,5 +22,10 @@ export const studentSidebarData = [
         icon: Gauge,
       },
     ],
+  },
+  {
+    routeNames: ["/student/profile"],
+    name: "Profile",
+    icon: User,
   },
 ];

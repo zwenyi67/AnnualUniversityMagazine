@@ -1,5 +1,6 @@
 import {
   Gauge,
+  User,
 } from "lucide-react";
 
 export const guestSidebarData = [
@@ -24,5 +25,10 @@ export const guestSidebarData = [
         icon: Gauge,
       },
     ],
+  },
+  {
+    routeNames: ["/guest/profile"],
+    name: "Profile",
+    icon: User,
   },
 ];

@@ -5,26 +5,20 @@ import { useState } from "react";
 import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import ManagerSidebar from "@/components/sidebar/manager/ManagerSidebar";
-import { useUserData } from "@/store/AuthContext";
 
 const ManagerLayout = () => {
   const { isAuthenticated, role } = useAuth();
-  const {userData} = useUserData();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-
-  if (!userData?.is_password_change && location.pathname !== "/manager/profile") {
-    return <Navigate to="/manager/profile" replace />;
-  }
 
   if (!isAuthenticated) {
     return <Navigate to={"/auth/login"} state={{ from: location }} replace />;
   }
 
   if (role === "student" ) {
-    return <Navigate to="/stuent/dashboard" />;
+    return <Navigate to="/student/dashboard" />;
   }
 
   if (role === "coordinator" ) {

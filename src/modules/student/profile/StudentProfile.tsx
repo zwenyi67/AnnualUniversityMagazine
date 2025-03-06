@@ -31,9 +31,8 @@ const formSchema = z.object({
     updateby: z.number().optional(),
 });
 
-const ProfileView = () => {
+const StudentProfile = () => {
     const { userData } = useUserData();
-    const [profilePic, setProfilePic] = useState("https://cdn-icons-png.flaticon.com/512/149/149071.png");
     const [open, setOpen] = useState(false);
 
     const dispatch = useDispatch();
@@ -73,14 +72,6 @@ const ProfileView = () => {
             updateby: item?.updateby || 1,
         },
     });
-
-
-    const handleProfilePicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const imageUrl = URL.createObjectURL(event.target.files[0]);
-            setProfilePic(imageUrl);
-        }
-    };
 
     const { mutate: passwordUpdate } =
         api.auth.passwordUpdate.useMutation({
@@ -160,31 +151,18 @@ const ProfileView = () => {
                             <div className="flex flex-col items-center gap-4">
                                 {/* Profile Picture */}
                                 <div className="relative">
-                                    <img
-                                        src={profilePic}
-                                        alt="User Profile"
-                                        className="w-28 h-28 rounded-full border shadow-md object-cover"
-                                    />
-                                    {/* Upload Icon */}
                                     <label htmlFor="profile-upload" className="absolute bottom-0 right-0 bg-secondary p-1 rounded-full cursor-pointer">
                                         <Camera className="h-5 w-5 text-white" />
                                     </label>
-                                    <input
-                                        type="file"
-                                        id="profile-upload"
-                                        className="hidden"
-                                        accept="image/*"
-                                        onChange={handleProfilePicChange}
-                                    />
                                 </div>
                             </div>
                             <div>
                                 <label className="text-gray-600 text-sm">Full Name</label>
-                                <Input value={userData?.first_name || "N/A"} />
+                                <Input value={userData?.first_name || "N/A"} readOnly/>
                             </div>
                             <div>
                                 <label className="text-gray-600 text-sm">Email</label>
-                                <Input value={userData?.email || "N/A"} />
+                                <Input value={userData?.email || "N/A"} readOnly/>
                             </div>
                         </CardContent>
                     </Card>
@@ -287,4 +265,4 @@ const ProfileView = () => {
     );
 };
 
-export default ProfileView;
+export default StudentProfile;

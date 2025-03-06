@@ -1,5 +1,6 @@
 import {
   Gauge,
+  User,
 } from "lucide-react";
 
 export const coordinatorSidebarData = [
@@ -24,5 +25,10 @@ export const coordinatorSidebarData = [
         icon: Gauge,
       },
     ],
+  },
+  {
+    routeNames: ["/coordinator/profile"],
+    name: "Profile",
+    icon: User,
   },
 ];

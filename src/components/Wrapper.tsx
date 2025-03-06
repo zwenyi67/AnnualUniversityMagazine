@@ -40,34 +40,13 @@ import GuestView from "@/modules/admin/user-management/guest/GuestView";
 import GuestFormView from "@/modules/admin/user-management/guest/GuestFormView";
 import AdminFormView from "@/modules/admin/user-management/admin/AdminFormView";
 import { AuthProvider } from "@/store/AuthContext";
-import ProfileView from "@/modules/manager/profile/ProfileView";
+import ManagerProfile from "@/modules/manager/profile/ManagerProfile";
+import CoordinatorProfile from "@/modules/coordinator/profile/CoordinatorProfile";
+import StudentProfile from "@/modules/student/profile/StudentProfile";
+import GuestProfile from "@/modules/guest/profile/GuestProfile";
+import ReturnLayout from "@/layouts/ReturnLayout";
 
 const router = createBrowserRouter([
-  {
-    // Guest Layout
-    path: "/",
-    element: <GuestLayout />,
-    errorElement: <ErrorView />,
-    children: [
-      {
-        index: true,
-        element: <Navigate to="dashboard" replace />,
-      },
-      // Dashboard Start
-      {
-        path: "dashboard",
-        element: <HomeView />,
-      },
-      {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
-      },
-    ],
-  },
   {
     // Admin Layout
     path: "/admin",
@@ -183,7 +162,7 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
-        element: <ProfileView />,
+        element: <ManagerProfile />,
       },
       {
         path: "menu1",
@@ -211,6 +190,10 @@ const router = createBrowserRouter([
         element: <CoordinatorDashboardView />,
       },
       {
+        path: "profile",
+        element: <CoordinatorProfile />,
+      },
+      {
         path: "menu1",
         element: <Menu1View />,
       },
@@ -236,6 +219,39 @@ const router = createBrowserRouter([
         element: <StudentDashboardView />,
       },
       {
+        path: "profile",
+        element: <StudentProfile />,
+      },
+      {
+        path: "menu1",
+        element: <Menu1View />,
+      },
+      {
+        path: "menu2",
+        element: <Menu1View />,
+      },
+    ],
+  },
+  {
+    // Guest Layout
+    path: "/guest",
+    element: <GuestLayout />,
+    errorElement: <ErrorView />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="dashboard" replace />,
+      },
+      // Dashboard Start
+      {
+        path: "dashboard",
+        element: <HomeView />,
+      },
+      {
+        path: "profile",
+        element: <GuestProfile />,
+      },
+      {
         path: "menu1",
         element: <Menu1View />,
       },
@@ -259,6 +275,14 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/",
+    element: <ReturnLayout />,
+    children: [
+      
+    ],
+  },
+  
   {
     path: "*",
     element: <NotFoundView />,
