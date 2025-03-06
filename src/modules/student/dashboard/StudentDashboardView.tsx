@@ -1,13 +1,5 @@
-
-
 const StudentDashboardView = () => {
-
-  return (
-    <section className="m-4">
-        Hello World | This is Student Dashboard
-    </section>
-  );
+  return <div>StudentDashboardView</div>;
 };
-
 
 export default StudentDashboardView;

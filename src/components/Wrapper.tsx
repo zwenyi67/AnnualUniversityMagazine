@@ -45,6 +45,8 @@ import CoordinatorProfile from "@/modules/coordinator/profile/CoordinatorProfile
 import StudentProfile from "@/modules/student/profile/StudentProfile";
 import GuestProfile from "@/modules/guest/profile/GuestProfile";
 import ReturnLayout from "@/layouts/ReturnLayout";
+import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
+import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
 
 const router = createBrowserRouter([
   {
@@ -62,7 +64,7 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: <AdminDashboardView />,
       },
-      // User Management 
+      // User Management
       // Admin
       {
         path: "user-management/admins",
@@ -204,7 +206,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    // Student 
+    // Student
     path: "/student",
     element: <StudentLayout />,
     errorElement: <ErrorView />,
@@ -217,6 +219,15 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <StudentDashboardView />,
+      },
+      // Articles
+      {
+        path: "articles",
+        element: <StudentArticlesView />,
+      },
+      {
+        path: "articles/details/:id",
+        element: <StudentArticleDetailsView />,
       },
       {
         path: "profile",
@@ -300,15 +311,15 @@ const Wrapper = () => {
 
   return (
     <>
-    <AuthProvider>
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <Loader />
-          <Toaster />
-          <RouterProvider router={router}></RouterProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </Provider>
+      <AuthProvider>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <Loader />
+            <Toaster />
+            <RouterProvider router={router}></RouterProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </Provider>
       </AuthProvider>
     </>
   );
