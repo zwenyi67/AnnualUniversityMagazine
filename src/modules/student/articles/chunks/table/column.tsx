@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { StudentArticle } from "../StudentDashboardView";
-import { Button } from "@/components/ui/button";
+import { StudentArticle } from "../../StudentArticlesView";
+import { Navigate } from "react-router-dom";
 
 export const columns: ColumnDef<StudentArticle>[] = [
   {
@@ -20,11 +20,11 @@ export const columns: ColumnDef<StudentArticle>[] = [
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => (
+    cell: ({ row }) => (
       <div className="lowercase">
-        <Button variant={"outline"} className="text-secondary">
-          Detail
-        </Button>
+        <Navigate
+          to={`/student/articles/details/${row.original.id}`}
+        ></Navigate>
       </div>
     ),
   },

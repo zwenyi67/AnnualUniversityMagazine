@@ -39,6 +39,8 @@ import StudentFormView from "@/modules/admin/user-management/student/StudentForm
 import GuestView from "@/modules/admin/user-management/guest/GuestView";
 import GuestFormView from "@/modules/admin/user-management/guest/GuestFormView";
 import AdminFormView from "@/modules/admin/user-management/admin/AdminFormView";
+import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
+import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
 
 const router = createBrowserRouter([
   {
@@ -81,7 +83,7 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: <AdminDashboardView />,
       },
-      // User Management 
+      // User Management
       // Admin
       {
         path: "user-management/admins",
@@ -228,6 +230,15 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <StudentDashboardView />,
+      },
+      // Articles
+      {
+        path: "articles",
+        element: <StudentArticlesView />,
+      },
+      {
+        path: "articles/details/:id",
+        element: <StudentArticleDetailsView />,
       },
       {
         path: "menu1",
