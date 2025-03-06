@@ -1,9 +1,6 @@
 import TableUI from "@/components/table/TableUI";
 import { columns } from "./chunks/table/column";
-export type StudentArticle = {
-  id: number;
-  articleName: string;
-};
+import { StudentArticle } from "@/api/student/types";
 
 const StudentArticlesView = () => {
   const data: StudentArticle[] = [
@@ -30,6 +27,7 @@ const StudentArticlesView = () => {
         columnVisibility={{}}
         opt={{}}
         noToolbar={false}
+        newCreate="/student/articles/create"
       ></TableUI>
     </section>
   );

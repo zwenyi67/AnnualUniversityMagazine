@@ -43,6 +43,7 @@ import { AuthProvider } from "@/store/AuthContext";
 import ProfileView from "@/modules/manager/profile/ProfileView";
 import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
 import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
+import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
 
 const router = createBrowserRouter([
   {
@@ -232,7 +233,7 @@ const router = createBrowserRouter([
         index: true,
         element: <Navigate to="dashboard" replace />,
       },
-      // Dashboard Start
+      // Dashboard
       {
         path: "dashboard",
         element: <StudentDashboardView />,
@@ -241,6 +242,10 @@ const router = createBrowserRouter([
       {
         path: "articles",
         element: <StudentArticlesView />,
+      },
+      {
+        path: "articles/create",
+        element: <AddNewArticleView />,
       },
       {
         path: "articles/details/:id",
