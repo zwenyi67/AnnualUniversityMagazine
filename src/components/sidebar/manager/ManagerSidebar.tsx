@@ -1,12 +1,13 @@
-import { ChevronRightIcon } from "lucide-react";
+import { AlertTriangle, ChevronRightIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { managerSidebarData } from "./managerSidebarData";
 import { SidebarItemType, SidebarSubItemType } from "../type";
+import { useUserData } from "@/store/AuthContext";
 
 const ManagerSidebar = () => {
   const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
-
+  const { userData } = useUserData();
   const toggleSubMenu = (itemName: string) => {
     setOpenSubMenus((prev) => ({
       ...prev,
@@ -78,9 +79,8 @@ const ManagerSidebar = () => {
                     <p className="text-[13px]">{item.name}</p>
                   </div>
                   <ChevronRightIcon
-                    className={`w-4 h-4 transform transition-transform ${
-                      openSubMenus[item.name] ? "rotate-90" : ""
-                    }`}
+                    className={`w-4 h-4 transform transition-transform ${openSubMenus[item.name] ? "rotate-90" : ""
+                      }`}
                   />
                 </div>
               ) : (
@@ -90,6 +90,10 @@ const ManagerSidebar = () => {
                       {item.icon && <item.icon className="w-4 h-4" />}
                       <p className="text-[13px]">{item.name}</p>
                     </div>
+                    {/* Show Exclamation Icon if Password is not Changed */}
+                    {item.name === "Profile" && !userData?.is_password_change && (
+                          <AlertTriangle className="w-4 h-4 text-primary animate-pulse" />
+                        )}
                   </div>
                 </NavLink>
               )}

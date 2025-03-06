@@ -17,19 +17,19 @@ const CoordinatorLayout = () => {
     return <Navigate to={"/auth/login"} state={{ from: location }} replace />;
   }
 
-  if (role === "manager" ) {
+  if (role === "manager") {
     return <Navigate to="/manager/dashboard" />;
   }
 
-  if (role === "student" ) {
+  if (role === "student") {
     return <Navigate to="/student/dashboard" />;
   }
 
-  if (role === "admin" ) {
+  if (role === "admin") {
     return <Navigate to="/admin/dashboard" />;
   }
 
-  if (role === "guest" ) {
+  if (role === "guest") {
     return <Navigate to="/" />;
   }
 

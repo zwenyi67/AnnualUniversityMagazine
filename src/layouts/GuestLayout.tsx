@@ -25,7 +25,7 @@ const GuestLayout = () => {
     return <Navigate to="/manager/dashboard" />;
   }
 
-  if (role === "student") {
+  if (role === "student" ) {
     return <Navigate to="/student/dashboard" />;
   }
 
