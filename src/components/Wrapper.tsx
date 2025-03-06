@@ -39,6 +39,8 @@ import StudentFormView from "@/modules/admin/user-management/student/StudentForm
 import GuestView from "@/modules/admin/user-management/guest/GuestView";
 import GuestFormView from "@/modules/admin/user-management/guest/GuestFormView";
 import AdminFormView from "@/modules/admin/user-management/admin/AdminFormView";
+import { AuthProvider } from "@/store/AuthContext";
+import ProfileView from "@/modules/manager/profile/ProfileView";
 import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
 import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
 
@@ -182,6 +184,10 @@ const router = createBrowserRouter([
         element: <ManagerDashboardView />,
       },
       {
+        path: "profile",
+        element: <ProfileView />,
+      },
+      {
         path: "menu1",
         element: <Menu1View />,
       },
@@ -281,14 +287,16 @@ const Wrapper = () => {
 
   return (
     <>
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <Loader />
-          <Toaster />
-          <RouterProvider router={router}></RouterProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </Provider>
+      <AuthProvider>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <Loader />
+            <Toaster />
+            <RouterProvider router={router}></RouterProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </Provider>
+      </AuthProvider>
     </>
   );
 };
