@@ -118,6 +118,21 @@ export interface UpdateFacultyPayloadType extends CommonUserPayload {
   updateby?: number;
 }
 
+export interface GetSettingType extends TimeStamps {
+  id: number;
+  academic_year: string;
+  closure_date: Date;
+  final_closure_date: Date;
+}
+
+export interface UpdateSettingPayloadType {
+  id: number;
+  academic_year: string;
+  closure_date: Date;
+  final_closure_date: Date;
+  updateby: number;
+}
+
 export interface PostResponse {
   data: string
   status: number

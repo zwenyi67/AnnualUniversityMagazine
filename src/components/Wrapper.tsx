@@ -48,6 +48,7 @@ import ReturnLayout from "@/layouts/ReturnLayout";
 import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
 import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
 import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
+import SystemSetting from "@/modules/admin/setting/SystemSetting";
 
 const router = createBrowserRouter([
   {
@@ -146,6 +147,13 @@ const router = createBrowserRouter([
         path: "faculty-management/faculties/:id/edit",
         element: <FacultyFormView />,
       },
+
+      // System Setting Management
+      {
+        path: "system-setting",
+        element: <SystemSetting />,
+      },
+      
     ],
   },
   {
