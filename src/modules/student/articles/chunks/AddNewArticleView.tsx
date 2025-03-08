@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -13,150 +12,165 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Zod Schema for Validation
+type FormData = {
+  article: File | null;
+  photos: File[];
+};
+
 const formSchema = z.object({
   article: z
-    .custom<FileList>()
-    .refine((files) => files?.length === 1, "Please upload an article file")
-    .refine((files) => {
-      const allowedTypes = [
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ];
-      return files && allowedTypes.includes(files[0].type);
-    }, "Only .doc and .docx files are allowed"),
+    .custom<File>()
+    .refine((file) => file !== null, "Please upload an article file")
+    .refine(
+      (file) =>
+        [
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ].includes(file.type),
+      "Only .doc and .docx files are allowed"
+    ),
 
   photos: z
-    .custom<FileList>()
-    .refine((files) => files?.length > 0, "Please upload at least one photo")
-    .refine((files) => {
-      const allowedTypes = ["image/png", "image/jpeg"];
-      return Array.from(files).every((file) =>
-        allowedTypes.includes(file.type)
-      );
-    }, "Only .png, .jpg, and .jpeg files are allowed"),
+    .array(z.custom<File>())
+    .min(1, "Please upload at least one photo")
+    .refine(
+      (files) =>
+        files.every((file) => ["image/png", "image/jpeg"].includes(file.type)),
+      "Only .png, .jpg, and .jpeg files are allowed"
+    ),
 });
 
 const AddNewArticleView = () => {
+  const [uploadedArticle, setUploadedArticle] = useState<File | null>(null);
   const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([]);
 
-  const form = useForm({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      article: undefined,
-      photos: undefined,
+      article: null,
+      photos: [],
     },
   });
 
-  // Handle Submit
-  const onSubmit = (values: any) => {
+  const onSubmit: SubmitHandler<FormData> = (values) => {
     console.log("Submitted Data:", values);
   };
 
-  // Handle Photo Upload and Display
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      setUploadedPhotos([...uploadedPhotos, ...Array.from(files)]);
-      form.setValue("photos", files); // Set form value
+  const handleUploadArticle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      setUploadedArticle(file);
+      form.setValue("article", file);
     }
   };
 
-  // Remove a Photo
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files ? Array.from(event.target.files) : [];
+    if (files.length > 0) {
+      setUploadedPhotos((prev) => [...prev, ...files]);
+      form.setValue("photos", [...uploadedPhotos, ...files]);
+    }
+  };
+
   const removePhoto = (index: number) => {
-    setUploadedPhotos((prev) => prev.filter((_, i) => i !== index));
+    setUploadedPhotos((prev) => {
+      const updatedPhotos = prev.filter((_, i) => i !== index);
+      form.setValue("photos", updatedPhotos);
+      return updatedPhotos;
+    });
   };
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Upload Article */}
-          {/* <FormField
-            control={form.control}
-            name="article"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="file"
-                    accept=".doc,.docx"
-                    onChange={(e) => field.onChange(e.target.files)}
-                    className="cursor-pointer"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-
           <FormField
             control={form.control}
             name="article"
-            render={({ field }) => (
+            render={() => (
               <FormItem>
-                <FormLabel>Upload Article</FormLabel>
+                <FormLabel className="text-lg text-gray-700 font-medium">
+                  Upload Article
+                </FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
-                    accept=".doc,.docx"
-                    onChange={(e) => field.onChange(e.target.files)}
-                    // className="cursor-pointer"
-                    // placeholder="shadcn"
-                  />
+                  <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
+                    <label className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
+                      Choose File
+                      <input
+                        type="file"
+                        accept=".doc,.docx"
+                        className="hidden"
+                        onChange={handleUploadArticle}
+                      />
+                    </label>
+                    <span
+                      className={cn(
+                        uploadedArticle && "text-gray-900",
+                        "ml-3 flex-1 text-sm truncate"
+                      )}
+                    >
+                      {uploadedArticle?.name || "Upload article as Word file"}
+                    </span>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* Upload Photo */}
           <FormField
             control={form.control}
             name="photos"
             render={() => (
               <FormItem>
+                <FormLabel className="text-lg text-gray-700 font-medium">
+                  Upload Photos
+                </FormLabel>
                 <FormControl>
-                  <Input
-                    type="file"
-                    accept="image/png, image/jpeg, image/jpg"
-                    multiple
-                    onChange={(e) => handlePhotoUpload(e)}
-                    className="cursor-pointer"
-                  />
+                  <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
+                    <label className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
+                      Choose File
+                      <input
+                        type="file"
+                        accept="image/png, image/jpeg, image/jpg"
+                        multiple
+                        onChange={handlePhotoUpload}
+                        hidden
+                        className="cursor-pointer"
+                      />
+                    </label>
+                    <span className="ml-3 flex-1 text-sm truncate">
+                      Upload photos as PNG, JPG, or JPEG
+                    </span>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button
-            type="button"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            Upload Photo
-          </Button>
 
-          {/* Uploaded Photos List */}
-          <div>
-            {uploadedPhotos.map((photo, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-center p-2 bg-gray-200 rounded mb-2"
-              >
-                <span className="text-gray-700 text-sm">{photo.name}</span>
-                <button
-                  type="button"
-                  onClick={() => removePhoto(index)}
-                  className="text-red-500"
+          {uploadedPhotos.length > 0 && (
+            <div>
+              {uploadedPhotos.map((photo, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center p-2 bg-gray-200 rounded mb-2"
                 >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
-          </div>
+                  <span className="text-gray-700 text-sm">{photo.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => removePhoto(index)}
+                    className="text-red-500"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
-          {/* Buttons */}
           <div className="flex justify-between">
             <Button
               type="button"

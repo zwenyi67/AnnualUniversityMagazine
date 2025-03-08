@@ -46,7 +46,7 @@ import StudentProfile from "@/modules/student/profile/StudentProfile";
 import GuestProfile from "@/modules/guest/profile/GuestProfile";
 import ReturnLayout from "@/layouts/ReturnLayout";
 import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
-import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
+import StudentArticleDetailsView from "@/modules/student/articles/chunks/StudentArticleDetailsView";
 import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
 import SystemSetting from "@/modules/admin/setting/SystemSetting";
 
@@ -153,7 +153,6 @@ const router = createBrowserRouter([
         path: "system-setting",
         element: <SystemSetting />,
       },
-      
     ],
   },
   {
@@ -302,11 +301,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <ReturnLayout />,
-    children: [
-      
-    ],
+    children: [],
   },
-  
+
   {
     path: "*",
     element: <NotFoundView />,
