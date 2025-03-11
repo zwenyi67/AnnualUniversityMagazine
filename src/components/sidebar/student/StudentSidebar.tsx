@@ -62,7 +62,7 @@ const StudentSidebar = () => {
   return (
     <div className="h-full">
       <div className="px-3">
-        {studentSidebarData.map((item) => (
+        {studentSidebarData.map((item: SidebarItemType) => (
           <div key={item.name} className={`flex flex-col`}>
             <div
               className={`p-2 rounded-sm cursor-pointer ${ActiveMainMenu(item)} 
@@ -79,8 +79,9 @@ const StudentSidebar = () => {
                     <p className="text-[13px]">{item.name}</p>
                   </div>
                   <ChevronRightIcon
-                    className={`w-4 h-4 transform transition-transform ${openSubMenus[item.name] ? "rotate-90" : ""
-                      }`}
+                    className={`w-4 h-4 transform transition-transform ${
+                      openSubMenus[item.name] ? "rotate-90" : ""
+                    }`}
                   />
                 </div>
               ) : (
@@ -91,9 +92,10 @@ const StudentSidebar = () => {
                       <p className="text-[13px]">{item.name}</p>
                     </div>
                     {/* Show Exclamation Icon if Password is not Changed */}
-                    {item.name === "Profile" && !userData?.is_password_change && (
-                          <AlertTriangle className="w-4 h-4 text-primary animate-pulse" />
-                        )}
+                    {item.name === "Profile" &&
+                      !userData?.is_password_change && (
+                        <AlertTriangle className="w-4 h-4 text-primary animate-pulse" />
+                      )}
                   </div>
                 </NavLink>
               )}
