@@ -46,7 +46,10 @@ import StudentProfile from "@/modules/student/profile/StudentProfile";
 import GuestProfile from "@/modules/guest/profile/GuestProfile";
 import ReturnLayout from "@/layouts/ReturnLayout";
 import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
-import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
+import StudentArticleDetailsView from "@/modules/student/articles/chunks/StudentArticleDetailsView";
+import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
+import SystemSetting from "@/modules/admin/setting/SystemSetting";
+import LogView from "@/modules/admin/log-management/log/LogView";
 
 const router = createBrowserRouter([
   {
@@ -145,6 +148,16 @@ const router = createBrowserRouter([
         path: "faculty-management/faculties/:id/edit",
         element: <FacultyFormView />,
       },
+      // Log Management
+      {
+        path: "log-management/logs",
+        element: <LogView />,
+      },
+      // System Setting Management
+      {
+        path: "system-setting",
+        element: <SystemSetting />,
+      },
     ],
   },
   {
@@ -215,7 +228,7 @@ const router = createBrowserRouter([
         index: true,
         element: <Navigate to="dashboard" replace />,
       },
-      // Dashboard Start
+      // Dashboard
       {
         path: "dashboard",
         element: <StudentDashboardView />,
@@ -224,6 +237,10 @@ const router = createBrowserRouter([
       {
         path: "articles",
         element: <StudentArticlesView />,
+      },
+      {
+        path: "articles/create",
+        element: <AddNewArticleView />,
       },
       {
         path: "articles/details/:id",
@@ -289,11 +306,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <ReturnLayout />,
-    children: [
-      
-    ],
+    children: [],
   },
-  
+
   {
     path: "*",
     element: <NotFoundView />,

@@ -4,6 +4,9 @@ import * as coordinatorUsers from "./coordinator-user";
 import * as studentUsers from "./student-user";
 import * as guestUsers from "./guest-user";
 import * as faculties from "./faculty";
+import * as logs from "./log";
+import * as setting from "./system-setting";
+
 
 export const admin = {
 	adminUsers,
@@ -12,6 +15,8 @@ export const admin = {
 	studentUsers,
 	guestUsers,
 	faculties,
+	logs,
+	setting,
 };
 
 export type AdminAPI = typeof admin;
