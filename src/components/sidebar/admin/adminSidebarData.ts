@@ -44,6 +44,11 @@ export const adminSidebarData = [
     icon: School,
   },
   {
+    routeNames: ["/admin/log-management/logs"],
+    name: "Log Management",
+    icon: School,
+  },
+  {
     routeNames: ["/admin/system-setting"],
     name: "System Setting",
     icon: Settings2Icon,

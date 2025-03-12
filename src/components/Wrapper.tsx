@@ -49,6 +49,7 @@ import StudentArticlesView from "@/modules/student/articles/StudentArticlesView"
 import StudentArticleDetailsView from "@/modules/student/articles/chunks/StudentArticleDetailsView";
 import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
 import SystemSetting from "@/modules/admin/setting/SystemSetting";
+import LogView from "@/modules/admin/log-management/log/LogView";
 
 const router = createBrowserRouter([
   {
@@ -147,7 +148,11 @@ const router = createBrowserRouter([
         path: "faculty-management/faculties/:id/edit",
         element: <FacultyFormView />,
       },
-
+      // Log Management
+      {
+        path: "log-management/logs",
+        element: <LogView />,
+      },
       // System Setting Management
       {
         path: "system-setting",
