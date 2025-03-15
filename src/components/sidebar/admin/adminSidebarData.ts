@@ -1,4 +1,4 @@
-import { Gauge, School, Settings2Icon, User, Users } from "lucide-react";
+import { FileClockIcon, Gauge, School, Settings2Icon, User, Users } from "lucide-react";
 
 export const adminSidebarData = [
   {
@@ -42,6 +42,11 @@ export const adminSidebarData = [
     routeNames: ["/admin/faculty-management/faculties"],
     name: "Faculty Management",
     icon: School,
+  },
+  {
+    routeNames: ["/admin/log-management/logs"],
+    name: "Log Management",
+    icon: FileClockIcon,
   },
   {
     routeNames: ["/admin/system-setting"],

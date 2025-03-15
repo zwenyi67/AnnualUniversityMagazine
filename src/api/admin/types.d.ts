@@ -98,24 +98,45 @@ export interface UpdateGuestPayloadType extends CommonUserPayload {
 
 // Faculty Management Type
 
-export interface GetFacultiesType extends TimeStamps, CommonUserPayload  {
+export interface GetFacultiesType extends TimeStamps  {
   id: number;
   name: string;
   description: string;
   status: string;
 }
 
-export interface AddFacultyPayloadType extends CommonUserPayload {
+export interface AddFacultyPayloadType {
   name: string;
   description: string;
   createby?: number;
 }
 
-export interface UpdateFacultyPayloadType extends CommonUserPayload {
+export interface UpdateFacultyPayloadType {
   id: string | number;
   name: string;
   description: string;
   updateby?: number;
+}
+
+// Log Management
+
+export interface GetLogsType extends TimeStamps  {
+  id: number;
+  table_name: string;
+  action_type: string;
+  user_id: number;
+  ip_address: string;
+  user_agent: string;
+  success: boolean,
+  message: string,
+  user: User;
+}
+
+export interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
 }
 
 export interface GetSettingType extends TimeStamps {
