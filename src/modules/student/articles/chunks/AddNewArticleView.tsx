@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/form";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import FormHeader from "@/components/common/FormHeader";
+import { Link } from "react-router-dom";
 
 type FormData = {
   article: File | null;
@@ -83,111 +85,118 @@ const AddNewArticleView = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="article"
-            render={() => (
-              <FormItem>
-                <FormLabel className="text-lg text-gray-700 font-medium">
-                  Upload Article
-                </FormLabel>
-                <FormControl>
-                  <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
-                    <label className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
-                      Choose File
-                      <input
-                        type="file"
-                        accept=".doc,.docx"
-                        className="hidden"
-                        onChange={handleUploadArticle}
-                      />
-                    </label>
-                    <span
-                      className={cn(
-                        uploadedArticle && "text-gray-900",
-                        "ml-3 flex-1 text-sm truncate"
-                      )}
-                    >
-                      {uploadedArticle?.name || "Upload article as Word file"}
-                    </span>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <section className="m-4">
+      <FormHeader
+        title="Add Article"
+        // onRefresh={() => refetch()}
+        // isLoading={isFetching || isRefetching}
+      />
+      <div className="p-6 bg-white rounded-b-lg">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="article"
+              render={() => (
+                <FormItem>
+                  <FormLabel className="text-lg text-gray-700 font-medium">
+                    Upload Article
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
+                      <label className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
+                        Choose File
+                        <input
+                          type="file"
+                          accept=".doc,.docx"
+                          className="hidden"
+                          onChange={handleUploadArticle}
+                        />
+                      </label>
+                      <span
+                        className={cn(
+                          uploadedArticle && "text-gray-900",
+                          "ml-3 flex-1 text-sm truncate"
+                        )}
+                      >
+                        {uploadedArticle?.name || "Upload article as Word file"}
+                      </span>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="photos"
-            render={() => (
-              <FormItem>
-                <FormLabel className="text-lg text-gray-700 font-medium">
-                  Upload Photos
-                </FormLabel>
-                <FormControl>
-                  <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
-                    <label className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
-                      Choose File
-                      <input
-                        type="file"
-                        accept="image/png, image/jpeg, image/jpg"
-                        multiple
-                        onChange={handlePhotoUpload}
-                        hidden
-                        className="cursor-pointer"
-                      />
-                    </label>
-                    <span className="ml-3 flex-1 text-sm truncate">
-                      Upload photos as PNG, JPG, or JPEG
-                    </span>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="photos"
+              render={() => (
+                <FormItem>
+                  <FormLabel className="text-lg text-gray-700 font-medium">
+                    Upload Photos
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
+                      <label className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-blue-500 transition">
+                        Choose File
+                        <input
+                          type="file"
+                          accept="image/png, image/jpeg, image/jpg"
+                          multiple
+                          onChange={handlePhotoUpload}
+                          hidden
+                          className="cursor-pointer"
+                        />
+                      </label>
+                      <span className="ml-3 flex-1 text-sm truncate">
+                        Upload photos as PNG, JPG, or JPEG
+                      </span>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          {uploadedPhotos.length > 0 && (
-            <div>
-              {uploadedPhotos.map((photo, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center p-2 bg-gray-200 rounded mb-2"
-                >
-                  <span className="text-gray-700 text-sm">{photo.name}</span>
-                  <button
-                    type="button"
-                    onClick={() => removePhoto(index)}
-                    className="text-red-500"
+            {uploadedPhotos.length > 0 && (
+              <div>
+                {uploadedPhotos.map((photo, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center p-2 bg-gray-200 rounded mb-2"
                   >
-                    <X size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+                    <span className="text-gray-700 text-sm">{photo.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(index)}
+                      className="text-red-500"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
-          <div className="flex justify-between">
-            <Button
-              type="button"
-              className="bg-gray-400 hover:bg-gray-500 text-white"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              Submit
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+            <div className="flex justify-between">
+              <Button
+                type="button"
+                className="bg-gray-400 hover:bg-gray-500 text-white"
+              >
+                <Link to="/student/articles">Cancel</Link>
+              </Button>
+              <Button
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </section>
   );
 };
 

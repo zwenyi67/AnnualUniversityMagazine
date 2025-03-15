@@ -1,6 +1,7 @@
 import TableUI from "@/components/table/TableUI";
 import { columns } from "./chunks/table/column";
 import { StudentArticle } from "@/api/student/types";
+import FormHeader from "@/components/common/FormHeader";
 
 const StudentArticlesView = () => {
   const data: StudentArticle[] = [
@@ -20,15 +21,22 @@ const StudentArticlesView = () => {
 
   return (
     <section className="m-4">
-      <TableUI
-        columns={columns}
-        loading={false}
-        data={data}
-        columnVisibility={{}}
-        opt={{}}
-        noToolbar={false}
-        newCreate="/student/articles/create"
-      ></TableUI>
+      <FormHeader
+        title="Articles"
+        // onRefresh={() => refetch()}
+        // isLoading={isFetching || isRefetching}
+      />
+      <div className="p-6 bg-white rounded-b-lg">
+        <TableUI
+          columns={columns}
+          loading={false}
+          data={data}
+          columnVisibility={{}}
+          opt={{}}
+          noToolbar={false}
+          newCreate="/student/articles/create"
+        ></TableUI>
+      </div>
     </section>
   );
 };
