@@ -15,29 +15,24 @@ const StudentArticleDetailsView = () => {
         </div>
         <div className="flex-1 py-3 overflow-y-hidden">
           <div className="flex flex-col items-start bg-white border border-gray-200 rounded-lg shadow-lg md:flex-row md:max-w-xl hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 transition-all duration-200 ease-in-out">
-            {/* Profile Picture */}
             <div className="flex-shrink-0 p-4">
               <img
-                className="object-cover w-16 h-16 rounded-full shadow-md"
+                className="object-cover w-10 h-10 rounded-full shadow-md"
                 src="https://m.media-amazon.com/images/I/61KBNVEfxcL._SY879_.jpg"
                 alt="User Profile"
               />
             </div>
 
-            {/* Comment Content */}
             <div className="flex flex-col p-4 pt-2 md:pt-4">
-              {/* User Name */}
-              <h5 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+              <h5 className="mb-2 text-md font-semibold text-gray-900 dark:text-white">
                 John Doe
               </h5>
 
-              {/* Comment Text */}
               <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                 Here are the biggest enterprise technology acquisitions of 2021
                 so far, in reverse chronological order.
               </p>
 
-              {/* Timestamp (Optional) */}
               <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                 2 hours ago
               </p>
