@@ -6,23 +6,23 @@ import { GetLogsType } from "@/api/admin/types";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-const detectBrowser = (userAgent:any) => {
-	if (userAgent.includes("Firefox")) {
-	  const firefoxVersion = userAgent.match(/Firefox\/(\d+\.\d+)/);
-	  return `Firefox ${firefoxVersion ? firefoxVersion[1] : ""}`;
-	} else if (userAgent.includes("Edg")) {
-	  const edgeVersion = userAgent.match(/Edg\/(\d+\.\d+\.\d+\.\d+)/);
-	  return `Edge ${edgeVersion ? edgeVersion[1] : ""}`;
-	} else if (userAgent.includes("Chrome")) {
-	  const chromeVersion = userAgent.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
-	  return `Chrome ${chromeVersion ? chromeVersion[1] : ""}`;
-	} else if (userAgent.includes("Safari")) {
-	  const safariVersion = userAgent.match(/Version\/(\d+\.\d+)/);
-	  return `Safari ${safariVersion ? safariVersion[1] : ""}`;
-	} else {
-	  return "Unknown Browser";
-	}
-  };
+const detectBrowser = (userAgent: any) => {
+  if (userAgent.includes("Firefox")) {
+    const firefoxVersion = userAgent.match(/Firefox\/(\d+\.\d+)/);
+    return `Firefox ${firefoxVersion ? firefoxVersion[1] : ""}`;
+  } else if (userAgent.includes("Edg")) {
+    const edgeVersion = userAgent.match(/Edg\/(\d+\.\d+\.\d+\.\d+)/);
+    return `Edge ${edgeVersion ? edgeVersion[1] : ""}`;
+  } else if (userAgent.includes("Chrome")) {
+    const chromeVersion = userAgent.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
+    return `Chrome ${chromeVersion ? chromeVersion[1] : ""}`;
+  } else if (userAgent.includes("Safari")) {
+    const safariVersion = userAgent.match(/Version\/(\d+\.\d+)/);
+    return `Safari ${safariVersion ? safariVersion[1] : ""}`;
+  } else {
+    return "Unknown Browser";
+  }
+};
 
 export const columns: ColumnDef<GetLogsType>[] = [
   {
@@ -47,7 +47,20 @@ export const columns: ColumnDef<GetLogsType>[] = [
     accessorKey: "action_type",
     header: () => <TableHeaderCell>{`Action Type`}</TableHeaderCell>,
     cell: ({ row }) => {
-      return <div>{row.original.action_type}</div>;
+      return (
+      <div>
+        <span
+          className={`px-3 py-1 rounded-md text-white 
+    ${row.original.action_type === "create" ? "bg-green-500" :
+              row.original.action_type === "update" ? "bg-yellow-500 text-black" :
+                row.original.action_type === "delete" ? "bg-red-500" :
+                  "bg-gray-500"}`}
+        >
+          {row.original.action_type.charAt(0).toUpperCase() + row.original.action_type.slice(1)}
+        </span>
+
+      </div>
+      )
     },
     filterFn: "includesString",
   },
