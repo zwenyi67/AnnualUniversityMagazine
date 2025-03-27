@@ -14,33 +14,44 @@ import {
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import FormHeader from "@/components/common/FormHeader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import api from "@/api";
+import { useDispatch } from "react-redux";
+import { hideLoader, openLoader } from "@/store/features/loaderSlice";
+import { toast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormData = {
-  article: File | null;
+  title: string;
+  description: string;
+  article: File;
   photos: File[];
 };
 
 const formSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
   article: z
     .custom<File>()
-    .refine((file) => file !== null, "Please upload an article file")
+    .refine((file) => file !== undefined, {
+      message: "Please upload an article file",
+    })
     .refine(
       (file) =>
+        file &&
         [
           "application/msword",
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         ].includes(file.type),
-      "Only .doc and .docx files are allowed"
+      { message: "Only .doc and .docx files are allowed" }
     ),
-
   photos: z
     .array(z.custom<File>())
-    .min(1, "Please upload at least one photo")
     .refine(
       (files) =>
         files.every((file) => ["image/png", "image/jpeg"].includes(file.type)),
-      "Only .png, .jpg, and .jpeg files are allowed"
+      { message: "Only .png, .jpg, and .jpeg files are allowed" }
     ),
 });
 
@@ -48,20 +59,28 @@ const AddNewArticleView = () => {
   const [uploadedArticle, setUploadedArticle] = useState<File | null>(null);
   const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([]);
 
+  // Retrieve and parse userData from local storage
+  const userDataString = localStorage.getItem("userData");
+  const userData = userDataString ? JSON.parse(userDataString) : null;
+
+  // Extract faculty_id
+  const faculty_id = userData?.faculty_id;
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      article: null,
+      title: "",
+      description: "",
+      article: undefined,
       photos: [],
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = (values) => {
-    console.log("Submitted Data:", values);
-  };
-
   const handleUploadArticle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] || null;
+    const file = event.target.files?.[0];
     if (file) {
       setUploadedArticle(file);
       form.setValue("article", file);
@@ -84,16 +103,97 @@ const AddNewArticleView = () => {
     });
   };
 
+  const refreshForm = () => {
+    form.reset({
+      title: "",
+      description: "",
+      article: undefined,
+      photos: [],
+    });
+    setUploadedArticle(null);
+    setUploadedPhotos([]);
+  };
+
+  const { mutate: uploadContribution } = api.student.uploadArticle.useMutation({
+    onMutate: () => {
+      dispatch(openLoader());
+    },
+    onSuccess: () => {
+      toast({
+        title: "New Article added successfully",
+        variant: "success",
+      });
+      navigate("/student/articles");
+    },
+    onError: (error) => {
+      toast({
+        title: error.message,
+        variant: "destructive",
+      });
+    },
+    onSettled: () => {
+      dispatch(hideLoader());
+    },
+  });
+
+  const onSubmit: SubmitHandler<FormData> = (values) => {
+    const payload = {
+      ...values,
+      faculty_id: faculty_id,
+    };
+    uploadContribution(payload);
+  };
+
   return (
     <section className="m-4">
       <FormHeader
         title="Add Article"
-        // onRefresh={() => refetch()}
+        onRefresh={refreshForm}
         // isLoading={isFetching || isRefetching}
       />
       <div className="p-6 bg-white rounded-b-lg">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg text-gray-700 font-medium">
+                    Title
+                  </FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="Title" {...field} />
+                  </FormControl>
+                  <div className="h-[16px]">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg text-gray-700 font-medium">
+                    Description
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Description"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <div className="h-[16px]">
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="article"
@@ -123,7 +223,9 @@ const AddNewArticleView = () => {
                       </span>
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <div className="h-[16px]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -154,7 +256,9 @@ const AddNewArticleView = () => {
                       </span>
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <div className="h-[16px]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />

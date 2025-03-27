@@ -305,7 +305,7 @@ export function TableUI<TData, TValue>({
                     onClick={() => clickCustomPage(pageIndex)}
                     className={`px-3 py-1 rounded ${
                       pageIndex === table.getState().pagination.pageIndex
-                        ? "bg-blue-500 text-white"
+                        ? "bg-secondary text-white"
                         : "bg-gray-200"
                     }`}
                   >

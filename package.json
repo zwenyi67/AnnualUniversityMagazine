@@ -49,6 +49,7 @@
     "react": "^18.3.1",
     "react-apexcharts": "^1.5.0",
     "react-day-picker": "8.10.1",
+    "react-doc-viewer": "^0.1.14",
     "react-dom": "^18.3.1",
     "react-dynamic-virtual-scroll": "^1.4.0",
     "react-hook-form": "^7.53.2",

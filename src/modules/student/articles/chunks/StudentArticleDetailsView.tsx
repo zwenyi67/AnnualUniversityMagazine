@@ -1,10 +1,22 @@
+// import api from "@/api";
 import { Button } from "@/components/ui/button";
 import WordViewer from "@/components/word-viewer/WordViewer";
+// import { useEffect } from "react";
+// import { useParams } from "react-router-dom";
 
 const StudentArticleDetailsView = () => {
   // Replace with your actual Google Drive File ID
   const wordFileUrl =
     "https://drive.google.com/uc?id=1T4M6VIJsgBgYgVmevFScfTGakOXA6pBb&export=download";
+
+  // const { id } = useParams();
+  // const articleId = Number(id);
+
+  // const { data } = api.student.getCommentsByArticleID.useQuery(articleId!);
+
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">

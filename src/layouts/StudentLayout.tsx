@@ -13,7 +13,7 @@ const StudentLayout = () => {
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
-  if (isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to={"/auth/login"} state={{ from: location }} replace />;
   }
 
