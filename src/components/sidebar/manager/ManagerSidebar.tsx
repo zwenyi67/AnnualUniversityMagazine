@@ -62,7 +62,7 @@ const ManagerSidebar = () => {
   return (
     <div className="h-full">
       <div className="px-3">
-        {managerSidebarData.map((item) => (
+        {managerSidebarData.map((item: SidebarItemType) => (
           <div key={item.name} className={`flex flex-col`}>
             <div
               className={`p-2 rounded-sm cursor-pointer ${ActiveMainMenu(item)} 

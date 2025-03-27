@@ -50,6 +50,7 @@ import StudentArticleDetailsView from "@/modules/student/articles/chunks/Student
 import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
 import SystemSetting from "@/modules/admin/setting/SystemSetting";
 import LogView from "@/modules/admin/log-management/log/LogView";
+import ArticleView from "@/modules/manager/article/ArticleView";
 
 const router = createBrowserRouter([
   {
@@ -180,12 +181,8 @@ const router = createBrowserRouter([
         element: <ManagerProfile />,
       },
       {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
+        path: "articles",
+        element: <ArticleView />,
       },
     ],
   },
