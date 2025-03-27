@@ -40,7 +40,7 @@ const AdminDashboardView = () => {
     <section className="m-4">
       <FormHeader title="Dashboard" />
       <div className="p-6 bg-white rounded-b-lg min-h-[500px]">
-        <h2 className="text-xl font-bold mb-4">WELCOME TO YOUR DASHBOARD</h2>
+        <h2 className="text-xl font-bold mb-4">WELCOME TO ADMIN DASHBOARD</h2>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
