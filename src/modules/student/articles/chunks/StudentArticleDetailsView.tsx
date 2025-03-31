@@ -88,7 +88,7 @@ const StudentArticleDetailsView = () => {
             {imagePaths.map((image, index) => (
               <img
                 key={index}
-                src={`http://127.0.0.1:8000/api/storage/${image}`}
+                src={`http://127.0.0.1:8000/storage/${image}`}
                 alt={`image-${index}`}
                 className="w-20 h-20 object-cover col-span-1"
               />

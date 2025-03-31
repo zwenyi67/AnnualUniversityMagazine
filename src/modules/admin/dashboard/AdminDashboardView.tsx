@@ -28,9 +28,10 @@ const data = [
 ];
 
 const pieData = [
-  { name: "Faculty 1", value: 50 },
-  { name: "Faculty 2", value: 34 },
-  { name: "Faculty 3", value: 34 },
+  { name: "Computer Science", value: 50 },
+  { name: "Medical", value: 34 },
+  { name: "Chemistry", value: 34 },
+  { name: "Mathematics", value: 34 },
 ];
 
 const COLORS = ["#003fbe", "#f4c542", "#f34542"];
@@ -58,7 +59,7 @@ const AdminDashboardView = () => {
         </div>
 
         {/* Pie Chart and Countdown Timer */}
-        <div className="grid grid-cols-1 md:grid-cols-[70%_30%] gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-4">
 
           {/* Line Chart (70%) */}
           <Card className="shadow-md p-4 mb-6">
@@ -82,9 +83,9 @@ const AdminDashboardView = () => {
               <h4 className="text-lg font-bold mb-2">Contributions by Faculty</h4>
               <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
-                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={80}>
+                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={80} label={({percent }) => `${(percent * 100).toFixed(0)}%`}>
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}-${entry}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell className="text-xs" key={`cell-${index}-${entry}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
                   <Legend />
