@@ -23,7 +23,6 @@ export type CommentType = {
   comment: string;
   user_id: number;
   contribution_id: number;
-  comment_id: number | null;
   active_flag: number;
   created_at: string;
   updated_at: string;
@@ -47,7 +46,7 @@ export type ContributionType = {
   title: string;
   description: string;
   article_path: string;
-  image_paths: string[];
+  image_paths: string;
   user_id: number;
   faculty_id: number;
   status: string;
@@ -56,8 +55,8 @@ export type ContributionType = {
   updated_at: string;
   createby: number;
   updateby: number;
-  faculty: Faculty;
-  comments: Comment[];
+  faculty: FacultyType;
+  comments: CommentType[];
 };
 
 export type UploadArticlePayload = {
@@ -66,4 +65,42 @@ export type UploadArticlePayload = {
   article: File;
   photos: File[];
   faculty_id: number;
+};
+
+interface CommentUserType {
+  id: number;
+  profile: null | string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role_id: number;
+  faculty_id: number;
+  email_verified_at: null | string;
+  is_password_change: number | boolean;
+  last_login_at: null | string;
+  last_login_ip: null | string;
+  is_suspended: number | boolean;
+  active_flag: boolean;
+  created_at: string;
+  updated_at: string;
+  createby: null | number;
+  updateby: null | number;
+}
+
+interface CommentWithUserType {
+  id: number;
+  comment: string;
+  user_id: number;
+  contribution_id: number;
+  active_flag: boolean;
+  created_at: string;
+  updated_at: string;
+  createby: number;
+  updateby: number;
+  user: CommentUserType;
+}
+
+export type CommentPayloadType = {
+  comment: string;
+  contribution_id: number;
 };

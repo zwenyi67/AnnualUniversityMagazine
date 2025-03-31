@@ -1,4 +1,9 @@
-import type { ContributionType, UploadArticlePayload } from "./types";
+import type {
+  CommentPayloadType,
+  CommentWithUserType,
+  ContributionType,
+  UploadArticlePayload,
+} from "./types";
 
 import {
   useMutation,
@@ -63,9 +68,37 @@ export const uploadArticle = {
   },
 };
 
+export const getContributionByContributionID = {
+  useQuery: (
+    articleId: number,
+    opt?: UseQueryOptions<ContributionType, Error>
+  ) =>
+    useQuery<ContributionType, Error>({
+      queryKey: ["getContributionByContributionID"],
+      queryFn: async () => {
+        const response = await axios.get(
+          `${BASE_URL}/contributions/${articleId}`
+        );
+
+        const { data, status, message } = response.data;
+
+        if (status !== 0) {
+          throw new Error(message);
+        }
+
+        return data;
+      },
+      throwOnError: true,
+      ...opt,
+    }),
+};
+
 export const getCommentsByArticleID = {
-  useQuery: (articleId: number, opt?: UseQueryOptions<any, Error>) =>
-    useQuery<any, Error>({
+  useQuery: (
+    articleId: number,
+    opt?: UseQueryOptions<CommentWithUserType[], Error>
+  ) =>
+    useQuery<CommentWithUserType[], Error>({
       queryKey: ["getCommentsByArticleID"],
       queryFn: async () => {
         const response = await axios.get(
@@ -83,4 +116,31 @@ export const getCommentsByArticleID = {
       throwOnError: true,
       ...opt,
     }),
+};
+
+export const addComment = {
+  useMutation: (
+    opt?: UseMutationOptions<PostResponse, Error, CommentPayloadType, unknown>
+  ) => {
+    return useMutation({
+      mutationKey: ["addComment"],
+      mutationFn: async (payload: CommentPayloadType) => {
+        const response = await axios.post(
+          `${BASE_URL}/articles/${payload.contribution_id}/comments`,
+          payload
+        );
+
+        const { data, status, message } = response.data;
+
+        if (status !== 0) {
+          throw new Error(
+            message || "An error occurred while processing the request."
+          );
+        }
+
+        return data;
+      },
+      ...opt,
+    });
+  },
 };
