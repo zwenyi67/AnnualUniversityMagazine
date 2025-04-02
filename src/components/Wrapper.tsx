@@ -49,6 +49,10 @@ import StudentArticlesView from "@/modules/student/articles/StudentArticlesView"
 import StudentArticleDetailsView from "@/modules/student/articles/chunks/StudentArticleDetailsView";
 import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
 import SystemSetting from "@/modules/admin/setting/SystemSetting";
+import CoordinatorArticlesView from "@/modules/coordinator/articles/CoordinatorArticlesView";
+import CoordinatorArticleDetailView from "@/modules/coordinator/articles/CoordinatorArticleDetailView";
+import CoordinatorGuestsView from "@/modules/coordinator/guests/CoordinatorGuestsView";
+import CoordinatorNotificationsView from "@/modules/coordinator/notification/CoordinatorNotificationsView";
 
 const router = createBrowserRouter([
   {
@@ -198,6 +202,22 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <CoordinatorDashboardView />,
+      },
+      {
+        path: "articles",
+        element: <CoordinatorArticlesView />,
+      },
+      {
+        path: "articles/:id",
+        element: <CoordinatorArticleDetailView />,
+      },
+      {
+        path: "guests",
+        element: <CoordinatorGuestsView />,
+      },
+      {
+        path: "notifications",
+        element: <CoordinatorNotificationsView />,
       },
       {
         path: "profile",

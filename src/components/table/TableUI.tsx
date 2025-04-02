@@ -59,6 +59,7 @@ interface TableUIProps<TData, TValue> {
   selectOptions?: { label: string; value: string }[];
   sectionBelowToolbar?: React.ReactNode | undefined;
   opt?: Partial<TableOptions<TData>>;
+  allowAdd?: boolean;
 }
 
 export function TableUI<TData, TValue>({
@@ -86,6 +87,7 @@ export function TableUI<TData, TValue>({
   selectOptions,
   sectionBelowToolbar = undefined,
   opt,
+  allowAdd = true,
 }: TableUIProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selectedOpt, setSelectedOpt] = useState<"Oldest" | "Newest">("Newest");
@@ -202,6 +204,7 @@ export function TableUI<TData, TValue>({
           globalFilter={globalFilter}
           sortSelectNewLine={sortSelectNewLine}
           selectOptions={selectOptions}
+          allowAdd={allowAdd}
         >
           {children}
         </TableToolbar>
@@ -212,25 +215,28 @@ export function TableUI<TData, TValue>({
         <TableHeader className={tableHeaderClass}>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header, index) => (
-                <TableHead
-                  key={header.id}
-                  className={`${
-                    index === 0 && tableHeaderClass ? "rounded-tl-2xl" : ""
-                  } ${
-                    index === columns.length - 2 && tableHeaderClass
-                      ? "rounded-tr-2xl"
-                      : ""
-                  }`}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
+              {headerGroup.headers.map((header, index) => {
+                const isFirstColumn = index === 0;
+                const isLastColumn = index === headerGroup.headers.length - 1;
+
+                return (
+                  <TableHead
+                    key={header.id}
+                    className={`${
+                      isFirstColumn && tableHeaderClass ? "rounded-tl-2xl" : ""
+                    } ${
+                      isLastColumn && tableHeaderClass ? "rounded-tr-2xl" : ""
+                    } py-4`}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                );
+              })}
             </TableRow>
           ))}
         </TableHeader>
@@ -250,7 +256,10 @@ export function TableUI<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id} className={tableRowClass}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className={tableCellClass}>
+                  <TableCell
+                    key={cell.id}
+                    className={`${tableCellClass} py-4 h-16`}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
