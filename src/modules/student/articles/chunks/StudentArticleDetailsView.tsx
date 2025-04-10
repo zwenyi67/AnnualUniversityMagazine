@@ -32,8 +32,7 @@ const StudentArticleDetailsView = () => {
   });
 
   // Replace with your actual Google Drive File ID
-  const wordFileUrl =
-    "https://drive.google.com/uc?id=1T4M6VIJsgBgYgVmevFScfTGakOXA6pBb&export=download";
+
 
   const { id } = useParams();
   const articleId = Number(id);
@@ -48,6 +47,10 @@ const StudentArticleDetailsView = () => {
   const imagePaths: string[] = article?.image_paths
     ? JSON.parse(article.image_paths)
     : [];
+
+    const wordFileUrl = article?.article_path ? article.article_path
+    : "";
+
 
   const { mutate: addComment } = api.student.addComment.useMutation({
     onMutate: () => {
@@ -88,7 +91,7 @@ const StudentArticleDetailsView = () => {
             {imagePaths.map((image, index) => (
               <img
                 key={index}
-                src={`http://127.0.0.1:8000/storage/${image}`}
+                src={`${image}`}
                 alt={`image-${index}`}
                 className="w-20 h-20 object-cover col-span-1"
               />
