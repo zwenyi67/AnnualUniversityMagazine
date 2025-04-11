@@ -59,6 +59,7 @@ interface TableUIProps<TData, TValue> {
   selectOptions?: { label: string; value: string }[];
   sectionBelowToolbar?: React.ReactNode | undefined;
   opt?: Partial<TableOptions<TData>>;
+  allowAdd?: boolean;
 }
 
 export function TableUI<TData, TValue>({
@@ -86,6 +87,7 @@ export function TableUI<TData, TValue>({
   selectOptions,
   sectionBelowToolbar = undefined,
   opt,
+  allowAdd = true,
 }: TableUIProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selectedOpt, setSelectedOpt] = useState<"Oldest" | "Newest">("Newest");
@@ -138,33 +140,35 @@ export function TableUI<TData, TValue>({
   const [pageSize, setPageSize] = useState(10);
 
   const clickPrevPage = () => {
-    () => table.previousPage()
+    table.previousPage();
     setPageIndex(pageIndex - 1);
-  }
+  };
 
   const clickNextPage = () => {
-    () => table.nextPage();
+    table.nextPage();
     setPageIndex(pageIndex + 1);
-  }
+  };
 
   const clickCustomPage = (pageIndex: number) => {
-    () => table.setPageIndex(pageIndex);
+    table.setPageIndex(pageIndex);
     setPageIndex(pageIndex);
-  }
+  };
 
-  const clickPageSize = (e: any) => {
+  const clickPageSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPageSize = Number(e.target.value);
     table.setPageSize(newPageSize); // Update page size
-    setPageSize(e.target.value)
-
-  }
+    setPageSize(newPageSize);
+    table.setPageIndex(0);
+    setPageIndex(0);
+  };
   const table = useReactTable<TData>({
     data: data || [],
     columns,
     globalFilterFn: customGlobalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(), // Enable pagination
-    onColumnFiltersChange: search && filterColumnsState ? setColumnFilters : undefined,
+    onColumnFiltersChange:
+      search && filterColumnsState ? setColumnFilters : undefined,
     getSortedRowModel: sort ? getSortedRowModel() : undefined,
     getFilteredRowModel: search ? getFilteredRowModel() : undefined,
     state: {
@@ -200,6 +204,7 @@ export function TableUI<TData, TValue>({
           globalFilter={globalFilter}
           sortSelectNewLine={sortSelectNewLine}
           selectOptions={selectOptions}
+          allowAdd={allowAdd}
         >
           {children}
         </TableToolbar>
@@ -210,20 +215,28 @@ export function TableUI<TData, TValue>({
         <TableHeader className={tableHeaderClass}>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header, index) => (
-                <TableHead
-                  key={header.id}
-                  className={`${index === 0 && tableHeaderClass ? "rounded-tl-2xl" : ""
-                    } ${index === columns.length - 2 && tableHeaderClass
-                      ? "rounded-tr-2xl"
-                      : ""
-                    }`}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHead>
-              ))}
+              {headerGroup.headers.map((header, index) => {
+                const isFirstColumn = index === 0;
+                const isLastColumn = index === headerGroup.headers.length - 1;
+
+                return (
+                  <TableHead
+                    key={header.id}
+                    className={`${
+                      isFirstColumn && tableHeaderClass ? "rounded-tl-2xl" : ""
+                    } ${
+                      isLastColumn && tableHeaderClass ? "rounded-tr-2xl" : ""
+                    } py-4`}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                );
+              })}
             </TableRow>
           ))}
         </TableHeader>
@@ -232,7 +245,10 @@ export function TableUI<TData, TValue>({
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={table.getAllColumns().length} className="p-0 align-top">
+              <TableCell
+                colSpan={table.getAllColumns().length}
+                className="p-0 align-top"
+              >
                 <TableLoadingBar />
               </TableCell>
             </TableRow>
@@ -240,7 +256,10 @@ export function TableUI<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id} className={tableRowClass}>
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className={tableCellClass}>
+                  <TableCell
+                    key={cell.id}
+                    className={`${tableCellClass} py-4 h-16`}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -257,7 +276,7 @@ export function TableUI<TData, TValue>({
       </Table>
 
       {/* Pagination Controls */}
-      {table.getRowModel().rows?.length > 0 &&
+      {table.getRowModel().rows?.length > 0 && (
         <div className="flex justify-between items-center mt-5">
           <span>
             Page {table.getState().pagination.pageIndex + 1} of{" "}
@@ -288,18 +307,21 @@ export function TableUI<TData, TValue>({
 
             {/* Page Numbers */}
             <div className="flex gap-2">
-              {Array.from({ length: table.getPageCount() }).map((_, pageIndex) => (
-                <button
-                  key={pageIndex}
-                  onClick={() => clickCustomPage(pageIndex)}
-                  className={`px-3 py-1 rounded ${pageIndex === table.getState().pagination.pageIndex
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
+              {Array.from({ length: table.getPageCount() }).map(
+                (_, pageIndex) => (
+                  <button
+                    key={pageIndex}
+                    onClick={() => clickCustomPage(pageIndex)}
+                    className={`px-3 py-1 rounded ${
+                      pageIndex === table.getState().pagination.pageIndex
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
                     }`}
-                >
-                  {pageIndex + 1}
-                </button>
-              ))}
+                  >
+                    {pageIndex + 1}
+                  </button>
+                )
+              )}
             </div>
 
             <button
@@ -311,7 +333,7 @@ export function TableUI<TData, TValue>({
             </button>
           </div>
         </div>
-      }
+      )}
     </div>
   );
 }

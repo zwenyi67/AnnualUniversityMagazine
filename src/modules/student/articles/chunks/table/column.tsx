@@ -1,12 +1,13 @@
+import { StudentArticle } from "@/api/student/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { StudentArticle } from "../../StudentArticlesView";
-import { Navigate } from "react-router-dom";
+import { Info } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const columns: ColumnDef<StudentArticle>[] = [
   {
     id: "id",
-    header: "ID",
-    cell: ({ row }) => <div>{row.original.id}</div>,
+    header: () => <div className="text-center">#</div>,
+    cell: ({ row }) => <div className="text-center">{row.original.id}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -19,13 +20,14 @@ export const columns: ColumnDef<StudentArticle>[] = [
   },
   {
     accessorKey: "action",
-    header: "Action",
+    header: () => <div className="text-center">Action</div>,
     cell: ({ row }) => (
-      <div className="lowercase">
-        <Navigate
-          to={`/student/articles/details/${row.original.id}`}
-        ></Navigate>
-      </div>
+      <Link
+        to={`/student/articles/details/${row.original.id}`}
+        className="flex justify-center item-center"
+      >
+        <Info className="text-[#4169E1] text-center" />
+      </Link>
     ),
   },
 ];

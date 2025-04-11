@@ -1,13 +1,18 @@
 export type LoginPayload = {
-    username: string
-    password: string
-}
+  username: string;
+  password: string;
+};
 
 export type LoginResponse = {
-    token: string
-    role: string
-}
+  token: string;
+  role: string;
+};
 
 export type FileUploadResponse = {
-    file: string
-}
+  file: string;
+};
+
+export type StudentArticle = {
+  id: number;
+  articleName: string;
+};

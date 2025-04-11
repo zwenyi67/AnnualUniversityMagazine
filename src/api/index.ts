@@ -4,6 +4,7 @@ import * as manager from "./manager";
 import * as coordinator from "./coordinator";
 import * as student from "./student";
 import * as guest from "./guest";
+import * as notification from "./notification";
 
 class API {
   auth: typeof auth;
@@ -12,6 +13,7 @@ class API {
   coordinator: typeof coordinator;
   student: typeof student;
   guest: typeof guest;
+  notification: typeof notification;
 
   constructor() {
     this.auth = auth;
@@ -20,6 +22,7 @@ class API {
     this.coordinator = coordinator;
     this.student = student;
     this.guest = guest;
+    this.notification = notification;
   }
 }
 

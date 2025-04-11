@@ -46,7 +46,13 @@ import StudentProfile from "@/modules/student/profile/StudentProfile";
 import GuestProfile from "@/modules/guest/profile/GuestProfile";
 import ReturnLayout from "@/layouts/ReturnLayout";
 import StudentArticlesView from "@/modules/student/articles/StudentArticlesView";
-import StudentArticleDetailsView from "@/modules/student/articles/chunks/detail/StudentArticleDetailsView";
+import StudentArticleDetailsView from "@/modules/student/articles/chunks/StudentArticleDetailsView";
+import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
+import SystemSetting from "@/modules/admin/setting/SystemSetting";
+import CoordinatorArticlesView from "@/modules/coordinator/articles/CoordinatorArticlesView";
+import CoordinatorArticleDetailView from "@/modules/coordinator/articles/CoordinatorArticleDetailView";
+import CoordinatorGuestsView from "@/modules/coordinator/guests/CoordinatorGuestsView";
+import CoordinatorNotificationsView from "@/modules/coordinator/notification/CoordinatorNotificationsView";
 
 const router = createBrowserRouter([
   {
@@ -145,6 +151,12 @@ const router = createBrowserRouter([
         path: "faculty-management/faculties/:id/edit",
         element: <FacultyFormView />,
       },
+
+      // System Setting Management
+      {
+        path: "system-setting",
+        element: <SystemSetting />,
+      },
     ],
   },
   {
@@ -192,6 +204,22 @@ const router = createBrowserRouter([
         element: <CoordinatorDashboardView />,
       },
       {
+        path: "articles",
+        element: <CoordinatorArticlesView />,
+      },
+      {
+        path: "articles/:id",
+        element: <CoordinatorArticleDetailView />,
+      },
+      {
+        path: "guests",
+        element: <CoordinatorGuestsView />,
+      },
+      {
+        path: "notifications",
+        element: <CoordinatorNotificationsView />,
+      },
+      {
         path: "profile",
         element: <CoordinatorProfile />,
       },
@@ -215,7 +243,7 @@ const router = createBrowserRouter([
         index: true,
         element: <Navigate to="dashboard" replace />,
       },
-      // Dashboard Start
+      // Dashboard
       {
         path: "dashboard",
         element: <StudentDashboardView />,
@@ -224,6 +252,10 @@ const router = createBrowserRouter([
       {
         path: "articles",
         element: <StudentArticlesView />,
+      },
+      {
+        path: "articles/create",
+        element: <AddNewArticleView />,
       },
       {
         path: "articles/details/:id",
@@ -289,11 +321,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <ReturnLayout />,
-    children: [
-      
-    ],
+    children: [],
   },
-  
+
   {
     path: "*",
     element: <NotFoundView />,
