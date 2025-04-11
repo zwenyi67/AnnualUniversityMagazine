@@ -11,9 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks";
 import { toast } from "@/hooks/use-toast";
+import { hideLoader, openLoader } from "@/store/features/loaderSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -26,6 +28,7 @@ const FormSchema = z.object({
 
 const LoginView = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // const { toast } = useToast();
   const { userLogin } = useAuth();
@@ -41,7 +44,10 @@ const LoginView = () => {
   });
 
   const { mutate: loginUser } = api.auth.loginMutation.useMutation({
-    onMutate: () => setIsLoading(true),
+    onMutate: () => {
+      setIsLoading(true);
+      dispatch(openLoader());
+    },
     onSuccess: (data) => {
       userLogin(data.token, data.role, data.user);
 
@@ -63,6 +69,7 @@ const LoginView = () => {
     },
     onSettled: () => {
       setIsLoading(false);
+      dispatch(hideLoader());
     },
   });
 

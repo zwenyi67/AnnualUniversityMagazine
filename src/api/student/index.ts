@@ -1,62 +1,146 @@
-import type { FileUploadResponse, LoginPayload, LoginResponse } from "./types"
+import type {
+  CommentPayloadType,
+  CommentWithUserType,
+  ContributionType,
+  UploadArticlePayload,
+} from "./types";
 
-import { useMutation, UseMutationOptions } from "@tanstack/react-query"
-import axios from "axios"
+import {
+  useMutation,
+  UseMutationOptions,
+  useQuery,
+  UseQueryOptions,
+} from "@tanstack/react-query";
+import axios from "axios";
+import { PostResponse } from "../admin/types";
 
-const BASE_URL = "/authorization"
+const BASE_URL = "student";
 
-export const loginMutation = {
-	useMutation: (
-		opt?: UseMutationOptions<LoginResponse, Error, LoginPayload, void>
-	) =>
-		useMutation({
-			mutationKey: ["login"],
-			mutationFn: async (payload: LoginPayload) => {
-				const response = await axios.post(`${BASE_URL}/login`, payload);
+export const getContributionsByStudentID = {
+  useQuery: (opt?: UseQueryOptions<ContributionType[], Error>) =>
+    useQuery<ContributionType[], Error>({
+      queryKey: ["getContributionsByStudentID"],
+      queryFn: async () => {
+        const response = await axios.get(`${BASE_URL}/contributions`);
 
-				const { data, status, message } = response.data;
+        const { data, status, message } = response.data;
 
-				if (status !== 0) {
-					throw new Error(
-					  message || "An error occurred while processing the request."
-					);
-				  }
-		  
-				  return data;
+        if (status !== 0) {
+          throw new Error(message);
+        }
 
-				// return success now (don't have login api)
-				// return {
-				// 	token: "fake-token",
-				// }
-			},
-			...opt, // additional options
-		}),
-}
+        return data;
+      },
+      throwOnError: true,
+      ...opt,
+    }),
+};
 
-export const uploadFileDocument = {
-	useMutation: (
-		opt?: UseMutationOptions<FileUploadResponse, Error, File, void>
-	) =>
-		useMutation({
-			mutationKey: ["uploadFileDocument"],
-			mutationFn: async (file: File) => {
-				const formData = new FormData()
+export const uploadArticle = {
+  useMutation: (
+    opt?: UseMutationOptions<PostResponse, Error, UploadArticlePayload, unknown>
+  ) => {
+    return useMutation({
+      mutationKey: ["uploadArticle"],
+      mutationFn: async (payload: UploadArticlePayload) => {
+        const response = await axios.post(
+          `${BASE_URL}/uploadArticle`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-				const blob = new Blob([file], {
-					type: file.type,
-				})
-				formData.append("file", blob, file.name)
+        const { data, status, message } = response.data;
+        console.log(status);
+        if (status !== 0) {
+          throw new Error(
+            message || "An error occurred while processing the request."
+          );
+        }
 
-				const response = await axios.post(
-					`${BASE_URL}/UploadFileDocument`,
-					formData
-				)
+        return data;
+      },
+      ...opt,
+    });
+  },
+};
 
-				if (response.status !== 200) throw new Error()
+export const getContributionByContributionID = {
+  useQuery: (
+    articleId: number,
+    opt?: UseQueryOptions<ContributionType, Error>
+  ) =>
+    useQuery<ContributionType, Error>({
+      queryKey: ["getContributionByContributionID"],
+      queryFn: async () => {
+        const response = await axios.get(
+          `${BASE_URL}/contributions/${articleId}`
+        );
 
-				return response.data
-			},
-			throwOnError: true,
-			...opt,
-		}),
-}
+        const { data, status, message } = response.data;
+
+        if (status !== 0) {
+          throw new Error(message);
+        }
+
+        return data;
+      },
+      throwOnError: true,
+      ...opt,
+    }),
+};
+
+export const getCommentsByArticleID = {
+  useQuery: (
+    articleId: number,
+    opt?: UseQueryOptions<CommentWithUserType[], Error>
+  ) =>
+    useQuery<CommentWithUserType[], Error>({
+      queryKey: ["getCommentsByArticleID"],
+      queryFn: async () => {
+        const response = await axios.get(
+          `${BASE_URL}/articles/${articleId}/comments`
+        );
+
+        const { data, status, message } = response.data;
+
+        if (status !== 0) {
+          throw new Error(message);
+        }
+
+        return data;
+      },
+      throwOnError: true,
+      ...opt,
+    }),
+};
+
+export const addComment = {
+  useMutation: (
+    opt?: UseMutationOptions<PostResponse, Error, CommentPayloadType, unknown>
+  ) => {
+    return useMutation({
+      mutationKey: ["addComment"],
+      mutationFn: async (payload: CommentPayloadType) => {
+        const response = await axios.post(
+          `${BASE_URL}/articles/${payload.contribution_id}/comments`,
+          payload
+        );
+
+        const { data, status, message } = response.data;
+
+        if (status !== 0) {
+          throw new Error(
+            message || "An error occurred while processing the request."
+          );
+        }
+
+        return data;
+      },
+      ...opt,
+    });
+  },
+};

@@ -53,6 +53,8 @@ import CoordinatorArticlesView from "@/modules/coordinator/articles/CoordinatorA
 import CoordinatorArticleDetailView from "@/modules/coordinator/articles/CoordinatorArticleDetailView";
 import CoordinatorGuestsView from "@/modules/coordinator/guests/CoordinatorGuestsView";
 import CoordinatorNotificationsView from "@/modules/coordinator/notification/CoordinatorNotificationsView";
+import LogView from "@/modules/admin/log-management/log/LogView";
+import ArticleView from "@/modules/manager/article/ArticleView";
 
 const router = createBrowserRouter([
   {
@@ -151,7 +153,11 @@ const router = createBrowserRouter([
         path: "faculty-management/faculties/:id/edit",
         element: <FacultyFormView />,
       },
-
+      // Log Management
+      {
+        path: "log-management/logs",
+        element: <LogView />,
+      },
       // System Setting Management
       {
         path: "system-setting",
@@ -179,12 +185,8 @@ const router = createBrowserRouter([
         element: <ManagerProfile />,
       },
       {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
+        path: "articles",
+        element: <ArticleView />,
       },
     ],
   },

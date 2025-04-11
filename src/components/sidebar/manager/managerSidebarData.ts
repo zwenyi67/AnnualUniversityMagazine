@@ -7,21 +7,14 @@ export const managerSidebarData = [
     icon: Gauge,
   },
   {
-    routeNames: [""],
-    name: "DropDown Menu",
-    icon: Gauge,
-    subMenu: [
-      {
-        routeNames: ["/manager/menu1"],
-        name: "Menu 1",
-        icon: Gauge,
-      },
-      {
-        routeNames: ["/manager/menu2"],
-        name: "Menu 2",
-        icon: Gauge,
-      },
-    ],
+    routeNames: ["/manager/articles"],
+    name: "Articles",
+    icon: User,
+  },
+  {
+    routeNames: ["/manager/notifications"],
+    name: "Notifications",
+    icon: User,
   },
   {
     routeNames: ["/manager/profile"],

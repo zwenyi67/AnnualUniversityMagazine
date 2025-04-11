@@ -82,17 +82,12 @@ const TableToolbar = ({
           sortSelectNewLine ? "2xl:flex-nowrap flex-wrap mt-2 xl:mt-0" : ""
         )}
       >
-        {allowAdd && (
+        {newCreate && (
           <div className="">
             <div>
-              <Link
-                to={newCreate as string}
-                className="flex bg-secondary rounded-sm text-white px-4 py-2"
-              >
+              <Link to={newCreate as string} className="flex bg-secondary rounded-sm text-white px-4 py-2">
                 <span>Add</span>
-                <div>
-                  <Plus />
-                </div>
+                <div><Plus /></div>
               </Link>
             </div>
           </div>
