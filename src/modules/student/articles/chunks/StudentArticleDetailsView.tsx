@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
-// Define form schema
+// Define form schemac
 const formSchema = z.object({
   comment: z.string(),
 });
