@@ -1,6 +1,6 @@
 import FormHeader from "@/components/common/FormHeader";
 import { Card, CardContent } from "@/components/ui/card";
-import { Clock } from "lucide-react";
+import { Clock, LucideIcon } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -9,99 +9,158 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
+  BarChart,
+  Bar,
 } from "recharts";
-import { PieChart, Pie, Cell, Legend } from "recharts";
-
-const data = [
-  { name: "Jan", value: 500 },
-  { name: "Feb", value: 200 },
-  { name: "Mar", value: 1000 },
-  { name: "Apr", value: 1500 },
-  { name: "May", value: 1300 },
-  { name: "Jun", value: 700 },
-  { name: "Jul", value: 900 },
-  { name: "Aug", value: 1100 },
-  { name: "Sep", value: 800 },
-  { name: "Oct", value: 1200 },
-  { name: "Nov", value: 1500 },
-  { name: "Dec", value: 1400 },
-];
-
-const pieData = [
-  { name: "Computer Science", value: 50 },
-  { name: "Medical", value: 34 },
-  { name: "Chemistry", value: 34 },
-  { name: "Mathematics", value: 34 },
-];
-
-const COLORS = ["#003fbe", "#f4c542", "#f34542"];
+import { Legend } from "recharts";
+import {
+  UserCog,
+  Users,
+  GraduationCap,
+  User,
+  Building,
+  FileText,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+import api from "@/api";
+import { differenceInDays, format } from "date-fns";
+import { DashboardDataType } from "@/api/admin/types";
 
 const AdminDashboardView = () => {
+
+  const { data } = api.admin.dashboard.dashboardData.useQuery();
+
+  type DashboardStatKey = Exclude<keyof DashboardDataType, "setting" | "contributionData" | 'contributionDataByFaculty'>;
+
+const statsData: {
+  title: string;
+  key: DashboardStatKey;
+  icon: LucideIcon;
+  color: string;
+}[] = [
+  { title: "Manager", key: "managers", icon: UserCog, color: "text-blue-600" },
+  { title: "Coordinator", key: "coordinators", icon: Users, color: "text-purple-600" },
+  { title: "Student", key: "students", icon: GraduationCap, color: "text-green-600" },
+  { title: "Guest", key: "guests", icon: User, color: "text-gray-500" },
+  { title: "Faculty", key: "faculties", icon: Building, color: "text-yellow-600" },
+  { title: "All Submissions", key: "contributions", icon: FileText, color: "text-indigo-600" },
+  { title: "Approved", key: "approved", icon: CheckCircle, color: "text-emerald-600" },
+  { title: "Rejected", key: "rejected", icon: XCircle, color: "text-rose-600" },
+];
+  
+
+  const academicYear = data?.setting?.academic_year ?? "N/A";
+
+  const closureDate = data?.setting?.closure_date
+    ? new Date(data.setting.closure_date)
+    : null;
+
+  const finalClosureDate = data?.setting?.final_closure_date
+    ? new Date(data.setting.final_closure_date)
+    : null;
+
+  const today = new Date();
+
+  const daysToClosure = closureDate ? differenceInDays(closureDate, today) : null;
+  const daysToFinalClosure = finalClosureDate ? differenceInDays(finalClosureDate, today) : null;
+
   return (
     <section className="m-4">
       <FormHeader title="Dashboard" />
       <div className="p-6 bg-white rounded-b-lg min-h-[500px]">
-        <h2 className="text-xl font-bold mb-4">WELCOME TO ADMIN DASHBOARD</h2>
+        <h2 className="text-xl font-bold mb-6">WELCOME TO ADMIN DASHBOARD <span className="text-sm text-gray-600 ms-3">Academic Year ({academicYear})</span></h2>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {["Views", "Visits", "New Users", "Active Contributors"].map(
-            (title, index) => (
-              <Card key={index} className="shadow-md p-4">
-                <CardContent>
-                  <h4 className="text-gray-600">{title}</h4>
-                  <p className="text-2xl font-bold">{Math.floor(Math.random() * 2000)}</p>
-                  <p className="text-sm text-green-500">+{(Math.random() * 10).toFixed(2)}%</p>
-                </CardContent>
-              </Card>
-            )
-          )}
+          {statsData.map(({ title, key, icon: Icon, color }, index) => (
+            <Card key={index} className="shadow-md p-4">
+              <CardContent className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-sm text-gray-600">{title}</h4>
+                  <p className="text-xl font-bold">{data?.[key] ?? 0}</p>
+                </div>
+                <Icon className={`w-8 h-8 ${color}`} />
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
-        {/* Pie Chart and Countdown Timer */}
-        <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-4">
-
-          {/* Line Chart (70%) */}
-          <Card className="shadow-md p-4 mb-6">
-            <CardContent>
-              <h4 className="text-lg font-bold mb-2">Total Contributions</h4>
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="value" stroke="#003fbe" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {/* Submission Closure */}
+          <Card className="shadow-md p-4 bg-white border border-red-300">
+            <CardContent className="flex items-center gap-4">
+              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100">
+                <Clock className="text-red-600 w-8 h-8" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-red-600">Submission Closure</p>
+                <p className="text-2xl font-bold text-red-700">
+                  {closureDate ? format(closureDate, "dd MMMM yyyy") : "N/A"}
+                </p>
+                {daysToClosure !== null && (
+                  <span className="inline-block mt-1 text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">
+                    {daysToClosure} Days Left
+                  </span>
+                )}
+              </div>
             </CardContent>
           </Card>
 
-          {/* Pie Chart (30%) */}
-          <Card className="shadow-md p-4">
-            <CardContent>
-              <h4 className="text-lg font-bold mb-2">Contributions by Faculty</h4>
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={80} label={({percent }) => `${(percent * 100).toFixed(0)}%`}>
-                    {pieData.map((entry, index) => (
-                      <Cell className="text-xs" key={`cell-${index}-${entry}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+          {/* Final Closure */}
+          <Card className="shadow-md p-4 bg-white border border-red-300">
+            <CardContent className="flex items-center gap-4">
+              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100">
+                <Clock className="text-red-600 w-8 h-8" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-red-600">Final Closure</p>
+                <p className="text-2xl font-bold text-red-700">
+                  {finalClosureDate ? format(finalClosureDate, "dd MMMM yyyy") : "N/A"}
+                </p>
+                {daysToFinalClosure !== null && (
+                  <span className="inline-block mt-1 text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">
+                    {daysToFinalClosure} Days Left
+                  </span>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
 
+        {/* Line Chart */}
+        <Card className="shadow-md p-4 mb-6">
+          <CardContent>
+            <h4 className="text-lg font-bold mb-2">Total Contributions</h4>
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={data?.contributionData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="value" stroke="#003fbe" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
 
-        <Card className="shadow-md p-4">
-          <CardContent className="flex flex-col items-center text-center">
-            <Clock className="text-red-500 w-10 h-10 mb-2" />
-            <p className="text-xl font-bold text-red-500">10 days remaining</p>
-            <p className="text-3xl font-bold text-red-600">10:04:15</p>
-            <p className="text-sm text-gray-500">Days Hours Mins</p>
+        <Card className="shadow-md p-4 mb-6">
+          <CardContent>
+            <h4 className="text-lg font-bold mb-2">Contributions by Faculty</h4>
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={data?.contributionDataByFaculty} layout="vertical" margin={{ top: 10, right: 30, left: 10, bottom: 10 }}>
+                <XAxis type="number" />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={100}
+                  tick={{ fontSize: 9 }}
+                />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#2563EB" />
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>

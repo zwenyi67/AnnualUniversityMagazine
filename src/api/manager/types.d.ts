@@ -15,6 +15,19 @@ export interface SelectedArticlesType extends TimeStamps {
     title: string;
     description: string;
     article_path: string;
+    faculty: Faculty;
+    student: Student;
+}
+
+export type Facutly = {
+    id: number;
+    name: string;
+}
+
+export type Student = {
+    id: number;
+    first_name: string;
+    last_name: string;
 }
 
 export type FileUploadResponse = {

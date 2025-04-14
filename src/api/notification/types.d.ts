@@ -5,5 +5,5 @@ export type NotificationType = {
   created_at: string;
   active_flag: number;
   is_read: number;
-  type: "user" | "system";
+  type: "user" | "role";
 };

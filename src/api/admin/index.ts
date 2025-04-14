@@ -6,9 +6,11 @@ import * as guestUsers from "./guest-user";
 import * as faculties from "./faculty";
 import * as logs from "./log";
 import * as setting from "./system-setting";
+import * as dashboard from "./dashboard";
 
 
 export const admin = {
+	dashboard,
 	adminUsers,
 	managerUsers,
 	coordinatorUsers,

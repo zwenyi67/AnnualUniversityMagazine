@@ -1,4 +1,4 @@
-import { Gauge, User } from "lucide-react";
+import { BellDot, Gauge, User } from "lucide-react";
 
 export const managerSidebarData = [
   {
@@ -14,7 +14,7 @@ export const managerSidebarData = [
   {
     routeNames: ["/manager/notifications"],
     name: "Notifications",
-    icon: User,
+    icon: BellDot,
   },
   {
     routeNames: ["/manager/profile"],

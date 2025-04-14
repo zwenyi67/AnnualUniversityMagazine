@@ -55,6 +55,8 @@ import CoordinatorGuestsView from "@/modules/coordinator/guests/CoordinatorGuest
 import CoordinatorNotificationsView from "@/modules/coordinator/notification/CoordinatorNotificationsView";
 import LogView from "@/modules/admin/log-management/log/LogView";
 import ArticleView from "@/modules/manager/article/ArticleView";
+import ManagerArticleDetailView from "@/modules/manager/article/ManagerArticleDetailView";
+import StudentNotificationsView from "@/modules/student/notification/StudentNotificationsView";
 
 const router = createBrowserRouter([
   {
@@ -188,6 +190,14 @@ const router = createBrowserRouter([
         path: "articles",
         element: <ArticleView />,
       },
+      {
+        path: "articles/:id",
+        element: <ManagerArticleDetailView />,
+      },
+      {
+        path: "notifications",
+        element: <StudentNotificationsView />,
+      },
     ],
   },
   {
@@ -225,14 +235,6 @@ const router = createBrowserRouter([
         path: "profile",
         element: <CoordinatorProfile />,
       },
-      {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
-      },
     ],
   },
   {
@@ -268,12 +270,8 @@ const router = createBrowserRouter([
         element: <StudentProfile />,
       },
       {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
+        path: "notifications",
+        element: <StudentNotificationsView />,
       },
     ],
   },

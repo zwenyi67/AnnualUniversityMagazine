@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { NotificationType } from "@/api/notification/types";
 import { toast } from "@/hooks/use-toast";
 
-const CoordinatorNotificationsView = () => {
+const ManagerNotificationsView = () => {
   const { data, isFetching, refetch, isRefetching } =
     api.notification.getCoordinatorNotifications.useQuery();
 
@@ -234,4 +234,4 @@ const CoordinatorNotificationsView = () => {
   );
 };
 
-export default CoordinatorNotificationsView;
+export default ManagerNotificationsView;

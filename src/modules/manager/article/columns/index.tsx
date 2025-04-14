@@ -35,10 +35,18 @@ export const columns: ColumnDef<SelectedArticlesType>[] = [
     filterFn: "includesString",
   },
   {
-    accessorKey: "article_path",
-    header: () => <TableHeaderCell>{`Article`}</TableHeaderCell>,
+    accessorKey: "student",
+    header: () => <TableHeaderCell>{`Contributor`}</TableHeaderCell>,
     cell: ({ row }) => {
-      return <div>{row.original.article_path}</div>;
+      return <div>{row.original.student.first_name} {row.original.student.last_name}</div>;
+    },
+    filterFn: "includesString",
+  },
+  {
+    accessorKey: "faculty",
+    header: () => <TableHeaderCell>{`Faculty`}</TableHeaderCell>,
+    cell: ({ row }) => {
+      return <div>{row.original.faculty.name}</div>;
     },
     filterFn: "includesString",
   },
