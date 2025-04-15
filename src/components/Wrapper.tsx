@@ -16,7 +16,6 @@ import LoginView from "@/modules/auth/login/LoginView";
 import NotFoundView from "@/modules/not-found/NotFoundView";
 
 import ErrorView from "@/modules/error/ErrorView";
-import Menu1View from "@/modules/dropdown/Menu1View";
 import AdminLayout from "@/layouts/AdminLayout";
 import StudentLayout from "@/layouts/StudentLayout";
 import CoordinatorLayout from "@/layouts/CoordinatorLayout";
@@ -26,7 +25,6 @@ import AdminDashboardView from "@/modules/admin/dashboard/AdminDashboardView";
 import ManagerDashboardView from "@/modules/manager/dashboard/ManagerDashboardView";
 import CoordinatorDashboardView from "@/modules/coordinator/dashboard/CoordinatorDashboardView";
 import StudentDashboardView from "@/modules/student/dashboard/StudentDashboardView";
-import HomeView from "@/modules/guest/home/HomeView";
 import ManagerView from "@/modules/admin/user-management/manager/ManagerView";
 import FacultyView from "@/modules/admin/faculty-management/faculty/FacultyView";
 import FacultyFormView from "@/modules/admin/faculty-management/faculty/FacultyFormView";
@@ -57,6 +55,9 @@ import LogView from "@/modules/admin/log-management/log/LogView";
 import ArticleView from "@/modules/manager/article/ArticleView";
 import ManagerArticleDetailView from "@/modules/manager/article/ManagerArticleDetailView";
 import StudentNotificationsView from "@/modules/student/notification/StudentNotificationsView";
+import GuestArticleView from "@/modules/guest/article/GuestArticleView";
+import GuestDashboardView from "@/modules/guest/dashboard/GuestDashboardView";
+import GuestArticleDetailView from "@/modules/guest/article/GuestArticleDetailView";
 
 const router = createBrowserRouter([
   {
@@ -288,19 +289,19 @@ const router = createBrowserRouter([
       // Dashboard Start
       {
         path: "dashboard",
-        element: <HomeView />,
+        element: <GuestDashboardView />,
+      },
+      {
+        path: "articles",
+        element: <GuestArticleView />,
+      },
+      {
+        path: "articles/:id",
+        element: <GuestArticleDetailView />,
       },
       {
         path: "profile",
         element: <GuestProfile />,
-      },
-      {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
       },
     ],
   },

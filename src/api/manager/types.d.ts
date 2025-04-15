@@ -10,6 +10,40 @@ export type LoginResponse = {
     role: string
 }
 
+// Dashboard Data
+
+export type DashboardDataType = {
+    coordinators: number;
+    students: number;
+    guests: number;
+    faculties: number;
+    contributions: number;
+    approved: number;
+    pending: number;
+    reviewed: number;
+    unreviewed: number;
+    rejected: number;
+    setting: Setting;
+    contributionData: ContributionChartData[];
+    contributionDataByFaculty: ContributionDataByFaculty[];
+}
+
+export type Setting = {
+    academic_year: string,
+    closure_date: Date,
+    final_closure_date: Date,
+}
+
+export type ContributionChartData = {
+    name: string;
+    value: number;
+};
+
+export type ContributionDataByFaculty = {
+    name: string;
+    value: number;
+};
+
 export interface SelectedArticlesType extends TimeStamps {
     id: number,
     title: string;

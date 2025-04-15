@@ -13,7 +13,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 
-const ManagerArticleDetailView = () => {
+const GuestArticleDetailView = () => {
   const location = useLocation();
   const passedData = location.state?.data;
 
@@ -128,4 +128,4 @@ const ManagerArticleDetailView = () => {
   );
 };
 
-export default ManagerArticleDetailView;
+export default GuestArticleDetailView;
