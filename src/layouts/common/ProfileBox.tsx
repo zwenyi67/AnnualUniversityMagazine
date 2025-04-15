@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogoutDialog } from "@/components/dialogs";
 import { useUserData } from "@/store/AuthContext";
+import { Link } from "react-router-dom";
 
 const ProfileBox = () => {
 	const [isDropdownOpen, setDropdownOpen] = useState(false);
-	const {userData} = useUserData();
+	const { userData } = useUserData();
 
 	const toggleDropdown = () => {
 		setDropdownOpen(!isDropdownOpen);
@@ -20,7 +21,7 @@ const ProfileBox = () => {
 			>
 				<Avatar className="w-8 h-8">
 					<AvatarImage src="/image" alt="Profile Image" />
-					<AvatarFallback>A</AvatarFallback>
+					<AvatarFallback>{userData?.first_name?.charAt(0)?.toUpperCase() || "N"}</AvatarFallback>
 				</Avatar>
 				<div className="text-left">
 					<h5 className="text-[13px] font-semibold">{userData?.first_name}</h5>
@@ -58,20 +59,35 @@ const ProfileBox = () => {
 			</div>
 
 
-			{/* Dropdown Menu */}
 			{isDropdownOpen && (
-				<div className="absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-48 z-50">
+				<div className="absolute right-0 mt-2 w-64 rounded-xl bg-white shadow-xl border border-gray-200 z-50">
+					<div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
+						<Avatar className="w-8 h-8">
+							<AvatarImage src="/image" alt="Profile Image" />
+							<AvatarFallback>{userData?.first_name?.charAt(0)?.toUpperCase() || "N"}</AvatarFallback>
+						</Avatar>
+						<div>
+							<div className="text-sm font-semibold text-gray-900">
+								{userData?.first_name} {userData?.last_name}
+							</div>
+							<div className="text-xs text-gray-500">{userData?.email}</div>
+						</div>
+					</div>
+
 					<ul className="py-2">
-						<li className="px-4 py-2 text-sm font-bold text-gray-700">
-							My Account
+						<li className="px-5 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer rounded transition">
+							<Link to={`/${userData?.role_name}/profile`}>My Account</Link>
 						</li>
-						<hr />
-						<LogoutDialog>
-							<li className="px-4 py-2 text-sm text-destructive hover:bg-accent cursor-pointer rounded-md">
-								Log out
-							</li>
-						</LogoutDialog>
+						{/* Add more menu items if needed */}
 					</ul>
+
+					<div className="border-t border-gray-100 mb-3">
+						<LogoutDialog>
+							<div className="ps-5 px-4 py-2 text-sm text-destructive hover:bg-accent cursor-pointer rounded-md">
+								Log out
+							</div>
+						</LogoutDialog>
+					</div>
 				</div>
 			)}
 		</div>

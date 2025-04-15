@@ -82,11 +82,24 @@ const ManagerArticleDetailView = () => {
           <p className="text-gray-600">{description}</p>
 
           <Tabs defaultValue="article" className="w-full mt-6">
-            <TabsList className="mb-4">
-              <TabsTrigger value="article">Article Document</TabsTrigger>
-              <TabsTrigger value="images">Images</TabsTrigger>
+            <TabsList className="inline-flex bg-gray-100 p-1 rounded-lg shadow-inner mb-6">
+              <TabsTrigger
+                value="article"
+                className="px-5 py-2 text-sm font-medium rounded-md transition-colors duration-200
+               data-[state=active]:bg-white data-[state=active]:text-secondary
+               data-[state=inactive]:text-gray-600 hover:bg-white"
+              >
+                 Article Document
+              </TabsTrigger>
+              <TabsTrigger
+                value="images"
+                className="px-5 py-2 text-sm font-medium rounded-md transition-colors duration-200
+               data-[state=active]:bg-white data-[state=active]:text-secondary
+               data-[state=inactive]:text-gray-600 hover:bg-white"
+              >
+                 Images
+              </TabsTrigger>
             </TabsList>
-
             <TabsContent value="article">
               <p className="font-semibold text-gray-700 mb-2">Document:</p>
               <a

@@ -1,6 +1,6 @@
 import FormHeader from "@/components/common/FormHeader";
 import { Card, CardContent } from "@/components/ui/card";
-import { Clock, LucideIcon } from "lucide-react";
+import { Clock, Eye, EyeOff, LucideIcon } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -35,14 +35,12 @@ const statsData: {
   color: string;
 }[] = [
   { title: "All Submissions", key: "contributions", icon: FileText, color: "text-indigo-600" },
-  { title: "Pending", key: "pending", icon: XCircle, color: "text-rose-600" },
+  { title: "Pending", key: "pending", icon: Clock, color: "text-yellow-500" },
   { title: "Approved", key: "approved", icon: CheckCircle, color: "text-emerald-600" },
   { title: "Rejected", key: "rejected", icon: XCircle, color: "text-rose-600" },
-  { title: "reviewed", key: "reviewed", icon: CheckCircle, color: "text-emerald-600" },
-  { title: "unreviewed", key: "unreviewed", icon: CheckCircle, color: "text-emerald-600" },
-
+  { title: "Reviewed", key: "reviewed", icon: Eye, color: "text-blue-600" },
+  { title: "Unreviewed", key: "unreviewed", icon: EyeOff, color: "text-gray-500" },
 ];
-  
 
   const academicYear = data?.setting?.academic_year ?? "N/A";
 
