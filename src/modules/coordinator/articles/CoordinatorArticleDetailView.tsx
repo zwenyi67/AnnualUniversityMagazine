@@ -97,48 +97,12 @@ const CoordinatorArticleDetailView = () => {
           console.error("Invalid article ID");
           return;
         }
+        console.log("Fetching article details", articleData);
         // Use the data from the useQuery hook
         if (articleData) {
-          const presignedUrls = [
-            {
-              fileUrl:
-                "https://contributex.nyc3.digitaloceanspaces.com/image1.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00VYQ4M6YJ4XK6VW6D%2F20250401%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250401T151856Z&X-Amz-Expires=360000&X-Amz-Signature=49ed31e7918c55586174a4dff7d721622fa32492f0239ea993940c1ce3bb8d22&X-Amz-SignedHeaders=host",
-            },
-            {
-              fileUrl:
-                "https://contributex.nyc3.digitaloceanspaces.com/image2.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00VYQ4M6YJ4XK6VW6D%2F20250401%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250401T151856Z&X-Amz-Expires=360000&X-Amz-Signature=901eea66d6651dc2b86507293d987559ba63e5a55ce5836d99f63388805e8141&X-Amz-SignedHeaders=host",
-            },
-            {
-              fileUrl:
-                "https://contributex.nyc3.digitaloceanspaces.com/image3.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00VYQ4M6YJ4XK6VW6D%2F20250401%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250401T151856Z&X-Amz-Expires=360000&X-Amz-Signature=62ae1a4dbab5da8ae440bb620484e176a6e9c8135f94ad95c2aef35bf4950df7&X-Amz-SignedHeaders=host",
-            },
-          ];
-          articleData.image_path = JSON.stringify(presignedUrls);
           setArticle(articleData);
         }
         setComments(articleData?.comments || []);
-        //   {
-        //     id: 1,
-        //     user: {
-        //       name: "Coordinator Name",
-        //       avatar: `/src/modules/coordinator/articles/avatar1.jpg`,
-        //       role: "coordinator",
-        //     },
-        //     text: "Please include more visual data in the sustainability metrics section. The current graphs need more context.",
-        //     timestamp: "2025-03-10T14:30:00",
-        //   },
-        //   {
-        //     id: 2,
-        //     user: {
-        //       name: "Student Name",
-        //       avatar: `/src/modules/coordinator/articles/avatar2.jpg`,
-        //       role: "student",
-        //     },
-        //     text: "I've updated the article with additional visual data and expanded the context for the sustainability metrics section.",
-        //     timestamp: "2025-03-11T09:15:00",
-        //   },
-        // ]);
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching article details:", error);
@@ -208,12 +172,7 @@ const CoordinatorArticleDetailView = () => {
       </div>
     );
   }
-  const getDocViewerUrl = (): string => {
-    const googleDocsUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(
-      "https://contributex.nyc3.digitaloceanspaces.com/sample.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=DO00VYQ4M6YJ4XK6VW6D%2F20250401%2Fnyc3%2Fs3%2Faws4_request&X-Amz-Date=20250401T150201Z&X-Amz-Expires=360000&X-Amz-Signature=bd7b52f030a6f00ae5e34342de3f8b2540604b15e67c80cce675504c55e1aab6&X-Amz-SignedHeaders=host"
-    )}&embedded=true`;
-    return googleDocsUrl;
-  };
+
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -308,39 +267,36 @@ const CoordinatorArticleDetailView = () => {
                 >
                   {/* Added flex-grow and adjusted height */}
                   <div className="space-y-4 overflow-y-auto h-full pr-2">
-                    {article?.image_path &&
-                    JSON.parse(article.image_path).length > 0 ? (
-                      JSON.parse(article.image_path).map(
-                        (img: { fileUrl: string }, index: number) => (
-                          <div key={index} className="relative">
-                            <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-md z-0">
-                              <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-                            </div>
-                            <img
-                              src={img.fileUrl}
-                              alt={`Figure ${index + 1}`}
-                              className="w-full h-auto rounded-md shadow-sm"
-                              onLoad={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.parentElement
-                                  ?.querySelector("div.absolute")
-                                  ?.classList.add("hidden");
-                              }}
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = "/api/placeholder/400/300";
-                                target.parentElement
-                                  ?.querySelector("div.absolute")
-                                  ?.classList.add("hidden");
-                              }}
-                            />
-                            <div className="mt-2 text-sm text-gray-600">
-                              Figure {index + 1}: {article?.title} - Visual{" "}
-                              {index + 1}
-                            </div>
+                    {article?.image_paths && article.image_paths.length > 0 ? (
+                      article.image_paths.map((img: string, index: number) => (
+                        <div key={index} className="relative">
+                          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-md z-0">
+                            <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
                           </div>
-                        )
-                      )
+                          <img
+                            src={img}
+                            alt={`Figure ${index + 1}`}
+                            className="w-full h-auto rounded-md shadow-sm"
+                            onLoad={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.parentElement
+                                ?.querySelector("div.absolute")
+                                ?.classList.add("hidden");
+                            }}
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = "/api/placeholder/400/300";
+                              target.parentElement
+                                ?.querySelector("div.absolute")
+                                ?.classList.add("hidden");
+                            }}
+                          />
+                          <div className="mt-2 text-sm text-gray-600">
+                            Figure {index + 1}: {article?.title} - Visual{" "}
+                            {index + 1}
+                          </div>
+                        </div>
+                      ))
                     ) : (
                       <div className="text-center text-gray-500 py-8">
                         No images available for this article.
@@ -413,7 +369,9 @@ const CoordinatorArticleDetailView = () => {
 
                       {/* Iframe */}
                       <iframe
-                        src={getDocViewerUrl()}
+                        src={`https://docs.google.com/gview?url=${encodeURIComponent(
+                          articleData?.article_path || ""
+                        )}&embedded=true`}
                         className="w-full h-full border-none rounded-md shadow-lg"
                         title="Document Preview"
                         onLoad={handleDocFrameLoad}

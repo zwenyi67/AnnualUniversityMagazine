@@ -2,8 +2,8 @@ export type CoordinatorsType = {
   id: number;
   title: string;
   description: string;
-  file_path: string;
-  image_path: string;
+  article_path: string;
+  image_paths: json[];
   user_id: number;
   faculty_id: number;
   status: "pending" | "reviewed" | "selected";
