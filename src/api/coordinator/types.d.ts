@@ -36,3 +36,11 @@ export type CommentResponse = {
   updated_at: string;
   name: string;
 };
+
+export type SubmissionType = {
+  id: number;
+  student_name: string;
+  title: string;
+  submitted_at: Date;
+  status: "pending" | "approved" | "rejected";
+};
