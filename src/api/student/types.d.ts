@@ -104,3 +104,69 @@ export type CommentPayloadType = {
   comment: string;
   contribution_id: number;
 };
+
+interface DashboardData {
+  latestCoordinatorComment: CoordinatorComment;
+  setting: SystemSetting;
+  statistics: Statistics;
+}
+
+interface CoordinatorComment {
+  id: number;
+  comment: string;
+  user_id: number;
+  contribution_id: number;
+  active_flag: number;
+  created_at: string;
+  updated_at: string;
+  createby: number;
+  updateby: number | null;
+  user: User;
+}
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+}
+
+interface SystemSetting {
+  id: number;
+  academic_year: string;
+  closure_date: string;
+  final_closure_date: string;
+  active_flag: number;
+  created_at: string | null;
+  updated_at: string;
+  createby: number;
+  updateby: number;
+}
+
+interface Statistics {
+  contributions: Contribution[];
+  statusCounts: StatusCount[];
+  totalSubmissions: number;
+  pendingReview: number;
+  approved: number;
+}
+
+interface Contribution {
+  id: number;
+  title: string;
+  description: string;
+  article_path: string;
+  image_paths: string;
+  user_id: number;
+  faculty_id: number;
+  status: "pending" | "selected" | "reviewed" | "rejected";
+  active_flag: number;
+  created_at: string;
+  updated_at: string;
+  createby: number;
+  updateby: number | null;
+}
+
+interface StatusCount {
+  name: "pending" | "reviewed" | "selected" | "rejected";
+  value: number;
+}

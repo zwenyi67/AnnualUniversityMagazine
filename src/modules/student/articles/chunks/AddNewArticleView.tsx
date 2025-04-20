@@ -14,7 +14,7 @@ import {
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import FormHeader from "@/components/common/FormHeader";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "@/api";
 import { useDispatch } from "react-redux";
 import { hideLoader, openLoader } from "@/store/features/loaderSlice";
@@ -149,6 +149,7 @@ const AddNewArticleView = () => {
       <FormHeader
         title="Add Article"
         onRefresh={refreshForm}
+        isShowBackButton={true}
         // isLoading={isFetching || isRefetching}
       />
       <div className="p-6 bg-white rounded-b-lg">
@@ -287,8 +288,9 @@ const AddNewArticleView = () => {
               <Button
                 type="button"
                 className="bg-gray-400 hover:bg-gray-500 text-white"
+                onClick={() => navigate(-1)}
               >
-                <Link to="/student/articles">Cancel</Link>
+                Cancel
               </Button>
               <Button
                 type="submit"
