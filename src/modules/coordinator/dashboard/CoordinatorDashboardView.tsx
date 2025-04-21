@@ -3,15 +3,15 @@ import {
   Clock,
   FileCheck,
   CalendarClock,
-  Bell
+  Bell,
 } from "lucide-react";
 import { TableUI } from "@/components/table/TableUI";
 import { columns } from "../dashboard/columns";
 import api from "@/api";
+import { useNavigate } from "react-router-dom";
 
 export default function CoordinatorDashboardView() {
-  // const [notifications] = useState(3);
-
+  const navigate = useNavigate();
   const { data } = api.coordinator.getDashboard.useQuery();
 
   const { data: notificationData } =
@@ -85,7 +85,10 @@ export default function CoordinatorDashboardView() {
           Faculty of Engineering Dashboard
         </h1>
         <div className="flex items-center gap-4">
-          <div className="relative">
+          <div
+            className="relative"
+            onClick={() => navigate("/coordinator/notifications")}
+          >
             <Bell
               size={24}
               className="text-slate-600 hover:text-slate-800 transition-colors cursor-pointer"
