@@ -122,12 +122,6 @@ const LoginView = () => {
                     <FormLabel className="text-sm font-medium">
                       Password
                     </FormLabel>
-                    <NavLink
-                      to="/forgot-password"
-                      className="text-xs text-secondary hover:underline"
-                    >
-                      Forgot password?
-                    </NavLink>
                   </div>
                   <FormControl>
                     <div className="relative">
