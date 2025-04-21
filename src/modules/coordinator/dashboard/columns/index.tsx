@@ -14,15 +14,15 @@ const statusConfig = {
     label: "Pending",
   },
   reviewed: {
-    bg: "bg-emerald-100",
-    text: "text-emerald-800",
-    hover: "hover:bg-emerald-200",
+    bg: "bg-orange-100",
+    text: "text-orange-800",
+    hover: "hover:bg-orange-200",
     label: "Reviewed",
   },
   selected: {
-    bg: "bg-rose-100",
-    text: "text-rose-800",
-    hover: "hover:bg-rose-200",
+    bg: "bg-emerald-100",
+    text: "text-emerald-800",
+    hover: "hover:bg-emerald-200",
     label: "Selected",
   },
 };
