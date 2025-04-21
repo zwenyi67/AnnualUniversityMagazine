@@ -2,6 +2,7 @@ import type {
   CommentPayloadType,
   CommentWithUserType,
   ContributionType,
+  DashboardData,
   UploadArticlePayload,
 } from "./types";
 
@@ -15,6 +16,26 @@ import axios from "axios";
 import { PostResponse } from "../admin/types";
 
 const BASE_URL = "student";
+
+export const getStudentDashboardData = {
+  useQuery: (opt?: UseQueryOptions<DashboardData, Error>) =>
+    useQuery<DashboardData, Error>({
+      queryKey: ["getStudentDashboardData"],
+      queryFn: async () => {
+        const response = await axios.get(`${BASE_URL}/dashboard`);
+
+        const { data, status, message } = response.data;
+
+        if (status !== 0) {
+          throw new Error(message);
+        }
+
+        return data;
+      },
+      throwOnError: true,
+      ...opt,
+    }),
+};
 
 export const getContributionsByStudentID = {
   useQuery: (opt?: UseQueryOptions<ContributionType[], Error>) =>
