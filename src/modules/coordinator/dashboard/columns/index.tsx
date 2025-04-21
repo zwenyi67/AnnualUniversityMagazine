@@ -1,9 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CoordinatorsType } from "@/api/coordinator/types";
-import { Eye, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
+import ManageColumn from "@/modules/coordinator/dashboard/columns/ManageColumn";
 
 // Status badge configuration for better consistency
 const statusConfig = {
@@ -32,7 +32,7 @@ export const columns: ColumnDef<CoordinatorsType>[] = [
     accessorKey: "student_name",
     header: () => <TableHeaderCell>Student</TableHeaderCell>,
     cell: ({ row }) => {
-      const initials = row.original.first_name  
+      const initials = row.original.first_name
         .split(" ")
         .map((name) => name.charAt(0))
         .join("")
@@ -107,29 +107,7 @@ export const columns: ColumnDef<CoordinatorsType>[] = [
     accessorKey: "action",
     header: () => <TableHeaderCell>Action</TableHeaderCell>,
     cell: ({ row }) => {
-      const status = row.original.status;
-      const isPending = status === "pending";
-
-      return (
-        <Button
-          variant="outline"
-          size="sm"
-          className={`flex items-center gap-1 ${
-            isPending
-              ? "text-blue-600 border-blue-200 hover:bg-blue-50"
-              : "text-gray-600 border-gray-200 hover:bg-gray-50"
-          }`}
-        >
-          {isPending ? (
-            "Review"
-          ) : (
-            <>
-              <Eye size={14} />
-              <span>View</span>
-            </>
-          )}
-        </Button>
-      );
+      return <ManageColumn data={row.original} />;
     },
   },
 ];
