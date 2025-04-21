@@ -26,7 +26,7 @@ const FormSchema = z.object({
     message: "Please enter a valid email address.",
   }),
   password: z.string().min(6, {
-    message: "Password must contain at least 6 characters.",
+    message: "Password must contain at least 8 characters.",
   }),
 });
 
@@ -133,7 +133,6 @@ const LoginView = () => {
                     <div className="relative">
                       <Input
                         type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
                         className="h-11 rounded-lg border-slate-200 focus:border-secondary focus:ring-1 focus:ring-secondary pr-10"
                         disabled={isLoading}
                         {...field}
