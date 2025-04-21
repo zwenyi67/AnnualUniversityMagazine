@@ -1,9 +1,7 @@
-import { useState } from "react";
 import {
   ClipboardCheck,
   Clock,
   FileCheck,
-  FileX,
   CalendarClock,
   Bell,
   TrendingUp,
@@ -12,117 +10,82 @@ import {
 } from "lucide-react";
 import { TableUI } from "@/components/table/TableUI";
 import { columns } from "../dashboard/columns";
-import { SubmissionType } from "@/api/coordinator/types";
-
-// Color scheme constants for better consistency
-const COLORS = {
-  primary: {
-    bg: "bg-indigo-100",
-    text: "text-indigo-700",
-    hover: "hover:bg-indigo-200",
-    border: "border-indigo-200",
-  },
-  pending: {
-    bg: "bg-amber-100",
-    text: "text-amber-700",
-    hover: "hover:bg-amber-200",
-    border: "border-amber-200",
-  },
-  approved: {
-    bg: "bg-emerald-100",
-    text: "text-emerald-700",
-    hover: "hover:bg-emerald-200",
-    border: "border-emerald-200",
-  },
-  rejected: {
-    bg: "bg-rose-100",
-    text: "text-rose-700",
-    hover: "hover:bg-rose-200",
-    border: "border-rose-200",
-  },
-  neutral: {
-    bg: "bg-slate-100",
-    text: "text-slate-700",
-    hover: "hover:bg-slate-200",
-    border: "border-slate-200",
-  },
-};
-
-const mockSubmissions: SubmissionType[] = [
-  {
-    id: 1,
-    student_name: "John Modulela",
-    title: "Renewable Energy Innovation",
-    submitted_at: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-    status: "pending",
-  },
-  {
-    id: 2,
-    student_name: "Emma",
-    title: "AI in Healthcare Systems",
-    submitted_at: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
-    status: "approved",
-  },
-  {
-    id: 3,
-    student_name: "Michael",
-    title: "Smart Cities Development",
-    submitted_at: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-    status: "rejected",
-  },
-  {
-    id: 4,
-    student_name: "Sarah Johnson",
-    title: "Sustainable Materials Research",
-    submitted_at: new Date(Date.now() - 6 * 60 * 60 * 1000),
-    status: "pending",
-  },
-  {
-    id: 5,
-    student_name: "David Chen",
-    title: "Quantum Computing Applications",
-    submitted_at: new Date(Date.now() - 12 * 60 * 60 * 1000),
-    status: "approved",
-  },
-];
-
-const statsInfo = [
-  {
-    title: "Total Submissions",
-    count: 147,
-    icon: ClipboardCheck,
-    colorScheme: COLORS.primary,
-    change: 12,
-    direction: "up",
-  },
-  {
-    title: "Pending Review",
-    count: 24,
-    icon: Clock,
-    colorScheme: COLORS.pending,
-    change: 8,
-    direction: "down",
-  },
-  {
-    title: "Approved",
-    count: 98,
-    icon: FileCheck,
-    colorScheme: COLORS.approved,
-    change: 24,
-    direction: "up",
-  },
-  {
-    title: "Rejected",
-    count: 25,
-    icon: FileX,
-    colorScheme: COLORS.rejected,
-    change: 0,
-    direction: "neutral",
-  },
-];
+import api from "@/api";
 
 export default function CoordinatorDashboardView() {
-  const [notifications] = useState(3);
+  // const [notifications] = useState(3);
+
+  const { data } = api.coordinator.getDashboard.useQuery();
+
+  const { data: notificationData } =
+    api.notification.getCoordinatorNotifications.useQuery();
+  const notifications =
+    notificationData?.filter((notification) => notification.is_read === 0).length ??
+    0;
+
+  // Color scheme constants for better consistency
+  const COLORS = {
+    primary: {
+      bg: "bg-indigo-100",
+      text: "text-indigo-700",
+      hover: "hover:bg-indigo-200",
+      border: "border-indigo-200",
+    },
+    pending: {
+      bg: "bg-amber-100",
+      text: "text-amber-700",
+      hover: "hover:bg-amber-200",
+      border: "border-amber-200",
+    },
+    approved: {
+      bg: "bg-emerald-100",
+      text: "text-emerald-700",
+      hover: "hover:bg-emerald-200",
+      border: "border-emerald-200",
+    },
+    rejected: {
+      bg: "bg-rose-100",
+      text: "text-rose-700",
+      hover: "hover:bg-rose-200",
+      border: "border-rose-200",
+    },
+    neutral: {
+      bg: "bg-slate-100",
+      text: "text-slate-700",
+      hover: "hover:bg-slate-200",
+      border: "border-slate-200",
+    },
+  };
+
+  const statsInfo = [
+    {
+      title: "Total Submissions",
+      // count: 147,
+      count: data?.contributionCount ?? 0,
+      icon: ClipboardCheck,
+      colorScheme: COLORS.primary,
+      change: 12,
+      direction: "up",
+    },
+    {
+      title: "Pending Review",
+      // count: 24,
+      count: data?.pendingCount ?? 0,
+      icon: Clock,
+      colorScheme: COLORS.pending,
+      change: 8,
+      direction: "down",
+    },
+    {
+      title: "Approved",
+      // count: 98,
+      count: data?.selectedCount ?? 0,
+      icon: FileCheck,
+      colorScheme: COLORS.approved,
+      change: 24,
+      direction: "up",
+    },
+  ];
 
   return (
     <div className="px-6 py-8">
@@ -166,7 +129,7 @@ export default function CoordinatorDashboardView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 mt-8">
         {statsInfo.map((stat, index) => (
           <div
             key={index}
@@ -222,7 +185,7 @@ export default function CoordinatorDashboardView() {
         </div>
 
         <TableUI
-          data={mockSubmissions}
+          data={data?.contributions ?? []}
           columns={columns}
           columnVisibility={{ id: false }}
           filterColumns={["student_name", "title"]}

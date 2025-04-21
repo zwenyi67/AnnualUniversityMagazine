@@ -44,3 +44,11 @@ export type SubmissionType = {
   submitted_at: Date;
   status: "pending" | "approved" | "rejected";
 };
+
+export type DashboardType = {
+  contributions: CoordinatorsType[];
+  contributionCount: number;
+  pendingCount: number;
+  selectedCount: number;
+  systemSettings: json[];
+};

@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { SubmissionType } from "@/api/coordinator/types";
+import { CoordinatorsType } from "@/api/coordinator/types";
 import { Eye, Clock } from "lucide-react";
 
 // Status badge configuration for better consistency
@@ -13,26 +13,26 @@ const statusConfig = {
     hover: "hover:bg-amber-200",
     label: "Pending",
   },
-  approved: {
+  reviewed: {
     bg: "bg-emerald-100",
     text: "text-emerald-800",
     hover: "hover:bg-emerald-200",
-    label: "Approved",
+    label: "Reviewed",
   },
-  rejected: {
+  selected: {
     bg: "bg-rose-100",
     text: "text-rose-800",
     hover: "hover:bg-rose-200",
-    label: "Rejected",
+    label: "Selected",
   },
 };
 
-export const columns: ColumnDef<SubmissionType>[] = [
+export const columns: ColumnDef<CoordinatorsType>[] = [
   {
     accessorKey: "student_name",
     header: () => <TableHeaderCell>Student</TableHeaderCell>,
     cell: ({ row }) => {
-      const initials = row.original.student_name
+      const initials = row.original.first_name  
         .split(" ")
         .map((name) => name.charAt(0))
         .join("")
@@ -44,7 +44,9 @@ export const columns: ColumnDef<SubmissionType>[] = [
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-medium text-sm">
             {initials}
           </div>
-          <span className="font-medium">{row.original.student_name}</span>
+          <span className="font-medium">
+            {row.original.first_name + " " + row.original.last_name}
+          </span>
         </div>
       );
     },
@@ -66,7 +68,8 @@ export const columns: ColumnDef<SubmissionType>[] = [
     cell: ({ row }) => {
       const now = new Date();
       const diff = Math.floor(
-        (now.getTime() - row.original.submitted_at.getTime()) / (1000 * 60 * 60)
+        (now.getTime() - new Date(row.original.created_at).getTime()) /
+          (1000 * 60 * 60)
       );
 
       const timeString =
