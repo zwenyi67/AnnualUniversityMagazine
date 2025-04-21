@@ -3,10 +3,7 @@ import {
   Clock,
   FileCheck,
   CalendarClock,
-  Bell,
-  TrendingUp,
-  TrendingDown,
-  Minus,
+  Bell
 } from "lucide-react";
 import { TableUI } from "@/components/table/TableUI";
 import { columns } from "../dashboard/columns";
@@ -20,8 +17,8 @@ export default function CoordinatorDashboardView() {
   const { data: notificationData } =
     api.notification.getCoordinatorNotifications.useQuery();
   const notifications =
-    notificationData?.filter((notification) => notification.is_read === 0).length ??
-    0;
+    notificationData?.filter((notification) => notification.is_read === 0)
+      .length ?? 0;
 
   // Color scheme constants for better consistency
   const COLORS = {
@@ -64,8 +61,6 @@ export default function CoordinatorDashboardView() {
       count: data?.contributionCount ?? 0,
       icon: ClipboardCheck,
       colorScheme: COLORS.primary,
-      change: 12,
-      direction: "up",
     },
     {
       title: "Pending Review",
@@ -73,8 +68,6 @@ export default function CoordinatorDashboardView() {
       count: data?.pendingCount ?? 0,
       icon: Clock,
       colorScheme: COLORS.pending,
-      change: 8,
-      direction: "down",
     },
     {
       title: "Approved",
@@ -82,8 +75,6 @@ export default function CoordinatorDashboardView() {
       count: data?.selectedCount ?? 0,
       icon: FileCheck,
       colorScheme: COLORS.approved,
-      change: 24,
-      direction: "up",
     },
   ];
 
@@ -147,26 +138,6 @@ export default function CoordinatorDashboardView() {
               >
                 <stat.icon className={stat.colorScheme.text} size={24} />
               </div>
-            </div>
-            <div className="mt-4 flex items-center">
-              {stat.direction === "up" && (
-                <span className="text-emerald-600 flex items-center text-sm">
-                  <TrendingUp size={16} className="mr-1" />
-                  {stat.change}% vs last month
-                </span>
-              )}
-              {stat.direction === "down" && (
-                <span className="text-rose-600 flex items-center text-sm">
-                  <TrendingDown size={16} className="mr-1" />
-                  {stat.change}% vs last month
-                </span>
-              )}
-              {stat.direction === "neutral" && (
-                <span className="text-slate-500 flex items-center text-sm">
-                  <Minus size={16} className="mr-1" />
-                  {stat.change}% vs last month
-                </span>
-              )}
             </div>
           </div>
         ))}
