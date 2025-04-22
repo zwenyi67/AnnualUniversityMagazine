@@ -4,11 +4,15 @@ import {
   FileCheck,
   CalendarClock,
   Bell,
+  AlertCircle,
 } from "lucide-react";
 import { TableUI } from "@/components/table/TableUI";
 import { columns } from "../dashboard/columns";
 import api from "@/api";
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { differenceInDays } from "date-fns";
+import { SystemSetting } from "@/api/coordinator/types";
 
 export default function CoordinatorDashboardView() {
   const navigate = useNavigate();
@@ -52,6 +56,12 @@ export default function CoordinatorDashboardView() {
       hover: "hover:bg-slate-200",
       border: "border-slate-200",
     },
+    urgent: {
+      bg: "bg-red-100",
+      text: "text-red-700",
+      hover: "hover:bg-red-200",
+      border: "border-red-200",
+    },
   };
 
   const statsInfo = [
@@ -77,6 +87,88 @@ export default function CoordinatorDashboardView() {
       colorScheme: COLORS.approved,
     },
   ];
+  interface DeadlineWarningProps {
+    systemSettings?: SystemSetting[];
+  }
+
+  const DeadlineWarning: React.FC<DeadlineWarningProps> = ({
+    systemSettings,
+  }) => {
+    // Get the active system setting
+    const activeSetting = React.useMemo(() => {
+      if (!systemSettings || !Array.isArray(systemSettings)) return null;
+      return systemSettings.find((setting) => setting.active_flag === 1);
+    }, [systemSettings]);
+
+    // Calculate days remaining until deadline
+    const daysRemaining = React.useMemo(() => {
+      if (!activeSetting) return null;
+
+      const finalClosureDate = new Date(activeSetting.final_closure_date);
+      const currentDate = new Date();
+
+      return differenceInDays(finalClosureDate, currentDate);
+    }, [activeSetting]);
+
+    // Don't show anything if no active setting or deadline has passed
+    if (!daysRemaining || daysRemaining < 0) {
+      return null;
+    }
+
+    // Different UI based on days remaining
+    if (daysRemaining < 10) {
+      return (
+        <div
+          className={`${COLORS.urgent.bg} border ${COLORS.urgent.border} rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300`}
+        >
+          <div className="flex gap-4 items-center">
+            <div
+              className={`${COLORS.urgent.bg} p-3 rounded-full transition-all duration-300 hover:scale-110 border ${COLORS.urgent.border}`}
+            >
+              <AlertCircle className={COLORS.urgent.text} size={24} />
+            </div>
+            <div>
+              <h3 className="font-semibold text-red-800 text-lg">
+                Urgent: Submission Deadline
+              </h3>
+              <p className="text-red-700">
+                {daysRemaining <= 1
+                  ? "Submissions close today! Final review required immediately."
+                  : `Only ${daysRemaining} days left for submissions. Urgent review required for all pending contributions.`}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (daysRemaining < 20) {
+      return (
+        <div
+          className={`${COLORS.pending.bg} border ${COLORS.pending.border} rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300`}
+        >
+          <div className="flex gap-4 items-center">
+            <div
+              className={`${COLORS.pending.bg} p-3 rounded-full transition-all duration-300 hover:scale-110 border ${COLORS.pending.border}`}
+            >
+              <CalendarClock className={COLORS.pending.text} size={24} />
+            </div>
+            <div>
+              <h3 className="font-semibold text-amber-800 text-lg">
+                Submission Deadline Approaching
+              </h3>
+              <p className="text-amber-700">
+                {`New submissions will be disabled in ${daysRemaining} days. Make sure to review all pending contributions before deadline.`}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // No warning needed if more than 20 days remaining
+    return null;
+  };
 
   return (
     <div className="px-6 py-8">
@@ -101,8 +193,8 @@ export default function CoordinatorDashboardView() {
           </div>
         </div>
       </div>
-
-      <div
+      <DeadlineWarning systemSettings={data?.systemSettings} />
+      {/* <div
         className={`${COLORS.pending.bg} border ${COLORS.pending.border} rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300`}
       >
         <div className="flex gap-4 items-center">
@@ -121,7 +213,7 @@ export default function CoordinatorDashboardView() {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 mt-8">
         {statsInfo.map((stat, index) => (
