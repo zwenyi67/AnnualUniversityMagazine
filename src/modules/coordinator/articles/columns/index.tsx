@@ -1,7 +1,7 @@
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 import ManageColumn from "@/modules/coordinator/articles/columns/ManageColumn";
 import { ColumnDef } from "@tanstack/react-table";
-import { formatDate } from "date-fns";
+import { formatDate, isPast } from "date-fns";
 import { CoordinatorsType } from "@/api/coordinator/types";
 import { SystemSetting } from "@/api/coordinator/types";
 import React from "react";
@@ -9,6 +9,24 @@ import React from "react";
 export const SystemSettingContext = React.createContext<SystemSetting | null>(
   null
 );
+
+export const isArticleEditable = (
+  systemSetting: SystemSetting | null
+): boolean => {
+  if (!systemSetting) return false;
+
+  // Check if system is active
+  if (systemSetting.active_flag !== 1) return false;
+
+  // Check if final closure date has not passed
+  const finalClosureDate = new Date(systemSetting.final_closure_date);
+  const currentDate = new Date();
+
+  return (
+    !isPast(finalClosureDate) ||
+    finalClosureDate.getTime() === currentDate.getTime()
+  );
+};
 
 export const columns: ColumnDef<CoordinatorsType>[] = [
   {
@@ -68,7 +86,7 @@ export const columns: ColumnDef<CoordinatorsType>[] = [
       return (
         <SystemSettingContext.Consumer>
           {(systemSetting) => {
-            if (systemSetting && systemSetting.active_flag === 1) {
+            if (isArticleEditable(systemSetting)) {
               return <ManageColumn data={row.original} />;
             }
             return <div className="text-gray-400">Not available</div>;
