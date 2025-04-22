@@ -3,6 +3,12 @@ import ManageColumn from "@/modules/coordinator/articles/columns/ManageColumn";
 import { ColumnDef } from "@tanstack/react-table";
 import { formatDate } from "date-fns";
 import { CoordinatorsType } from "@/api/coordinator/types";
+import { SystemSetting } from "@/api/coordinator/types";
+import React from "react";
+
+export const SystemSettingContext = React.createContext<SystemSetting | null>(
+  null
+);
 
 export const columns: ColumnDef<CoordinatorsType>[] = [
   {
@@ -58,8 +64,17 @@ export const columns: ColumnDef<CoordinatorsType>[] = [
     header: () => (
       <TableHeaderCell className="text-center">{`Actions`}</TableHeaderCell>
     ),
-    cell: (data) => {
-      return <ManageColumn data={data.row.original} />;
+    cell: ({ row }) => {
+      return (
+        <SystemSettingContext.Consumer>
+          {(systemSetting) => {
+            if (systemSetting && systemSetting.active_flag === 1) {
+              return <ManageColumn data={row.original} />;
+            }
+            return <div className="text-gray-400">Not available</div>;
+          }}
+        </SystemSettingContext.Consumer>
+      );
     },
   },
 ];

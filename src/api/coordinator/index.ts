@@ -5,7 +5,12 @@ import {
   UseMutationOptions,
 } from "@tanstack/react-query";
 import axios from "axios";
-import { CommentResponse, CoordinatorsType, DashboardType } from "./types";
+import {
+  CommentResponse,
+  CoordinatorsType,
+  ArticleResponse,
+  DashboardType,
+} from "./types";
 import { StudentType } from "../student/types";
 
 const BASE_URL = "/coordinator";
@@ -22,8 +27,8 @@ interface ContributionIdPayload {
 }
 
 export const getContribution = {
-  useQuery: (opt?: UseQueryOptions<CoordinatorsType[], Error>) =>
-    useQuery<CoordinatorsType[], Error>({
+  useQuery: (opt?: UseQueryOptions<ArticleResponse, Error>) =>
+    useQuery<ArticleResponse, Error>({
       queryKey: ["getContributions"],
       queryFn: async () => {
         const response = await axios.get(`${CONTRIBUTION_URL}`);
@@ -32,8 +37,10 @@ export const getContribution = {
         if (status !== 0) {
           throw new Error(message);
         }
-
-        return data;
+        return {
+          systemSetting: data.systemSetting,
+          contributions: data.contributions
+        } as ArticleResponse;
       },
       refetchOnWindowFocus: false,
       retry: 1,
