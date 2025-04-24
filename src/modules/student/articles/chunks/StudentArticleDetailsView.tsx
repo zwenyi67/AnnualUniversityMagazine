@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { hideLoader, openLoader } from "@/store/features/loaderSlice";
 import { toast } from "@/hooks/use-toast";
 
@@ -137,7 +137,7 @@ const StudentArticleDetailsView = () => {
   };
 
   const handleBackClick = useCallback(() => {
-    navigate("/coordinator/articles");
+    navigate("/student/articles");
   }, [navigate]);
 
   const parseImagePaths = (imagePaths: string | undefined): string[] => {
@@ -162,7 +162,10 @@ const StudentArticleDetailsView = () => {
           <h1 className="text-xl font-semibold">
             {article?.title || "Loading..."}
           </h1>
-          <Button className="bg-secondary hover:bg-secondary/80">
+          <Button
+            className="bg-secondary hover:bg-secondary/80"
+            onClick={() => navigate(`/student/articles/update/${articleId}`)}
+          >
             Update Article
             <Upload className="h-4 w-4 ml-2" />
           </Button>
@@ -389,14 +392,11 @@ const StudentArticleDetailsView = () => {
                   <div key={comment.id} className="bg-gray-50 rounded-lg p-3">
                     <div className="flex items-center mb-2">
                       <Avatar className="h-8 w-8 mr-2">
-                        <img
-                          src="/src/modules/coordinator/articles/avatar1.jpg"
-                          alt="User avatar"
-                          onError={(e) => {
-                            e.currentTarget.src =
-                              "https://via.placeholder.com/40?text=User";
-                          }}
-                        />
+                        <AvatarImage src="/image" alt="Profile Image" />
+                        <AvatarFallback>
+                          {comment.user.first_name?.charAt(0)?.toUpperCase() ||
+                            "N"}
+                        </AvatarFallback>
                       </Avatar>
                       <div>
                         <div className="font-medium">

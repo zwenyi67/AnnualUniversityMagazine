@@ -59,6 +59,7 @@ import GuestArticleView from "@/modules/guest/article/GuestArticleView";
 import GuestDashboardView from "@/modules/guest/dashboard/GuestDashboardView";
 import GuestArticleDetailView from "@/modules/guest/article/GuestArticleDetailView";
 import CoordinatorStudentsView from "@/modules/coordinator/students/CoordinatorStudentsView";
+import UpdateArticleView from "@/modules/student/articles/chunks/UpdateArticleView";
 
 const router = createBrowserRouter([
   {
@@ -270,6 +271,10 @@ const router = createBrowserRouter([
       {
         path: "articles/details/:id",
         element: <StudentArticleDetailsView />,
+      },
+      {
+        path: "articles/update/:id",
+        element: <UpdateArticleView />,
       },
       {
         path: "profile",
