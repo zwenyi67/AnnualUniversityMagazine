@@ -97,7 +97,9 @@ const ArticleManageColumn = ({ data }: { data: CoordinatorsType }) => {
       <Button
         variant="columnIcon"
         size="icon"
-        onClick={() => navigate(`/coordinator/articles/${data.id}`)}
+        onClick={() =>
+          navigate(`/coordinator/articles/${data.id}`)
+        }
         className="hover:bg-blue-100"
       >
         <Info className="h-4 w-4 text-blue-500" />

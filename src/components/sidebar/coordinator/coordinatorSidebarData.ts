@@ -12,6 +12,11 @@ export const coordinatorSidebarData = [
     icon: BookText,
   },
   {
+    routeNames: ["/coordinator/students"],
+    name: "Students",
+    icon: Users,
+  },
+  {
     routeNames: ["/coordinator/guests"],
     name: "Guests",
     icon: Users,

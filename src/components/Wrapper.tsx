@@ -58,6 +58,7 @@ import StudentNotificationsView from "@/modules/student/notification/StudentNoti
 import GuestArticleView from "@/modules/guest/article/GuestArticleView";
 import GuestDashboardView from "@/modules/guest/dashboard/GuestDashboardView";
 import GuestArticleDetailView from "@/modules/guest/article/GuestArticleDetailView";
+import CoordinatorStudentsView from "@/modules/coordinator/students/CoordinatorStudentsView";
 
 const router = createBrowserRouter([
   {
@@ -223,6 +224,10 @@ const router = createBrowserRouter([
       {
         path: "articles/:id",
         element: <CoordinatorArticleDetailView />,
+      },
+      {
+        path: "students",
+        element: <CoordinatorStudentsView />,
       },
       {
         path: "guests",

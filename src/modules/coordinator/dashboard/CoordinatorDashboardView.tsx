@@ -1,128 +1,174 @@
-import { useState } from "react";
 import {
   ClipboardCheck,
   Clock,
   FileCheck,
-  FileX,
   CalendarClock,
   Bell,
-  TrendingUp,
-  TrendingDown,
-  Minus,
+  AlertCircle,
 } from "lucide-react";
 import { TableUI } from "@/components/table/TableUI";
 import { columns } from "../dashboard/columns";
-import { SubmissionType } from "@/api/coordinator/types";
-
-// Color scheme constants for better consistency
-const COLORS = {
-  primary: {
-    bg: "bg-indigo-100",
-    text: "text-indigo-700",
-    hover: "hover:bg-indigo-200",
-    border: "border-indigo-200",
-  },
-  pending: {
-    bg: "bg-amber-100",
-    text: "text-amber-700",
-    hover: "hover:bg-amber-200",
-    border: "border-amber-200",
-  },
-  approved: {
-    bg: "bg-emerald-100",
-    text: "text-emerald-700",
-    hover: "hover:bg-emerald-200",
-    border: "border-emerald-200",
-  },
-  rejected: {
-    bg: "bg-rose-100",
-    text: "text-rose-700",
-    hover: "hover:bg-rose-200",
-    border: "border-rose-200",
-  },
-  neutral: {
-    bg: "bg-slate-100",
-    text: "text-slate-700",
-    hover: "hover:bg-slate-200",
-    border: "border-slate-200",
-  },
-};
-
-const mockSubmissions: SubmissionType[] = [
-  {
-    id: 1,
-    student_name: "John Modulela",
-    title: "Renewable Energy Innovation",
-    submitted_at: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-    status: "pending",
-  },
-  {
-    id: 2,
-    student_name: "Emma",
-    title: "AI in Healthcare Systems",
-    submitted_at: new Date(Date.now() - 5 * 60 * 60 * 1000), // 5 hours ago
-    status: "approved",
-  },
-  {
-    id: 3,
-    student_name: "Michael",
-    title: "Smart Cities Development",
-    submitted_at: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
-    status: "rejected",
-  },
-  {
-    id: 4,
-    student_name: "Sarah Johnson",
-    title: "Sustainable Materials Research",
-    submitted_at: new Date(Date.now() - 6 * 60 * 60 * 1000),
-    status: "pending",
-  },
-  {
-    id: 5,
-    student_name: "David Chen",
-    title: "Quantum Computing Applications",
-    submitted_at: new Date(Date.now() - 12 * 60 * 60 * 1000),
-    status: "approved",
-  },
-];
-
-const statsInfo = [
-  {
-    title: "Total Submissions",
-    count: 147,
-    icon: ClipboardCheck,
-    colorScheme: COLORS.primary,
-    change: 12,
-    direction: "up",
-  },
-  {
-    title: "Pending Review",
-    count: 24,
-    icon: Clock,
-    colorScheme: COLORS.pending,
-    change: 8,
-    direction: "down",
-  },
-  {
-    title: "Approved",
-    count: 98,
-    icon: FileCheck,
-    colorScheme: COLORS.approved,
-    change: 24,
-    direction: "up",
-  },
-  {
-    title: "Rejected",
-    count: 25,
-    icon: FileX,
-    colorScheme: COLORS.rejected,
-    change: 0,
-    direction: "neutral",
-  },
-];
+import api from "@/api";
+import { useNavigate } from "react-router-dom";
+import React from "react";
+import { differenceInDays } from "date-fns";
+import { SystemSetting } from "@/api/coordinator/types";
 
 export default function CoordinatorDashboardView() {
-  const [notifications] = useState(3);
+  const navigate = useNavigate();
+  const { data } = api.coordinator.getDashboard.useQuery();
+
+  const { data: notificationData } =
+    api.notification.getCoordinatorNotifications.useQuery();
+  const notifications =
+    notificationData?.filter((notification) => notification.is_read === 0)
+      .length ?? 0;
+
+  // Color scheme constants for better consistency
+  const COLORS = {
+    primary: {
+      bg: "bg-indigo-100",
+      text: "text-indigo-700",
+      hover: "hover:bg-indigo-200",
+      border: "border-indigo-200",
+    },
+    pending: {
+      bg: "bg-amber-100",
+      text: "text-amber-700",
+      hover: "hover:bg-amber-200",
+      border: "border-amber-200",
+    },
+    approved: {
+      bg: "bg-emerald-100",
+      text: "text-emerald-700",
+      hover: "hover:bg-emerald-200",
+      border: "border-emerald-200",
+    },
+    rejected: {
+      bg: "bg-rose-100",
+      text: "text-rose-700",
+      hover: "hover:bg-rose-200",
+      border: "border-rose-200",
+    },
+    neutral: {
+      bg: "bg-slate-100",
+      text: "text-slate-700",
+      hover: "hover:bg-slate-200",
+      border: "border-slate-200",
+    },
+    urgent: {
+      bg: "bg-red-100",
+      text: "text-red-700",
+      hover: "hover:bg-red-200",
+      border: "border-red-200",
+    },
+  };
+
+  const statsInfo = [
+    {
+      title: "Total Submissions",
+      // count: 147,
+      count: data?.contributionCount ?? 0,
+      icon: ClipboardCheck,
+      colorScheme: COLORS.primary,
+    },
+    {
+      title: "Pending Review",
+      // count: 24,
+      count: data?.pendingCount ?? 0,
+      icon: Clock,
+      colorScheme: COLORS.pending,
+    },
+    {
+      title: "Approved",
+      // count: 98,
+      count: data?.selectedCount ?? 0,
+      icon: FileCheck,
+      colorScheme: COLORS.approved,
+    },
+  ];
+  interface DeadlineWarningProps {
+    systemSettings?: SystemSetting[];
+  }
+
+  const DeadlineWarning: React.FC<DeadlineWarningProps> = ({
+    systemSettings,
+  }) => {
+    // Get the active system setting
+    const activeSetting = React.useMemo(() => {
+      if (!systemSettings || !Array.isArray(systemSettings)) return null;
+      return systemSettings.find((setting) => setting.active_flag === 1);
+    }, [systemSettings]);
+
+    // Calculate days remaining until deadline
+    const daysRemaining = React.useMemo(() => {
+      if (!activeSetting) return null;
+
+      const finalClosureDate = new Date(activeSetting.final_closure_date);
+      const currentDate = new Date();
+
+      return differenceInDays(finalClosureDate, currentDate);
+    }, [activeSetting]);
+
+    // Don't show anything if no active setting or deadline has passed
+    if (!daysRemaining || daysRemaining < 0) {
+      return null;
+    }
+
+    // Different UI based on days remaining
+    if (daysRemaining < 10) {
+      return (
+        <div
+          className={`${COLORS.urgent.bg} border ${COLORS.urgent.border} rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300`}
+        >
+          <div className="flex gap-4 items-center">
+            <div
+              className={`${COLORS.urgent.bg} p-3 rounded-full transition-all duration-300 hover:scale-110 border ${COLORS.urgent.border}`}
+            >
+              <AlertCircle className={COLORS.urgent.text} size={24} />
+            </div>
+            <div>
+              <h3 className="font-semibold text-red-800 text-lg">
+                Urgent: Submission Deadline
+              </h3>
+              <p className="text-red-700">
+                {daysRemaining <= 1
+                  ? "Submissions close today! Final review required immediately."
+                  : `Only ${daysRemaining} days left for submissions. Urgent review required for all pending contributions.`}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (daysRemaining < 20) {
+      return (
+        <div
+          className={`${COLORS.pending.bg} border ${COLORS.pending.border} rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300`}
+        >
+          <div className="flex gap-4 items-center">
+            <div
+              className={`${COLORS.pending.bg} p-3 rounded-full transition-all duration-300 hover:scale-110 border ${COLORS.pending.border}`}
+            >
+              <CalendarClock className={COLORS.pending.text} size={24} />
+            </div>
+            <div>
+              <h3 className="font-semibold text-amber-800 text-lg">
+                Submission Deadline Approaching
+              </h3>
+              <p className="text-amber-700">
+                {`New submissions will be disabled in ${daysRemaining} days. Make sure to review all pending contributions before deadline.`}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // No warning needed if more than 20 days remaining
+    return null;
+  };
 
   return (
     <div className="px-6 py-8">
@@ -131,7 +177,10 @@ export default function CoordinatorDashboardView() {
           Faculty of Engineering Dashboard
         </h1>
         <div className="flex items-center gap-4">
-          <div className="relative">
+          <div
+            className="relative"
+            onClick={() => navigate("/coordinator/notifications")}
+          >
             <Bell
               size={24}
               className="text-slate-600 hover:text-slate-800 transition-colors cursor-pointer"
@@ -144,8 +193,8 @@ export default function CoordinatorDashboardView() {
           </div>
         </div>
       </div>
-
-      <div
+      <DeadlineWarning systemSettings={data?.systemSettings} />
+      {/* <div
         className={`${COLORS.pending.bg} border ${COLORS.pending.border} rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300`}
       >
         <div className="flex gap-4 items-center">
@@ -164,9 +213,9 @@ export default function CoordinatorDashboardView() {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 mt-8">
         {statsInfo.map((stat, index) => (
           <div
             key={index}
@@ -185,26 +234,6 @@ export default function CoordinatorDashboardView() {
                 <stat.icon className={stat.colorScheme.text} size={24} />
               </div>
             </div>
-            <div className="mt-4 flex items-center">
-              {stat.direction === "up" && (
-                <span className="text-emerald-600 flex items-center text-sm">
-                  <TrendingUp size={16} className="mr-1" />
-                  {stat.change}% vs last month
-                </span>
-              )}
-              {stat.direction === "down" && (
-                <span className="text-rose-600 flex items-center text-sm">
-                  <TrendingDown size={16} className="mr-1" />
-                  {stat.change}% vs last month
-                </span>
-              )}
-              {stat.direction === "neutral" && (
-                <span className="text-slate-500 flex items-center text-sm">
-                  <Minus size={16} className="mr-1" />
-                  {stat.change}% vs last month
-                </span>
-              )}
-            </div>
           </div>
         ))}
       </div>
@@ -222,7 +251,7 @@ export default function CoordinatorDashboardView() {
         </div>
 
         <TableUI
-          data={mockSubmissions}
+          data={data?.contributions ?? []}
           columns={columns}
           columnVisibility={{ id: false }}
           filterColumns={["student_name", "title"]}

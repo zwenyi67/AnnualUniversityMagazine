@@ -18,6 +18,23 @@ export type CoordinatorsType = {
   comments?: ArticleComment[];
 };
 
+export type SystemSetting = {
+  id: number;
+  academic_year: string;
+  closure_date: string;
+  final_closure_date: string;
+  active_flag: number;
+  created_at: string;
+  updated_at: string;
+  createby: number;
+  updateby: number | null;
+};
+
+export type ArticleResponse = {
+  systemSetting: SystemSetting;
+  contributions: CoordinatorsType[];
+};
+
 export type ArticleComment = {
   id: number;
   comment: string;
@@ -43,4 +60,12 @@ export type SubmissionType = {
   title: string;
   submitted_at: Date;
   status: "pending" | "approved" | "rejected";
+};
+
+export type DashboardType = {
+  contributions: CoordinatorsType[];
+  contributionCount: number;
+  pendingCount: number;
+  selectedCount: number;
+  systemSettings: json[];
 };

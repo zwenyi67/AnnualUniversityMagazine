@@ -1,9 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { SubmissionType } from "@/api/coordinator/types";
-import { Eye, Clock } from "lucide-react";
+import { CoordinatorsType } from "@/api/coordinator/types";
+import { Clock } from "lucide-react";
+import ManageColumn from "@/modules/coordinator/dashboard/columns/ManageColumn";
 
 // Status badge configuration for better consistency
 const statusConfig = {
@@ -13,26 +13,26 @@ const statusConfig = {
     hover: "hover:bg-amber-200",
     label: "Pending",
   },
-  approved: {
+  reviewed: {
+    bg: "bg-orange-100",
+    text: "text-orange-800",
+    hover: "hover:bg-orange-200",
+    label: "Reviewed",
+  },
+  selected: {
     bg: "bg-emerald-100",
     text: "text-emerald-800",
     hover: "hover:bg-emerald-200",
-    label: "Approved",
-  },
-  rejected: {
-    bg: "bg-rose-100",
-    text: "text-rose-800",
-    hover: "hover:bg-rose-200",
-    label: "Rejected",
+    label: "Selected",
   },
 };
 
-export const columns: ColumnDef<SubmissionType>[] = [
+export const columns: ColumnDef<CoordinatorsType>[] = [
   {
     accessorKey: "student_name",
     header: () => <TableHeaderCell>Student</TableHeaderCell>,
     cell: ({ row }) => {
-      const initials = row.original.student_name
+      const initials = row.original.first_name
         .split(" ")
         .map((name) => name.charAt(0))
         .join("")
@@ -44,7 +44,9 @@ export const columns: ColumnDef<SubmissionType>[] = [
           <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-medium text-sm">
             {initials}
           </div>
-          <span className="font-medium">{row.original.student_name}</span>
+          <span className="font-medium">
+            {row.original.first_name + " " + row.original.last_name}
+          </span>
         </div>
       );
     },
@@ -66,7 +68,8 @@ export const columns: ColumnDef<SubmissionType>[] = [
     cell: ({ row }) => {
       const now = new Date();
       const diff = Math.floor(
-        (now.getTime() - row.original.submitted_at.getTime()) / (1000 * 60 * 60)
+        (now.getTime() - new Date(row.original.created_at).getTime()) /
+          (1000 * 60 * 60)
       );
 
       const timeString =
@@ -104,29 +107,7 @@ export const columns: ColumnDef<SubmissionType>[] = [
     accessorKey: "action",
     header: () => <TableHeaderCell>Action</TableHeaderCell>,
     cell: ({ row }) => {
-      const status = row.original.status;
-      const isPending = status === "pending";
-
-      return (
-        <Button
-          variant="outline"
-          size="sm"
-          className={`flex items-center gap-1 ${
-            isPending
-              ? "text-blue-600 border-blue-200 hover:bg-blue-50"
-              : "text-gray-600 border-gray-200 hover:bg-gray-50"
-          }`}
-        >
-          {isPending ? (
-            "Review"
-          ) : (
-            <>
-              <Eye size={14} />
-              <span>View</span>
-            </>
-          )}
-        </Button>
-      );
+      return <ManageColumn data={row.original} />;
     },
   },
 ];

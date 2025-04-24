@@ -105,6 +105,25 @@ export type CommentPayloadType = {
   contribution_id: number;
 };
 
+export type StudentType = {
+  id: number;
+  profile: null | string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  role_id: number;
+  faculty_id: number;
+  email_verified_at: null | string;
+  is_password_change: number | boolean;
+  last_login_at: null | string;
+  last_login_ip: null | string;
+  is_suspended: number | boolean;
+  active_flag: boolean;
+  created_at: string;
+  updated_at: string;
+  createby: null | number;
+  updateby: null | number;
+};
 interface DashboardData {
   latestCoordinatorComment: CoordinatorComment;
   setting: SystemSetting;

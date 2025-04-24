@@ -15,20 +15,16 @@ const CoordinatorArticlesView = () => {
       <FormHeader
         title={
           "Articles" +
-          (data && data?.length > 0 ? " ( " + data[0].faculty_name + " )" : "")
+          (data && data?.contributions.length > 0
+            ? " ( " + data.contributions[0].faculty_name + " )"
+            : "")
         }
         onRefresh={handleRefresh}
         isLoading={isFetching || isRefetching}
       />
       <div className="p-6 bg-white rounded-b-lg min-h-[530px]">
         <TableUI
-          data={data?.map((item) => ({
-            ...item,
-            articlename: item.title || "",
-            contributor: item.first_name + " " + item.last_name || "",
-            faculty: item.faculty_id.toString() || "",
-            comments: [],
-          }))}
+          data={data?.contributions || []}
           columns={columns}
           header={"Articles"}
           columnVisibility={{ created_at: false }}
