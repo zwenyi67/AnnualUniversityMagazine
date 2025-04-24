@@ -4,14 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import api from "@/api";
 import { format } from "date-fns";
+import { useUserData } from "@/store/AuthContext";
 
 const StudentDashboardView = () => {
   const { data } = api.student.getStudentDashboardData.useQuery();
+  const { userData } = useUserData();
 
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Welcome Kyi!!!</h1>
+        <h1 className="text-2xl font-bold">
+          Welcome {userData?.first_name + " " + userData?.last_name}!!!
+        </h1>
       </div>
 
       <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg flex justify-between items-center">
@@ -72,20 +76,25 @@ const StudentDashboardView = () => {
           <CardContent className="p-4">
             <h2 className="text-lg font-semibold mb-4">Recent Submissions</h2>
             <div className="space-y-3 text-sm">
-              {data?.statistics.contributions.map((contribution) => (
-                <div>
-                  <p className="font-medium">
-                    {contribution.title}
-                    <span className="ml-2 px-2 py-0.5 bg-yellow-300 text-yellow-800 rounded-full text-xs">
-                      {contribution.status}
-                    </span>
-                  </p>
-                  <p className="text-gray-500">
-                    Submitted on
-                    {format(new Date(contribution.created_at), "MMM d, yyyy")}
-                  </p>
-                </div>
-              ))}
+              {data?.statistics.contributions &&
+              data?.statistics.contributions.length > 0 ? (
+                data?.statistics.contributions.map((contribution) => (
+                  <div>
+                    <p className="font-medium">
+                      {contribution.title}
+                      <span className="ml-2 px-2 py-0.5 bg-yellow-300 text-yellow-800 rounded-full text-xs">
+                        {contribution.status}
+                      </span>
+                    </p>
+                    <p className="text-gray-500">
+                      Submitted on
+                      {format(new Date(contribution.created_at), "MMM d, yyyy")}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <div>There is no submission</div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -95,15 +104,26 @@ const StudentDashboardView = () => {
           <CardContent className="p-4">
             <h2 className="text-lg font-semibold mb-4">Recent Feedback</h2>
             <div className="text-sm">
-              <p className="font-semibold text-gray-700">
-                {data?.latestCoordinatorComment.user.first_name +
-                  " " +
-                  data?.latestCoordinatorComment.user.last_name}
-              </p>
-              <p className="text-xs text-gray-500 mb-2">Faculty Coordinator</p>
-              <p className="text-gray-700">
-                {data?.latestCoordinatorComment.comment}
-              </p>
+              {data?.latestCoordinatorComment ? (
+                <>
+                  {" "}
+                  <p className="font-semibold text-gray-700">
+                    {data?.latestCoordinatorComment &&
+                      data?.latestCoordinatorComment.user.first_name +
+                        " " +
+                        data?.latestCoordinatorComment.user.last_name}
+                  </p>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Faculty Coordinator
+                  </p>
+                  <p className="text-gray-700">
+                    {data?.latestCoordinatorComment &&
+                      data?.latestCoordinatorComment.comment}
+                  </p>
+                </>
+              ) : (
+                <div>There is no recent feedback</div>
+              )}
             </div>
           </CardContent>
         </Card>
