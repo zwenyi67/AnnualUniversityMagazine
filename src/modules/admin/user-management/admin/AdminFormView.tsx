@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { CircleChevronLeft, Eye, EyeOff } from "lucide-react";
+import { CircleChevronLeft } from "lucide-react";
 import api from "@/api";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,6 @@ import { useDispatch } from "react-redux";
 import { hideLoader, openLoader } from "@/store/features/loaderSlice";
 import FormHeader from "@/components/common/FormHeader";
 import { AddAdminPayloadType, UpdateAdminPayloadType } from "@/api/admin/types";
-import { useState } from "react";
 
 const formSchema = z.object({
   first_name: z.string().min(2, {
@@ -29,15 +28,11 @@ const formSchema = z.object({
     message: "Last name must be at least 2 characters.",
   }),
   email: z.string().email(),
-  password: z.string().min(6, {
-    message: "Password must contain at least 6 characters.",
-  }),
   createby: z.number().optional(),
 });
 
 export default function AdminFormView() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -49,9 +44,10 @@ export default function AdminFormView() {
   const item: AddAdminPayloadType = id
     ? { ...passedData }
     : {
-        name: "",
-        description: "",
-        createby: 1,
+      first_name: "",
+      last_name: "",
+      email: "",
+      createby: 1,
       };
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,6 +55,7 @@ export default function AdminFormView() {
     defaultValues: {
       first_name: item?.first_name || "",
       last_name: item?.last_name || "",
+      email: item?.email || "",
       createby: item?.createby || 1,
     },
   });
@@ -75,7 +72,7 @@ export default function AdminFormView() {
       navigate("/admin/user-management/admins");
     },
     onError: (error) => {
-      form.setError("first_name", { type: "custom", message: error.message });
+      form.setError("email", { type: "custom", message: error.message });
       toast({
         title: error.message,
         variant: "destructive",
@@ -98,7 +95,7 @@ export default function AdminFormView() {
       navigate("/admin/admin/user-management/admins");
     },
     onError: (error) => {
-      form.setError("first_name", { type: "custom", message: error.message });
+      form.setError("email", { type: "custom", message: error.message });
       toast({
         title: error.message,
         variant: "destructive",
@@ -116,7 +113,6 @@ export default function AdminFormView() {
       formData.append("first_name", item.first_name);
       formData.append("last_name", item.last_name);
       formData.append("email", item.email);
-      formData.append("password", item.password);
 
       if (id) {
         // For edit form
@@ -210,48 +206,6 @@ export default function AdminFormView() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => {
-                  const togglePasswordVisibility = () => {
-                    setShowPassword(!showPassword);
-                  };
-
-                  return (
-                    <FormItem>
-                      <FormLabel>
-                        Password{" "}
-                        <span className="text-primary font-extrabold text-base">
-                          *
-                        </span>
-                      </FormLabel>
-                      <div className="relative">
-                        <FormControl>
-                          <Input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Password"
-                            {...field}
-                          />
-                        </FormControl>
-                        <button
-                          type="button"
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                          onClick={togglePasswordVisibility}
-                          tabIndex={-1}
-                        >
-                          {showPassword ? (
-                            <EyeOff size={16} />
-                          ) : (
-                            <Eye size={16} />
-                          )}
-                        </button>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
               />
             </div>
             <div>

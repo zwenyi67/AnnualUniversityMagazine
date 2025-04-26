@@ -26,29 +26,39 @@ import {
 import api from "@/api";
 import { differenceInDays, format } from "date-fns";
 import { DashboardDataType } from "@/api/admin/types";
+import { useState } from "react";
 
 const AdminDashboardView = () => {
 
   const { data } = api.admin.dashboard.dashboardData.useQuery();
 
-  type DashboardStatKey = Exclude<keyof DashboardDataType, "setting" | "contributionData" | 'contributionDataByFaculty'>;
+  type DashboardStatKey = Exclude<keyof DashboardDataType, "setting" | "contributionData" | 'contributionDataByFaculty' | 'contributionWithoutComment' | 'contributionWithoutCommentAfter14'>;
 
-const statsData: {
-  title: string;
-  key: DashboardStatKey;
-  icon: LucideIcon;
-  color: string;
-}[] = [
-  { title: "Manager", key: "managers", icon: UserCog, color: "text-blue-600" },
-  { title: "Coordinator", key: "coordinators", icon: Users, color: "text-purple-600" },
-  { title: "Student", key: "students", icon: GraduationCap, color: "text-green-600" },
-  { title: "Guest", key: "guests", icon: User, color: "text-gray-500" },
-  { title: "Faculty", key: "faculties", icon: Building, color: "text-yellow-600" },
-  { title: "All Submissions", key: "contributions", icon: FileText, color: "text-indigo-600" },
-  { title: "Approved", key: "approved", icon: CheckCircle, color: "text-emerald-600" },
-  { title: "Rejected", key: "rejected", icon: XCircle, color: "text-rose-600" },
-];
-  
+
+
+  const statsData: {
+    title: string;
+    key: DashboardStatKey;
+    icon: LucideIcon;
+    color: string;
+  }[] = [
+      { title: "Manager", key: "managers", icon: UserCog, color: "text-blue-600" },
+      { title: "Coordinator", key: "coordinators", icon: Users, color: "text-purple-600" },
+      { title: "Student", key: "students", icon: GraduationCap, color: "text-green-600" },
+      { title: "Guest", key: "guests", icon: User, color: "text-gray-500" },
+      { title: "Faculty", key: "faculties", icon: Building, color: "text-yellow-600" },
+      { title: "All Submissions", key: "contributions", icon: FileText, color: "text-indigo-600" },
+      { title: "Approved", key: "approved", icon: CheckCircle, color: "text-emerald-600" },
+      { title: "Rejected", key: "rejected", icon: XCircle, color: "text-rose-600" },
+    ];
+
+  const [selectedYear, setSelectedYear] = useState<number>(2025);
+
+  const filteredFacultyData = data?.contributionDataByFaculty?.filter(item => item.year === selectedYear) ?? [];
+
+  const years = Array.from(
+    new Set(data?.contributionDataByFaculty.map((item) => item.year))
+  ).sort();
 
   const academicYear = data?.setting?.academic_year ?? "N/A";
 
@@ -128,10 +138,96 @@ const statsData: {
           </Card>
         </div>
 
+        {/* Contributions without comment */}
+        <Card className="shadow-md p-4 mb-6">
+          <CardContent>
+            <h4 className="text-lg font-bold mb-4">Contribution Without Comments</h4>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white text-sm text-gray-700">
+                <thead className="bg-blue-600 text-white">
+                  <tr>
+                    <th className="px-4 py-3 text-left">#</th>
+                    <th className="px-4 py-3 text-left">Title</th>
+                    <th className="px-4 py-3 text-left">Description</th>
+                    <th className="px-4 py-3 text-left">Faculty</th>
+                    <th className="px-4 py-3 text-left">Contributor</th>
+                    <th className="px-4 py-3 text-left">Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.contributionWithoutComment.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                        No data available.
+                      </td>
+                    </tr>
+                  ) : (
+                    data?.contributionWithoutComment.map((item, index) => (
+                      <tr key={item.id} className="border-t hover:bg-gray-100 transition">
+                        <td className="px-4 py-3">{index + 1}</td>
+                        <td className="px-4 py-3">{item.title}</td>
+                        <td className="px-4 py-3">{item.description}</td>
+                        <td className="px-4 py-3">{item.faculty}</td>
+                        <td className="px-4 py-3">{item.contributor}</td>
+                        <td className="px-4 py-3">
+                          {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Contributions without comment After 14 days */}
+        <Card className="shadow-md p-4 mb-6">
+          <CardContent>
+            <h4 className="text-lg font-bold mb-4">Contribution Without Comments After 14 days of Submission</h4>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white text-sm text-gray-700">
+                <thead className="bg-blue-600 text-white">
+                  <tr>
+                    <th className="px-4 py-3 text-left">#</th>
+                    <th className="px-4 py-3 text-left">Title</th>
+                    <th className="px-4 py-3 text-left">Description</th>
+                    <th className="px-4 py-3 text-left">Faculty</th>
+                    <th className="px-4 py-3 text-left">Contributor</th>
+                    <th className="px-4 py-3 text-left">Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.contributionWithoutCommentAfter14.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                        No data available.
+                      </td>
+                    </tr>
+                  ) : (
+                    data?.contributionWithoutCommentAfter14.map((item, index) => (
+                      <tr key={item.id} className="border-t hover:bg-gray-100 transition">
+                        <td className="px-4 py-3">{index + 1}</td>
+                        <td className="px-4 py-3">{item.title}</td>
+                        <td className="px-4 py-3">{item.description}</td>
+                        <td className="px-4 py-3">{item.faculty}</td>
+                        <td className="px-4 py-3">{item.contributor}</td>
+                        <td className="px-4 py-3">
+                          {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Line Chart */}
         <Card className="shadow-md p-4 mb-6">
           <CardContent>
-            <h4 className="text-lg font-bold mb-2">Total Contributions</h4>
+            <h4 className="text-lg font-bold mb-2">Total Contributions By Month (Current Year)</h4>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={data?.contributionData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -147,18 +243,39 @@ const statsData: {
         <Card className="shadow-md p-4 mb-6">
           <CardContent>
             <h4 className="text-lg font-bold mb-2">Contributions by Faculty</h4>
+            {/* Year Tabs */}
+            <div className="flex gap-4 mb-6">
+              {years.map((year) => (
+                <button
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={`px-4 py-2 rounded-md font-semibold transition ${selectedYear === year ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                    }`}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
+
+            {/* Bar Chart */}
             <ResponsiveContainer width="100%" height={350}>
-              <BarChart data={data?.contributionDataByFaculty} layout="vertical" margin={{ top: 10, right: 30, left: 10, bottom: 10 }}>
+              <BarChart
+                data={filteredFacultyData}
+                layout="vertical"
+                margin={{ top: 10, right: 30, left: 10, bottom: 10 }}
+              >
                 <XAxis type="number" />
                 <YAxis
                   type="category"
-                  dataKey="name"
+                  dataKey="faculty"
                   width={100}
-                  tick={{ fontSize: 9 }}
+                  tick={{ fontSize: 10 }}
                 />
-                <Tooltip />
+                <Tooltip formatter={(value: number, name: string) => name === 'percentage' ? `${value}%` : value} />
                 <Legend />
-                <Bar dataKey="value" fill="#2563EB" />
+                <Bar dataKey="value" name="Count" fill="#4d80f7" />         // Blue
+                <Bar dataKey="percentage" name="Percentage" fill="#25a6eb" /> // Green
+                <Bar dataKey="contributors" name="Contributors" fill="#2411f2" /> // Orange
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

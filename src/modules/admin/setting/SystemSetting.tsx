@@ -14,8 +14,8 @@ import { hideLoader, openLoader } from "@/store/features/loaderSlice";
 import { useDispatch } from "react-redux";
 
 const formSchema = z.object({
-    academic_year: z.string().min(6, {
-        message: "Academic year must contain at least 6 characters.",
+    academic_year: z.string().min(2, {
+        message: "Academic year must contain at least 2 characters.",
     }),
     closure_date: z.date({
         required_error: "Closure date is required.",
@@ -29,30 +29,30 @@ const formSchema = z.object({
 const SystemSetting = () => {
     const { data, isFetching, refetch, isRefetching } = api.admin.setting.getSetting.useQuery();
 
-      const dispatch = useDispatch();
-    
+    const dispatch = useDispatch();
+
     const { mutate: updateSetting } =
         api.admin.setting.updateSetting.useMutation({
-          onMutate: () => {
-            dispatch(openLoader());
-          },
-          onSuccess: () => {
-            toast({
-              title: "System Setting updated successfully",
-              variant: "success",
-            });
-            refetch();
-          },
-          onError: (error) => {
-            form.setError("academic_year", { type: "custom", message: error.message });
-            toast({
-              title: error.message,
-              variant: "destructive",
-            });
-          },
-          onSettled: () => {
-            dispatch(hideLoader());
-          },
+            onMutate: () => {
+                dispatch(openLoader());
+            },
+            onSuccess: () => {
+                toast({
+                    title: "System Setting updated successfully",
+                    variant: "success",
+                });
+                refetch();
+            },
+            onError: (error) => {
+                form.setError("academic_year", { type: "custom", message: error.message });
+                toast({
+                    title: error.message,
+                    variant: "destructive",
+                });
+            },
+            onSettled: () => {
+                dispatch(hideLoader());
+            },
         });
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -75,7 +75,7 @@ const SystemSetting = () => {
     }, [data, form]);
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        const formData : UpdateSettingPayloadType = {
+        const formData: UpdateSettingPayloadType = {
             id: data!.id,
             academic_year: values.academic_year,
             closure_date: values.closure_date,
@@ -88,9 +88,9 @@ const SystemSetting = () => {
     return (
         <section className="m-4">
             {/* Page Header */}
-            <FormHeader title="System Setting" 
-            onRefresh={() => refetch()}
-            isLoading={isFetching || isRefetching}/>
+            <FormHeader title="System Setting"
+                onRefresh={() => refetch()}
+                isLoading={isFetching || isRefetching} />
 
             <div className="p-6 bg-white rounded-lg shadow-lg min-h-[530px] space-y-6">
                 <Form {...form}>

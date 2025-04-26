@@ -15,6 +15,17 @@ export type DashboardDataType = {
   setting: Setting;
   contributionData: ContributionChartData[];
   contributionDataByFaculty: ContributionDataByFaculty[];
+  contributionWithoutComment: ContributionWithoutComment[];
+  contributionWithoutCommentAfter14: ContributionWithoutComment[];
+}
+
+export type ContributionWithoutComment = {
+  id: number;
+  title: string,
+  description: string,
+  faculty: string;
+  contributor: string;
+  created_at: string,
 }
 
 export type Setting = {
@@ -30,7 +41,10 @@ export type ContributionChartData = {
 
 export type ContributionDataByFaculty = {
   name: string;
+  year: number;
   value: number;
+  percentage: number;
+  contributors: number;
 };
 
 // Admin Management Type
