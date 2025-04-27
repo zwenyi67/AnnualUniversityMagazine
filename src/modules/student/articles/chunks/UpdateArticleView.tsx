@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,16 +22,24 @@ import { toast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-// Define the form schema
+type FormData = {
+  title: string;
+  description: string;
+  article: File;
+  photos: File[];
+};
+
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().min(1, { message: "Description is required" }),
   article: z
     .custom<File>()
-    .optional()
+    .refine((file) => file !== undefined, {
+      message: "Please upload an article file",
+    })
     .refine(
       (file) =>
-        !file ||
+        file &&
         [
           "application/msword",
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -40,35 +48,31 @@ const formSchema = z.object({
     ),
   photos: z
     .array(z.custom<File>())
-    .optional()
     .refine(
       (files) =>
-        !files ||
         files.every((file) => ["image/png", "image/jpeg"].includes(file.type)),
       { message: "Only .png, .jpg, and .jpeg files are allowed" }
     ),
 });
 
-type FormData = z.infer<typeof formSchema>;
-
 const UpdateArticleView = () => {
-  const { id } = useParams();
-  const contributionId = id ? parseInt(id, 10) : undefined;
   const [uploadedArticle, setUploadedArticle] = useState<File | null>(null);
   const [uploadedPhotos, setUploadedPhotos] = useState<File[]>([]);
-  const [existingArticleUrl, setExistingArticleUrl] = useState<string | null>(
-    null
-  );
-  const [existingPhotoUrls, setExistingPhotoUrls] = useState<string[]>([]);
 
-  const userDataString = localStorage.getItem("userData");
-  const userData = userDataString ? JSON.parse(userDataString) : null;
-  const faculty_id = userData?.faculty_id;
+  // // Retrieve and parse userData from local storage
+  // const userDataString = localStorage.getItem("userData");
+  // const userData = userDataString ? JSON.parse(userDataString) : null;
+
+  // // Extract faculty_id
+  // const faculty_id = userData?.faculty_id;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { data, refetch, isFetching, isRefetching } =
+  const { id } = useParams();
+  const contributionId = id ? parseInt(id) : undefined;
+
+  const { data, refetch } =
     api.student.getContributionByContributionID.useQuery(
       contributionId as number
     );
@@ -76,45 +80,18 @@ const UpdateArticleView = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: data?.title || "",
+      description: data?.description || "",
       article: undefined,
       photos: [],
     },
   });
-
-  // Update form values when API data loads
-  useEffect(() => {
-    if (data) {
-      form.reset({
-        title: data.title || "",
-        description: data.description || "",
-        article: undefined,
-        photos: [],
-      });
-      setExistingArticleUrl(data.article_path || null);
-      // Parse image_paths if it's a stringified JSON array
-      let parsedPhotoUrls: string[] = [];
-      if (typeof data.image_paths === "string") {
-        try {
-          parsedPhotoUrls = JSON.parse(data.image_paths);
-        } catch (error) {
-          console.error("Error parsing image_paths:", error);
-          parsedPhotoUrls = [];
-        }
-      } else if (Array.isArray(data.image_paths)) {
-        parsedPhotoUrls = data.image_paths;
-      }
-      setExistingPhotoUrls(parsedPhotoUrls);
-    }
-  }, [data, form]);
 
   const handleUploadArticle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setUploadedArticle(file);
       form.setValue("article", file);
-      setExistingArticleUrl(null);
     }
   };
 
@@ -134,30 +111,25 @@ const UpdateArticleView = () => {
     });
   };
 
-  const removeExistingPhoto = (index: number) => {
-    setExistingPhotoUrls((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const refreshForm = () => {
     form.reset({
-      title: "",
-      description: "",
+      title: data?.title || "",
+      description: data?.description || "",
       article: undefined,
       photos: [],
     });
+    refetch();
     setUploadedArticle(null);
     setUploadedPhotos([]);
-    setExistingArticleUrl(null);
-    setExistingPhotoUrls([]);
   };
 
-  const { mutate: updateContribution } = api.student.uploadArticle.useMutation({
+  const { mutate: updateContribution } = api.student.updateArticle.useMutation({
     onMutate: () => {
       dispatch(openLoader());
     },
     onSuccess: () => {
       toast({
-        title: "Article updated successfully",
+        title: "New Article added successfully",
         variant: "success",
       });
       navigate("/student/articles");
@@ -176,25 +148,18 @@ const UpdateArticleView = () => {
   const onSubmit: SubmitHandler<FormData> = (values) => {
     const payload = {
       ...values,
-      faculty_id: faculty_id,
-      contribution_id: contributionId,
-      existingArticleUrl: existingArticleUrl,
-      existingPhotoUrls: existingPhotoUrls,
+      id: contributionId as number,
     };
     updateContribution(payload);
   };
 
-  if (!id || isNaN(contributionId as number)) {
-    return <div>Invalid article ID</div>;
-  }
-
   return (
     <section className="m-4">
       <FormHeader
-        title="Update Article"
-        onRefresh={refetch}
+        title="Add Article"
+        onRefresh={refreshForm}
         isShowBackButton={true}
-        isLoading={isFetching || isRefetching}
+        // isLoading={isFetching || isRefetching}
       />
       <div className="p-6 bg-white rounded-b-lg">
         <Form {...form}>
@@ -245,7 +210,7 @@ const UpdateArticleView = () => {
               render={() => (
                 <FormItem>
                   <FormLabel className="text-lg text-gray-700 font-medium">
-                    Upload Article
+                    Upload Updated Article
                   </FormLabel>
                   <FormControl>
                     <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
@@ -260,15 +225,11 @@ const UpdateArticleView = () => {
                       </label>
                       <span
                         className={cn(
-                          (uploadedArticle || existingArticleUrl) &&
-                            "text-gray-900",
+                          uploadedArticle && "text-gray-900",
                           "ml-3 flex-1 text-sm truncate"
                         )}
                       >
-                        {uploadedArticle?.name ||
-                          (existingArticleUrl
-                            ? existingArticleUrl.split("/").pop()
-                            : "Upload article as Word file")}
+                        {uploadedArticle?.name || "Upload article as Word file"}
                       </span>
                     </div>
                   </FormControl>
@@ -285,7 +246,7 @@ const UpdateArticleView = () => {
               render={() => (
                 <FormItem>
                   <FormLabel className="text-lg text-gray-700 font-medium">
-                    Upload Photos
+                    Upload Updated Photos
                   </FormLabel>
                   <FormControl>
                     <div className="relative flex items-center w-full border border-gray-300 bg-gray-200 text-gray-400 rounded-lg px-4 py-2">
@@ -312,31 +273,6 @@ const UpdateArticleView = () => {
               )}
             />
 
-            {/* Display existing photos (URLs) */}
-            {Array.isArray(existingPhotoUrls) &&
-              existingPhotoUrls.length > 0 && (
-                <div>
-                  {existingPhotoUrls.map((photoUrl, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center p-2 bg-gray-200 rounded mb-2"
-                    >
-                      <span className="text-gray-700 text-sm">
-                        {photoUrl.split("/").pop()}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => removeExistingPhoto(index)}
-                        className="text-red-500"
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-            {/* Display newly uploaded photos */}
             {uploadedPhotos.length > 0 && (
               <div>
                 {uploadedPhotos.map((photo, index) => (

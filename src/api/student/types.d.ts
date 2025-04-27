@@ -67,6 +67,14 @@ export type UploadArticlePayload = {
   faculty_id: number;
 };
 
+export type UpdateArticlePayload = {
+  id: number;
+  title: string;
+  description: string;
+  article: File;
+  photos: File[];
+};
+
 interface CommentUserType {
   id: number;
   profile: null | string;

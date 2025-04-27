@@ -3,6 +3,7 @@ import type {
   CommentWithUserType,
   ContributionType,
   DashboardData,
+  UpdateArticlePayload,
   UploadArticlePayload,
 } from "./types";
 
@@ -66,6 +67,38 @@ export const uploadArticle = {
       mutationFn: async (payload: UploadArticlePayload) => {
         const response = await axios.post(
           `${BASE_URL}/uploadArticle`,
+          payload,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const { data, status, message } = response.data;
+        console.log(status);
+        if (status !== 0) {
+          throw new Error(
+            message || "An error occurred while processing the request."
+          );
+        }
+
+        return data;
+      },
+      ...opt,
+    });
+  },
+};
+
+export const updateArticle = {
+  useMutation: (
+    opt?: UseMutationOptions<PostResponse, Error, UpdateArticlePayload, unknown>
+  ) => {
+    return useMutation({
+      mutationKey: ["updateArticle"],
+      mutationFn: async (payload: UpdateArticlePayload) => {
+        const response = await axios.post(
+          `${BASE_URL}/articles/edit`,
           payload,
           {
             headers: {
