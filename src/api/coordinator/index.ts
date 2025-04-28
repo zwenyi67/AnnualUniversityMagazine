@@ -33,7 +33,6 @@ export const getContribution = {
       queryFn: async () => {
         const response = await axios.get(`${CONTRIBUTION_URL}`);
         const { data, status, message } = response.data;
-        console.log(data);
         if (status !== 0) {
           throw new Error(message);
         }
