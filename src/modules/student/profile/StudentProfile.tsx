@@ -159,11 +159,15 @@ const StudentProfile = () => {
             <CardContent className="space-y-3">
               <div>
                 <label className="text-gray-600 text-sm">Full Name</label>
-                <Input value={userData?.first_name || "N/A"} readOnly />
+                <div className="p-2 bg-gray-100 rounded-lg text-gray-700">
+                  {userData?.first_name + " " + userData?.last_name || "N/A"}
+                </div>
               </div>
               <div>
                 <label className="text-gray-600 text-sm">Email</label>
-                <Input value={userData?.email || "N/A"} readOnly />
+                <div className="p-2 bg-gray-100 rounded-lg text-gray-700">
+                  {userData?.email || "N/A"}
+                </div>
               </div>
             </CardContent>
           </Card>

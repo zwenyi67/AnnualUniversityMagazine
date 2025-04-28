@@ -60,6 +60,7 @@ import GuestDashboardView from "@/modules/guest/dashboard/GuestDashboardView";
 import GuestArticleDetailView from "@/modules/guest/article/GuestArticleDetailView";
 import CoordinatorStudentsView from "@/modules/coordinator/students/CoordinatorStudentsView";
 import UpdateArticleView from "@/modules/student/articles/chunks/UpdateArticleView";
+import AdminProfile from "@/modules/admin/profile/AdminProfile";
 
 const router = createBrowserRouter([
   {
@@ -167,6 +168,11 @@ const router = createBrowserRouter([
       {
         path: "system-setting",
         element: <SystemSetting />,
+      },
+      // profile
+      {
+        path: "profile",
+        element: <AdminProfile />,
       },
     ],
   },

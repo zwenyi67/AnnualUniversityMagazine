@@ -45,9 +45,8 @@ const formSchema = z.object({
   updateby: z.number().optional(),
 });
 
-const CoordinatorProfile = () => {
+const AdminProfile = () => {
   const { userData } = useUserData();
-  // const [profilePic, setProfilePic] = useState("https://cdn-icons-png.flaticon.com/512/149/149071.png");
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -133,7 +132,6 @@ const CoordinatorProfile = () => {
       console.error("Error submitting form:", error);
     }
   };
-
   return (
     <section className="m-4">
       {/* Page Header */}
@@ -186,7 +184,7 @@ const CoordinatorProfile = () => {
                 <label className="text-gray-600 text-sm">Email</label>
                 <div className="flex items-center gap-2">
                   <Mail className="h-5 w-5 text-gray-500" />
-                  <input value={userData?.email || "N/A"} disabled />
+                  <Input value={userData?.email || "N/A"} disabled />
                 </div>
               </div>
               <div className="flex justify-between items-center">
@@ -295,4 +293,4 @@ const CoordinatorProfile = () => {
   );
 };
 
-export default CoordinatorProfile;
+export default AdminProfile;
