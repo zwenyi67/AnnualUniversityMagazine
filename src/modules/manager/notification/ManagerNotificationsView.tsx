@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bell, RefreshCcw, CheckCircle } from "lucide-react";
+import { Bell, RefreshCcw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NotificationType } from "@/api/notification/types";
 import { toast } from "@/hooks/use-toast";
@@ -60,13 +60,6 @@ const ManagerNotificationsView = () => {
     });
   };
 
-  const handleMarkAllAsRead = async () => {
-    // Implement your mark all as read functionality
-    console.log("Marking all notifications as read");
-    // After API call you would refetch
-    await refetch();
-  };
-
   const getNotificationBadge = (type: string) => {
     if (type === "role") {
       return <Badge className="bg-blue-500 hover:bg-blue-600">System</Badge>;
@@ -91,16 +84,6 @@ const ManagerNotificationsView = () => {
               )}
             </div>
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-                onClick={handleMarkAllAsRead}
-                disabled={!data || data.every((n) => n.is_read === 1)}
-              >
-                <CheckCircle className="h-4 w-4" />
-                Mark all as read
-              </Button>
               <Button
                 variant="outline"
                 size="sm"

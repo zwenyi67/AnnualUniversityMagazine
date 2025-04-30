@@ -22,8 +22,8 @@ const StudentDashboardView = () => {
         <div>
           <p className="text-sm text-gray-700 font-bold">
             Submission deadline :{" "}
-            {data?.setting.created_at
-              ? format(new Date(data?.setting.created_at), "MMM d, yyyy")
+            {data?.setting.closure_date
+              ? format(new Date(data?.setting.closure_date), "MMM d, yyyy")
               : "N/A"}
           </p>
           <p className="text-sm text-gray-700">

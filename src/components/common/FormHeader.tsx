@@ -7,6 +7,7 @@ interface FormHeaderProps {
   onRefresh?: () => void;
   isLoading?: boolean;
   isShowBackButton?: boolean;
+  isShowRefreshButton?: boolean;
 }
 
 const FormHeader = ({
@@ -14,6 +15,7 @@ const FormHeader = ({
   onRefresh,
   isLoading,
   isShowBackButton = false,
+  isShowRefreshButton = true,
 }: FormHeaderProps) => {
   const navigate = useNavigate();
   return (
@@ -28,15 +30,17 @@ const FormHeader = ({
 
         {title}
       </div>
-      <Button
-        disabled={isLoading}
-        variant={"secondary"}
-        onClick={onRefresh}
-        className="text-xs"
-      >
-        <span className="text-xs">Refresh</span>
-        <RefreshCw className={`h-2 w-2 ${isLoading && "animate-spin"}`} />
-      </Button>
+      {isShowRefreshButton && (
+        <Button
+          disabled={isLoading}
+          variant={"secondary"}
+          onClick={onRefresh}
+          className="text-xs"
+        >
+          <span className="text-xs">Refresh</span>
+          <RefreshCw className={`h-2 w-2 ${isLoading && "animate-spin"}`} />
+        </Button>
+      )}
     </div>
   );
 };

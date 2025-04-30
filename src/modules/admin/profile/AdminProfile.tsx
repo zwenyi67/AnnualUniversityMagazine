@@ -135,7 +135,7 @@ const AdminProfile = () => {
   return (
     <section className="m-4">
       {/* Page Header */}
-      <FormHeader title="User Profile" />
+      <FormHeader title="User Profile" isShowRefreshButton={false} />
 
       <div className="p-6 bg-white rounded-lg shadow-lg min-h-[530px] space-y-6">
         {/* Password Update Warning */}
