@@ -37,9 +37,8 @@ const ManagerArticleDetailView = () => {
     image_paths,
     title,
     description,
-    first_name,
-    last_name,
-    faculty_name,
+    student,
+    faculty,
     updated_at,
   } = passedData;
 
@@ -148,7 +147,7 @@ const ManagerArticleDetailView = () => {
             </Button>
           </div>
           <div className="text-sm text-gray-500">
-            Last updated:{" "}
+            Last updated:
             {updated_at ? new Date(updated_at).toLocaleDateString() : "N/A"}
           </div>
         </div>
@@ -194,14 +193,15 @@ const ManagerArticleDetailView = () => {
                       Contributor:
                     </span>
                     <span className="text-sm ml-2">
-                      {first_name + " " + last_name || "Unknown"}
+                      {student.first_name + " " + student.last_name ||
+                        "Unknown"}
                     </span>
                   </div>
                   <div className="mb-4">
                     <span className="text-sm font-medium text-gray-500">
                       Faculty:
                     </span>
-                    <span className="text-sm ml-2">{faculty_name}</span>
+                    <span className="text-sm ml-2">{faculty.name}</span>
                   </div>
                   <div className="border-t pt-4">
                     <h3 className="text-md font-medium mb-2">Abstract</h3>
