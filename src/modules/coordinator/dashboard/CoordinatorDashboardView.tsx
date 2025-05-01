@@ -11,14 +11,14 @@ import { columns } from "../dashboard/columns";
 import api from "@/api";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { differenceInDays } from "date-fns";
+import { differenceInDays, formatDate } from "date-fns";
 import { SystemSetting } from "@/api/coordinator/types";
 import { useUserData } from "@/store/AuthContext";
 
 export default function CoordinatorDashboardView() {
   const navigate = useNavigate();
   const { data } = api.coordinator.getDashboard.useQuery();
-const { userData } = useUserData();
+  const { userData } = useUserData();
   const { data: notificationData } =
     api.notification.getCoordinatorNotifications.useQuery();
   const notifications =
@@ -173,11 +173,17 @@ const { userData } = useUserData();
 
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <div className="flex">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">
             Welcome {userData?.is_login ? " Back" : ""} {userData?.first_name + " " + userData?.last_name} !!!
           </h1>
+        </div>
+        <div className="text-right text-sm text-gray-600">
+          <span className="font-medium">Last login:</span>{" "}
+          {userData?.last_login_at
+            ? formatDate(new Date(userData.last_login_at), "dd MMM yyyy hh:mm:ss a")
+            : "First time"}
         </div>
       </div>
       <div>
@@ -188,8 +194,8 @@ const { userData } = useUserData();
         )}
       </div>
       <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg flex justify-between items-center">
-      <h1 className="text-xl font-bold text-slate-800">
-           {userData?.faculty_name} Faculty Dashboard
+        <h1 className="text-xl font-bold text-slate-800">
+          {userData?.faculty_name} Faculty Dashboard
         </h1>
         <div className="flex items-center gap-4">
           <div

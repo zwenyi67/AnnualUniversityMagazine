@@ -18,7 +18,7 @@ import {
   XCircle,
 } from "lucide-react";
 import api from "@/api";
-import { differenceInDays, format } from "date-fns";
+import { differenceInDays, format, formatDate } from "date-fns";
 import { DashboardDataType } from "@/api/manager/types";
 import { useUserData } from "@/store/AuthContext";
 
@@ -61,11 +61,17 @@ const ManagerDashboardView = () => {
 
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <div className="flex">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">
             Welcome {userData?.is_login ? " Back" : ""} {userData?.first_name + " " + userData?.last_name} !!!
           </h1>
+        </div>
+        <div className="text-right text-sm text-gray-600">
+          <span className="font-medium">Last login:</span>{" "}
+          {userData?.last_login_at
+            ? formatDate(new Date(userData.last_login_at), "dd MMM yyyy hh:mm:ss a")
+            : "First time"}
         </div>
       </div>
       <div>
