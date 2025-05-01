@@ -1,6 +1,6 @@
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 import { ColumnDef } from "@tanstack/react-table";
-import { formatDate } from "date-fns";
+import { differenceInDays, formatDate } from "date-fns";
 import ManageColumn from "./ManageColumn";
 import { getCoordinatorsType } from "@/api/admin/types";
 
@@ -52,12 +52,42 @@ export const columns: ColumnDef<getCoordinatorsType>[] = [
     filterFn: "includesString",
   },
   {
-    accessorKey: "status",
-    header: () => <TableHeaderCell>{`Status`}</TableHeaderCell>,
+    accessorKey: "last_login_at",
+    header: () => <TableHeaderCell>Last Login Date</TableHeaderCell>,
     cell: ({ row }) => {
-      return <div>{row.original.status}</div>;
+      const value = row.original.last_login_at;
+      return (
+        <div className="text-sm">
+          {value
+            ? formatDate(new Date(value), "dd MMM yyyy hh:mm:ss a")
+            : "This user has not logged in yet."}
+        </div>
+      );
     },
     filterFn: "includesString",
+  },
+  {
+    accessorKey: "active_status",
+    header: () => <TableHeaderCell>Active Status</TableHeaderCell>,
+    cell: ({ row }) => {
+      const loginAt = row.original.last_login_at;
+  
+      if (!loginAt) {
+        return <span className="text-sm text-gray-500">No recent usage</span>;
+      }
+  
+      const daysAgo = differenceInDays(new Date(), new Date(loginAt));
+  
+      if (daysAgo <= 2) {
+        return <span className="text-sm text-green-600 font-medium">Active</span>;
+      }
+  
+      return (
+        <span className="text-sm text-yellow-600 font-medium">
+          Active {daysAgo} days ago
+        </span>
+      );
+    },
   },
   {
     accessorKey: "created_at",

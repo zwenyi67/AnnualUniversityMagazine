@@ -13,11 +13,12 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { differenceInDays } from "date-fns";
 import { SystemSetting } from "@/api/coordinator/types";
+import { useUserData } from "@/store/AuthContext";
 
 export default function CoordinatorDashboardView() {
   const navigate = useNavigate();
   const { data } = api.coordinator.getDashboard.useQuery();
-
+const { userData } = useUserData();
   const { data: notificationData } =
     api.notification.getCoordinatorNotifications.useQuery();
   const notifications =
@@ -171,10 +172,24 @@ export default function CoordinatorDashboardView() {
   };
 
   return (
-    <div className="px-6 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-slate-800">
-          Faculty of Engineering Dashboard
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+      <div className="flex">
+        <div>
+          <h1 className="text-2xl font-bold">
+            Welcome {userData?.is_login ? " Back" : ""} {userData?.first_name + " " + userData?.last_name} !!!
+          </h1>
+        </div>
+      </div>
+      <div>
+        {!userData?.is_login && (
+          <p className="mt-2 rounded-md border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+            We're excited to have you here for the first time. Start contributing and exploring ContributeX!
+          </p>
+        )}
+      </div>
+      <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg flex justify-between items-center">
+      <h1 className="text-xl font-bold text-slate-800">
+           {userData?.faculty_name} Faculty Dashboard
         </h1>
         <div className="flex items-center gap-4">
           <div

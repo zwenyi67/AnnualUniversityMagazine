@@ -20,4 +20,5 @@ export interface CommonUserPayload {
   email: string;
   role_id: number;
   status: string;
+  last_login_at: Date;
 }

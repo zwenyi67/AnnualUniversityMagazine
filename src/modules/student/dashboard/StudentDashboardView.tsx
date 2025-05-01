@@ -12,10 +12,19 @@ const StudentDashboardView = () => {
 
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">
-          Welcome {userData?.first_name + " " + userData?.last_name}!!!
-        </h1>
+      <div className="flex">
+        <div>
+          <h1 className="text-2xl font-bold">
+            Welcome {userData?.is_login ? " Back" : ""} {userData?.first_name + " " + userData?.last_name} !!!
+          </h1>
+        </div>
+      </div>
+      <div>
+        {!userData?.is_login && (
+          <p className="mt-2 rounded-md border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+            We're excited to have you here for the first time. Start contributing and exploring ContributeX!
+          </p>
+        )}
       </div>
 
       <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg flex justify-between items-center">
@@ -30,9 +39,9 @@ const StudentDashboardView = () => {
             Final updates deadline :{" "}
             {data?.setting.final_closure_date
               ? format(
-                  new Date(data?.setting.final_closure_date),
-                  "MMM d, yyyy"
-                )
+                new Date(data?.setting.final_closure_date),
+                "MMM d, yyyy"
+              )
               : "N/A"}
           </p>
         </div>
@@ -77,7 +86,7 @@ const StudentDashboardView = () => {
             <h2 className="text-lg font-semibold mb-4">Recent Submissions</h2>
             <div className="space-y-3 text-sm">
               {data?.statistics.contributions &&
-              data?.statistics.contributions.length > 0 ? (
+                data?.statistics.contributions.length > 0 ? (
                 data?.statistics.contributions.map((contribution) => (
                   <div>
                     <p className="font-medium">
@@ -110,8 +119,8 @@ const StudentDashboardView = () => {
                   <p className="font-semibold text-gray-700">
                     {data?.latestCoordinatorComment &&
                       data?.latestCoordinatorComment.user.first_name +
-                        " " +
-                        data?.latestCoordinatorComment.user.last_name}
+                      " " +
+                      data?.latestCoordinatorComment.user.last_name}
                   </p>
                   <p className="text-xs text-gray-500 mb-2">
                     Faculty Coordinator

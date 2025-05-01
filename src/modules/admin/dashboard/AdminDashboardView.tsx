@@ -1,4 +1,3 @@
-import FormHeader from "@/components/common/FormHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Clock, LucideIcon } from "lucide-react";
 import {
@@ -27,6 +26,7 @@ import api from "@/api";
 import { differenceInDays, format } from "date-fns";
 import { DashboardDataType } from "@/api/admin/types";
 import { useState } from "react";
+import { useUserData } from "@/store/AuthContext";
 
 const AdminDashboardView = () => {
 
@@ -34,7 +34,7 @@ const AdminDashboardView = () => {
 
   type DashboardStatKey = Exclude<keyof DashboardDataType, "setting" | "contributionData" | 'contributionDataByFaculty' | 'contributionWithoutComment' | 'contributionWithoutCommentAfter14'>;
 
-
+  const { userData } = useUserData();
 
   const statsData: {
     title: string;
@@ -76,212 +76,226 @@ const AdminDashboardView = () => {
   const daysToFinalClosure = finalClosureDate ? differenceInDays(finalClosureDate, today) : null;
 
   return (
-    <section className="m-4">
-      <FormHeader title="Dashboard" />
-      <div className="p-6 bg-white rounded-b-lg min-h-[500px]">
-        <h2 className="text-xl font-bold mb-6">WELCOME TO ADMIN DASHBOARD <span className="text-sm text-gray-600 ms-3">Academic Year ({academicYear})</span></h2>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {statsData.map(({ title, key, icon: Icon, color }, index) => (
-            <Card key={index} className="shadow-md p-4">
-              <CardContent className="flex items-center justify-between">
-                <div>
-                  <h4 className="text-sm text-gray-600">{title}</h4>
-                  <p className="text-xl font-bold">{data?.[key] ?? 0}</p>
-                </div>
-                <Icon className={`w-8 h-8 ${color}`} />
-              </CardContent>
-            </Card>
-          ))}
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+      <div className="flex">
+        <div>
+          <h1 className="text-2xl font-bold">
+            Welcome {userData?.is_login ? " Back" : ""} {userData?.first_name + " " + userData?.last_name} !!!
+          </h1>
         </div>
+      </div>
+      <div>
+        {!userData?.is_login && (
+          <p className="mt-2 rounded-md border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+            We're excited to have you here for the first time. Start contributing and exploring ContributeX!
+          </p>
+        )}
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {/* Submission Closure */}
-          <Card className="shadow-md p-4 bg-white border border-red-300">
-            <CardContent className="flex items-center gap-4">
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100">
-                <Clock className="text-red-600 w-8 h-8" />
-              </div>
+      <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg flex justify-between items-center">
+        <h2 className="text-xl font-bold">Admin Dashboard <span className="text-sm text-gray-600 ms-3">Academic Year ({academicYear})</span></h2>
+      </div>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        {statsData.map(({ title, key, icon: Icon, color }, index) => (
+          <Card key={index} className="shadow-md p-4">
+            <CardContent className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-red-600">Submission Closure</p>
-                <p className="text-2xl font-bold text-red-700">
-                  {closureDate ? format(closureDate, "dd MMMM yyyy") : "N/A"}
-                </p>
-                {daysToClosure !== null && (
-                  <span className="inline-block mt-1 text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">
-                    {daysToClosure} Days Left
-                  </span>
-                )}
+                <h4 className="text-sm text-gray-600">{title}</h4>
+                <p className="text-xl font-bold">{data?.[key] ?? 0}</p>
               </div>
+              <Icon className={`w-8 h-8 ${color}`} />
             </CardContent>
           </Card>
+        ))}
+      </div>
 
-          {/* Final Closure */}
-          <Card className="shadow-md p-4 bg-white border border-red-300">
-            <CardContent className="flex items-center gap-4">
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100">
-                <Clock className="text-red-600 w-8 h-8" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-red-600">Final Closure</p>
-                <p className="text-2xl font-bold text-red-700">
-                  {finalClosureDate ? format(finalClosureDate, "dd MMMM yyyy") : "N/A"}
-                </p>
-                {daysToFinalClosure !== null && (
-                  <span className="inline-block mt-1 text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">
-                    {daysToFinalClosure} Days Left
-                  </span>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Contributions without comment */}
-        <Card className="shadow-md p-4 mb-6">
-          <CardContent>
-            <h4 className="text-lg font-bold mb-4">Contribution Without Comments</h4>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white text-sm text-gray-700">
-                <thead className="bg-blue-600 text-white">
-                  <tr>
-                    <th className="px-4 py-3 text-left">#</th>
-                    <th className="px-4 py-3 text-left">Title</th>
-                    <th className="px-4 py-3 text-left">Description</th>
-                    <th className="px-4 py-3 text-left">Faculty</th>
-                    <th className="px-4 py-3 text-left">Contributor</th>
-                    <th className="px-4 py-3 text-left">Created At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data?.contributionWithoutComment.length === 0 ? (
-                    <tr>
-                      <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
-                        No data available.
-                      </td>
-                    </tr>
-                  ) : (
-                    data?.contributionWithoutComment.map((item, index) => (
-                      <tr key={item.id} className="border-t hover:bg-gray-100 transition">
-                        <td className="px-4 py-3">{index + 1}</td>
-                        <td className="px-4 py-3">{item.title}</td>
-                        <td className="px-4 py-3">{item.description}</td>
-                        <td className="px-4 py-3">{item.faculty}</td>
-                        <td className="px-4 py-3">{item.contributor}</td>
-                        <td className="px-4 py-3">
-                          {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {/* Submission Closure */}
+        <Card className="shadow-md p-4 bg-white border border-red-300">
+          <CardContent className="flex items-center gap-4">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100">
+              <Clock className="text-red-600 w-8 h-8" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-red-600">Submission Closure</p>
+              <p className="text-2xl font-bold text-red-700">
+                {closureDate ? format(closureDate, "dd MMMM yyyy") : "N/A"}
+              </p>
+              {daysToClosure !== null && (
+                <span className="inline-block mt-1 text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">
+                  {daysToClosure} Days Left
+                </span>
+              )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Contributions without comment After 14 days */}
-        <Card className="shadow-md p-4 mb-6">
-          <CardContent>
-            <h4 className="text-lg font-bold mb-4">Contribution Without Comments After 14 days of Submission</h4>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white text-sm text-gray-700">
-                <thead className="bg-blue-600 text-white">
-                  <tr>
-                    <th className="px-4 py-3 text-left">#</th>
-                    <th className="px-4 py-3 text-left">Title</th>
-                    <th className="px-4 py-3 text-left">Description</th>
-                    <th className="px-4 py-3 text-left">Faculty</th>
-                    <th className="px-4 py-3 text-left">Contributor</th>
-                    <th className="px-4 py-3 text-left">Created At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data?.contributionWithoutCommentAfter14.length === 0 ? (
-                    <tr>
-                      <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
-                        No data available.
-                      </td>
-                    </tr>
-                  ) : (
-                    data?.contributionWithoutCommentAfter14.map((item, index) => (
-                      <tr key={item.id} className="border-t hover:bg-gray-100 transition">
-                        <td className="px-4 py-3">{index + 1}</td>
-                        <td className="px-4 py-3">{item.title}</td>
-                        <td className="px-4 py-3">{item.description}</td>
-                        <td className="px-4 py-3">{item.faculty}</td>
-                        <td className="px-4 py-3">{item.contributor}</td>
-                        <td className="px-4 py-3">
-                          {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+        {/* Final Closure */}
+        <Card className="shadow-md p-4 bg-white border border-red-300">
+          <CardContent className="flex items-center gap-4">
+            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-red-100">
+              <Clock className="text-red-600 w-8 h-8" />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Line Chart */}
-        <Card className="shadow-md p-4 mb-6">
-          <CardContent>
-            <h4 className="text-lg font-bold mb-2">Total Contributions By Month (Current Year)</h4>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={data?.contributionData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="value" stroke="#003fbe" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-md p-4 mb-6">
-          <CardContent>
-            <h4 className="text-lg font-bold mb-2">Contributions by Faculty</h4>
-            {/* Year Tabs */}
-            <div className="flex gap-4 mb-6">
-              {years.map((year) => (
-                <button
-                  key={year}
-                  onClick={() => setSelectedYear(year)}
-                  className={`px-4 py-2 rounded-md font-semibold transition ${selectedYear === year ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
-                    }`}
-                >
-                  {year}
-                </button>
-              ))}
+            <div>
+              <p className="text-sm font-semibold text-red-600">Final Closure</p>
+              <p className="text-2xl font-bold text-red-700">
+                {finalClosureDate ? format(finalClosureDate, "dd MMMM yyyy") : "N/A"}
+              </p>
+              {daysToFinalClosure !== null && (
+                <span className="inline-block mt-1 text-xs font-medium bg-red-100 text-red-700 px-2 py-1 rounded-full">
+                  {daysToFinalClosure} Days Left
+                </span>
+              )}
             </div>
-
-            {/* Bar Chart */}
-            <ResponsiveContainer width="100%" height={350}>
-              <BarChart
-                data={filteredFacultyData}
-                layout="vertical"
-                margin={{ top: 10, right: 30, left: 10, bottom: 10 }}
-              >
-                <XAxis type="number" />
-                <YAxis
-                  type="category"
-                  dataKey="faculty"
-                  width={100}
-                  tick={{ fontSize: 10 }}
-                />
-                <Tooltip formatter={(value: number, name: string) => name === 'percentage' ? `${value}%` : value} />
-                <Legend />
-                <Bar dataKey="value" name="Count" fill="#4d80f7" />         // Blue
-                <Bar dataKey="percentage" name="Percentage" fill="#25a6eb" /> // Green
-                <Bar dataKey="contributors" name="Contributors" fill="#2411f2" /> // Orange
-              </BarChart>
-            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>
-    </section>
+
+      {/* Contributions without comment */}
+      <Card className="shadow-md p-4 mb-6">
+        <CardContent>
+          <h4 className="text-lg font-bold mb-4">Contribution Without Comments</h4>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white text-sm text-gray-700">
+              <thead className="bg-blue-600 text-white">
+                <tr>
+                  <th className="px-4 py-3 text-left">#</th>
+                  <th className="px-4 py-3 text-left">Title</th>
+                  <th className="px-4 py-3 text-left">Description</th>
+                  <th className="px-4 py-3 text-left">Faculty</th>
+                  <th className="px-4 py-3 text-left">Contributor</th>
+                  <th className="px-4 py-3 text-left">Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.contributionWithoutComment.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                      No data available.
+                    </td>
+                  </tr>
+                ) : (
+                  data?.contributionWithoutComment.map((item, index) => (
+                    <tr key={item.id} className="border-t hover:bg-gray-100 transition">
+                      <td className="px-4 py-3">{index + 1}</td>
+                      <td className="px-4 py-3">{item.title}</td>
+                      <td className="px-4 py-3">{item.description}</td>
+                      <td className="px-4 py-3">{item.faculty}</td>
+                      <td className="px-4 py-3">{item.contributor}</td>
+                      <td className="px-4 py-3">
+                        {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Contributions without comment After 14 days */}
+      <Card className="shadow-md p-4 mb-6">
+        <CardContent>
+          <h4 className="text-lg font-bold mb-4">Contribution Without Comments After 14 days of Submission</h4>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white text-sm text-gray-700">
+              <thead className="bg-blue-600 text-white">
+                <tr>
+                  <th className="px-4 py-3 text-left">#</th>
+                  <th className="px-4 py-3 text-left">Title</th>
+                  <th className="px-4 py-3 text-left">Description</th>
+                  <th className="px-4 py-3 text-left">Faculty</th>
+                  <th className="px-4 py-3 text-left">Contributor</th>
+                  <th className="px-4 py-3 text-left">Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.contributionWithoutCommentAfter14.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                      No data available.
+                    </td>
+                  </tr>
+                ) : (
+                  data?.contributionWithoutCommentAfter14.map((item, index) => (
+                    <tr key={item.id} className="border-t hover:bg-gray-100 transition">
+                      <td className="px-4 py-3">{index + 1}</td>
+                      <td className="px-4 py-3">{item.title}</td>
+                      <td className="px-4 py-3">{item.description}</td>
+                      <td className="px-4 py-3">{item.faculty}</td>
+                      <td className="px-4 py-3">{item.contributor}</td>
+                      <td className="px-4 py-3">
+                        {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Line Chart */}
+      <Card className="shadow-md p-4 mb-6">
+        <CardContent>
+          <h4 className="text-lg font-bold mb-2">Total Contributions By Month (Current Year)</h4>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={data?.contributionData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="value" stroke="#003fbe" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      <Card className="shadow-md p-4 mb-6">
+        <CardContent>
+          <h4 className="text-lg font-bold mb-2">Contributions by Faculty</h4>
+          {/* Year Tabs */}
+          <div className="flex gap-4 mb-6">
+            {years.map((year) => (
+              <button
+                key={year}
+                onClick={() => setSelectedYear(year)}
+                className={`px-4 py-2 rounded-md font-semibold transition ${selectedYear === year ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+                  }`}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
+
+          {/* Bar Chart */}
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart
+              data={filteredFacultyData}
+              layout="vertical"
+              margin={{ top: 10, right: 30, left: 10, bottom: 10 }}
+            >
+              <XAxis type="number" />
+              <YAxis
+                type="category"
+                dataKey="faculty"
+                width={100}
+                tick={{ fontSize: 10 }}
+              />
+              <Tooltip formatter={(value: number, name: string) => name === 'percentage' ? `${value}%` : value} />
+              <Legend />
+              <Bar dataKey="value" name="Count" fill="#4d80f7" />         // Blue
+              <Bar dataKey="percentage" name="Percentage" fill="#25a6eb" /> // Green
+              <Bar dataKey="contributors" name="Contributors" fill="#2411f2" /> // Orange
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

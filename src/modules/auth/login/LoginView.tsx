@@ -53,10 +53,18 @@ const LoginView = () => {
     onSuccess: (data) => {
       userLogin(data.token, data.role, data.user);
       navigate("/", { replace: true });
-      toast({
-        description: "Successfully logged in",
-        variant: "success",
-      });
+      if (data.user.is_login) {
+        toast({
+          description: "Successfully logged in",
+          variant: "success",
+        });
+      } else {
+        toast({
+          title: "Welcome to ContributeX!",
+          description: "Glad to have you on board. Start exploring the platform!",
+          variant: "success",
+        });
+      }
     },
     onError: (error) => {
       console.error("Error during login:", error);
