@@ -17,6 +17,9 @@ export type DashboardDataType = {
   contributionDataByFaculty: ContributionDataByFaculty[];
   contributionWithoutComment: ContributionWithoutComment[];
   contributionWithoutCommentAfter14: ContributionWithoutComment[];
+  most_active_user: string;
+  most_used_table: string;
+  most_used_browser: string;
 }
 
 export type ContributionWithoutComment = {

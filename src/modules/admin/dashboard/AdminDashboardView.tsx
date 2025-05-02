@@ -28,6 +28,7 @@ import { DashboardDataType } from "@/api/admin/types";
 import { useState } from "react";
 import { useUserData } from "@/store/AuthContext";
 import { formatDate } from "date-fns";
+import { ChartLine, Globe, UserCheck } from "lucide-react"
 
 const AdminDashboardView = () => {
 
@@ -117,6 +118,56 @@ const AdminDashboardView = () => {
           </Card>
         ))}
       </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        {/* Most Viewed Page */}
+        <Card className="shadow-lg p-5 rounded-lg bg-white">
+          <CardContent className="flex items-center gap-4">
+            <div className="p-3 rounded-full bg-blue-100 text-blue-600 text-xl">
+            <ChartLine className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-sm text-gray-500">Most Viewed Page</h4>
+              <p className="text-lg font-semibold">
+                {data?.most_used_table
+                  ? `${data.most_used_table.replace(/s$/, '').replace(/^./, c => c.toUpperCase())} Management`
+                  : "N/A"}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Most Used Browser */}
+        <Card className="shadow-lg p-5 rounded-lg bg-white">
+          <CardContent className="flex items-center gap-4">
+            <div className="p-3 rounded-full bg-green-100 text-green-600 text-xl">
+            <Globe className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-sm text-gray-500">Most Used Browser</h4>
+              <p className="text-lg font-semibold">
+                {data?.most_used_browser || "N/A"}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Most Active User */}
+        <Card className="shadow-lg p-5 rounded-lg bg-white">
+          <CardContent className="flex items-center gap-4">
+            <div className="p-3 rounded-full bg-purple-100 text-purple-600 text-xl">
+            <UserCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-sm text-gray-500">Most Active User</h4>
+              <p className="text-lg font-semibold">
+                {data?.most_active_user || "No one"}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         {/* Submission Closure */}
