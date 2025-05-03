@@ -4,10 +4,13 @@ import { useState } from "react";
 import { coordinatorSidebarData } from "./coordinatorSidebarData";
 import { SidebarItemType, SidebarSubItemType } from "../type";
 import { useUserData } from "@/store/AuthContext";
+import { useLocation } from "react-router-dom";
 
 const CoordinatorSidebar = () => {
   const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
   const { userData } = useUserData();
+  const location = useLocation(); 
+
   const toggleSubMenu = (itemName: string) => {
     setOpenSubMenus((prev) => ({
       ...prev,
@@ -16,7 +19,7 @@ const CoordinatorSidebar = () => {
   };
 
   const ActiveMainMenu = (item: SidebarItemType): string => {
-    const currentPath = window.location.pathname;
+    const currentPath = location.pathname; // Use location from react-router instead of window.location
 
     // Check if any submenu is active
     if (item.subMenu) {
@@ -30,33 +33,21 @@ const CoordinatorSidebar = () => {
     }
 
     // Check if the main menu itself is active
-    const paths: string[] = item.routeNames;
-    if (!paths || paths.some((path) => path === "")) {
+    const paths: string[] = item.routeNames || [];
+
+    // Skip items with empty route arrays or only empty routes
+    if (paths.length === 0 || (paths.length === 1 && paths[0] === "")) {
       return "";
     }
 
-    const isActive = paths.some((path) => currentPath.startsWith(path));
-    if (isActive) {
-      return "bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow";
-    }
+    // Check if the current path matches any of the route paths
+    const isActive = paths.some(
+      (path) => path && path !== "" && currentPath.startsWith(path)
+    );
 
-    return "";
-  };
-
-  const ActiveSubMenu = (paths: string[]): string => {
-    const currentPath = window.location.pathname;
-
-    if (!paths || paths.some((path) => path === "")) {
-      return "";
-    }
-
-    const isActive = paths.some((path) => currentPath.startsWith(path));
-
-    if (isActive) {
-      return "bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow";
-    }
-
-    return "";
+    return isActive
+      ? "bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow"
+      : "";
   };
 
   return (
@@ -92,35 +83,14 @@ const CoordinatorSidebar = () => {
                       <p className="text-[13px]">{item.name}</p>
                     </div>
                     {/* Show Exclamation Icon if Password is not Changed */}
-                    {item.name === "Profile" && !userData?.is_password_change && (
-                      <AlertTriangle className="w-4 h-4 text-primary animate-pulse" />
-                    )}
+                    {item.name === "Profile" &&
+                      !userData?.is_password_change && (
+                        <AlertTriangle className="w-4 h-4 text-primary animate-pulse" />
+                      )}
                   </div>
                 </NavLink>
               )}
             </div>
-            {/* Submenu */}
-            {item.subMenu && openSubMenus[item.name] && (
-              <div className="ml-[14px] mt-1 pl-3 border-s-2 border-dashed mb-3">
-                {item.subMenu.map((subItem) => (
-                  <div
-                    key={subItem.name}
-                    className={`p-2 flex flex-col rounded-sm cursor-pointer mt-2 ${ActiveSubMenu(
-                      subItem.routeNames
-                    )} hover:bg-accent`}
-                  >
-                    <NavLink to={subItem.routeNames[0]}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          {subItem.icon && <subItem.icon className="w-4 h-4" />}
-                          <p className="text-[13px]">{subItem.name}</p>
-                        </div>
-                      </div>
-                    </NavLink>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         ))}
       </div>

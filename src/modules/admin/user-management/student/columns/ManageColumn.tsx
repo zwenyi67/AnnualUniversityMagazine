@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Pencil2Icon } from "@radix-ui/react-icons"
 import { Link } from "react-router-dom"
-import { Info, Trash2Icon } from "lucide-react"
+import { Trash2Icon } from "lucide-react"
 import { useState } from "react"
 import api from '@/api';
 import { toast } from "@/hooks/use-toast"
@@ -10,7 +10,6 @@ import { getStudentsType } from "@/api/admin/types"
 
 const ManageColumn = ({ data }: { data: getStudentsType }) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [isDetailOpen, setIsDetailOpen] = useState(false);
 	const queryClient = useQueryClient();
 
 
@@ -41,9 +40,6 @@ const ManageColumn = ({ data }: { data: getStudentsType }) => {
 
 	return (
 		<div className="flex items-center justify-center">
-			<Button variant={"columnIcon"} size={"icon"} onClick={() => setIsDetailOpen(true)}>
-				<Info color="blue" />
-			</Button>
 			<Button variant={"columnIcon"} size={"icon"}>
 				<Link to={`/admin/user-management/students/${data.id}/edit`} state={{ data }}>
 					<Pencil2Icon color="green" />
@@ -74,34 +70,7 @@ const ManageColumn = ({ data }: { data: getStudentsType }) => {
 				</div>
 			)}
 
-			{/* Detail Dialog Box */}
-			{isDetailOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-					<div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-						<div className="flex items-center justify-between mb-4">
-							<h2 className="text-xl font-bold text-gray-800">
-								Student Details
-							</h2>
-							<button
-								onClick={() => setIsDetailOpen(false)}
-								className="text-gray-500 hover:text-red-500 transition-colors duration-200"
-							>
-								✕
-							</button>
-						</div>
-						
-						<div className="mt-6 flex justify-center space-x-4">
-							<Button
-								variant="secondary"
-								className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition duration-200"
-								onClick={() => setIsDetailOpen(false)}
-							>
-								Close
-							</Button>
-						</div>
-					</div>
-				</div>
-			)}
+			
 		</div>
 	)
 }

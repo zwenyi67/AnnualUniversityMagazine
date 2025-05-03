@@ -1,7 +1,4 @@
-import {
-  Gauge,
-  User,
-} from "lucide-react";
+import { Gauge, BookText, Users, BellDot, User } from "lucide-react";
 
 export const coordinatorSidebarData = [
   {
@@ -10,21 +7,24 @@ export const coordinatorSidebarData = [
     icon: Gauge,
   },
   {
-    routeNames: [""],
-    name: "DropDown Menu",
-    icon: Gauge,
-    subMenu: [
-      {
-        routeNames: ["/coordinator/menu1"],
-        name: "Menu 1",
-        icon: Gauge,
-      },
-      {
-        routeNames: ["/coordinator/menu2"],
-        name: "Menu 2",
-        icon: Gauge,
-      },
-    ],
+    routeNames: ["/coordinator/articles"],
+    name: "Articles",
+    icon: BookText,
+  },
+  {
+    routeNames: ["/coordinator/students"],
+    name: "Students",
+    icon: Users,
+  },
+  {
+    routeNames: ["/coordinator/guests"],
+    name: "Guests",
+    icon: Users,
+  },
+  {
+    routeNames: ["/coordinator/notifications"],
+    name: "Notifications",
+    icon: BellDot,
   },
   {
     routeNames: ["/coordinator/profile"],

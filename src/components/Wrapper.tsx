@@ -16,7 +16,6 @@ import LoginView from "@/modules/auth/login/LoginView";
 import NotFoundView from "@/modules/not-found/NotFoundView";
 
 import ErrorView from "@/modules/error/ErrorView";
-import Menu1View from "@/modules/dropdown/Menu1View";
 import AdminLayout from "@/layouts/AdminLayout";
 import StudentLayout from "@/layouts/StudentLayout";
 import CoordinatorLayout from "@/layouts/CoordinatorLayout";
@@ -26,7 +25,6 @@ import AdminDashboardView from "@/modules/admin/dashboard/AdminDashboardView";
 import ManagerDashboardView from "@/modules/manager/dashboard/ManagerDashboardView";
 import CoordinatorDashboardView from "@/modules/coordinator/dashboard/CoordinatorDashboardView";
 import StudentDashboardView from "@/modules/student/dashboard/StudentDashboardView";
-import HomeView from "@/modules/guest/home/HomeView";
 import ManagerView from "@/modules/admin/user-management/manager/ManagerView";
 import FacultyView from "@/modules/admin/faculty-management/faculty/FacultyView";
 import FacultyFormView from "@/modules/admin/faculty-management/faculty/FacultyFormView";
@@ -49,7 +47,20 @@ import StudentArticlesView from "@/modules/student/articles/StudentArticlesView"
 import StudentArticleDetailsView from "@/modules/student/articles/chunks/StudentArticleDetailsView";
 import AddNewArticleView from "@/modules/student/articles/chunks/AddNewArticleView";
 import SystemSetting from "@/modules/admin/setting/SystemSetting";
+import CoordinatorArticlesView from "@/modules/coordinator/articles/CoordinatorArticlesView";
+import CoordinatorArticleDetailView from "@/modules/coordinator/articles/CoordinatorArticleDetailView";
+import CoordinatorGuestsView from "@/modules/coordinator/guests/CoordinatorGuestsView";
+import CoordinatorNotificationsView from "@/modules/coordinator/notification/CoordinatorNotificationsView";
 import LogView from "@/modules/admin/log-management/log/LogView";
+import ArticleView from "@/modules/manager/article/ArticleView";
+import ManagerArticleDetailView from "@/modules/manager/article/ManagerArticleDetailView";
+import StudentNotificationsView from "@/modules/student/notification/StudentNotificationsView";
+import GuestArticleView from "@/modules/guest/article/GuestArticleView";
+import GuestDashboardView from "@/modules/guest/dashboard/GuestDashboardView";
+import GuestArticleDetailView from "@/modules/guest/article/GuestArticleDetailView";
+import CoordinatorStudentsView from "@/modules/coordinator/students/CoordinatorStudentsView";
+import UpdateArticleView from "@/modules/student/articles/chunks/UpdateArticleView";
+import AdminProfile from "@/modules/admin/profile/AdminProfile";
 
 const router = createBrowserRouter([
   {
@@ -158,6 +169,11 @@ const router = createBrowserRouter([
         path: "system-setting",
         element: <SystemSetting />,
       },
+      // profile
+      {
+        path: "profile",
+        element: <AdminProfile />,
+      },
     ],
   },
   {
@@ -180,12 +196,16 @@ const router = createBrowserRouter([
         element: <ManagerProfile />,
       },
       {
-        path: "menu1",
-        element: <Menu1View />,
+        path: "articles",
+        element: <ArticleView />,
       },
       {
-        path: "menu2",
-        element: <Menu1View />,
+        path: "articles/:id",
+        element: <ManagerArticleDetailView />,
+      },
+      {
+        path: "notifications",
+        element: <StudentNotificationsView />,
       },
     ],
   },
@@ -205,16 +225,28 @@ const router = createBrowserRouter([
         element: <CoordinatorDashboardView />,
       },
       {
+        path: "articles",
+        element: <CoordinatorArticlesView />,
+      },
+      {
+        path: "articles/:id",
+        element: <CoordinatorArticleDetailView />,
+      },
+      {
+        path: "students",
+        element: <CoordinatorStudentsView />,
+      },
+      {
+        path: "guests",
+        element: <CoordinatorGuestsView />,
+      },
+      {
+        path: "notifications",
+        element: <CoordinatorNotificationsView />,
+      },
+      {
         path: "profile",
         element: <CoordinatorProfile />,
-      },
-      {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
       },
     ],
   },
@@ -247,16 +279,16 @@ const router = createBrowserRouter([
         element: <StudentArticleDetailsView />,
       },
       {
+        path: "articles/update/:id",
+        element: <UpdateArticleView />,
+      },
+      {
         path: "profile",
         element: <StudentProfile />,
       },
       {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
+        path: "notifications",
+        element: <StudentNotificationsView />,
       },
     ],
   },
@@ -273,19 +305,19 @@ const router = createBrowserRouter([
       // Dashboard Start
       {
         path: "dashboard",
-        element: <HomeView />,
+        element: <GuestDashboardView />,
+      },
+      {
+        path: "articles",
+        element: <GuestArticleView />,
+      },
+      {
+        path: "articles/:id",
+        element: <GuestArticleDetailView />,
       },
       {
         path: "profile",
         element: <GuestProfile />,
-      },
-      {
-        path: "menu1",
-        element: <Menu1View />,
-      },
-      {
-        path: "menu2",
-        element: <Menu1View />,
       },
     ],
   },

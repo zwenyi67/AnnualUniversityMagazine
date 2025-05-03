@@ -26,7 +26,7 @@ const ReturnLayout = () => {
   }
 
   if (role === "guest" ) {
-    return <Navigate to="/" />;
+    return <Navigate to="/guest/dashboard" />;
   }
 
   return (

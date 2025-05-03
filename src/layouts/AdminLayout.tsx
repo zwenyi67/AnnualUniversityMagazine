@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Menu as MenuIcon, X as XIcon } from "lucide-react";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import AdminSidebar from "@/components/sidebar/admin/AdminSidebar";
+import iconX from "../assets/icons/iconX.png";
 
 const AdminLayout = () => {
   const { isAuthenticated, role } = useAuth();
@@ -40,8 +41,13 @@ const AdminLayout = () => {
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
         <div className="lg:flex flex-col hidden min-h-svh bg-gray-100 h-full transition-all duration-300 lg:min-w-[280px] shadow-lg">
-          <div className="flex flex-col items-center justify-center h-20">
-            <div className="">Template</div>
+          <div className="flex flex-col items-center justify-center h-20 mb-5">
+            <div className="flex items-center space-x-1">
+              <span className="text-xl font-bold text-blue-900 tracking-wide pt-2">
+                CONTRIBUTE
+              </span>
+              <img src={iconX} alt="X Logo" className="w-6 h-6 object-contain" />
+            </div>
           </div>
           <AdminSidebar />
         </div>

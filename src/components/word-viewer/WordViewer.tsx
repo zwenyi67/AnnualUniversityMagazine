@@ -19,7 +19,7 @@ const WordViewer = ({
 
   return (
     <div className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between bg-blue-600 text-white px-4 py-3">
+      <div className="flex items-center justify-between bg-[#4169E1] text-white px-4 py-3">
         <span className="text-lg font-semibold truncate">
           {fileName || "Word Document"}
         </span>

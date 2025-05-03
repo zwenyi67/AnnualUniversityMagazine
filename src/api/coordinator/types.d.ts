@@ -1,13 +1,71 @@
-export type LoginPayload = {
-    username: string
-    password: string
-}
+export type CoordinatorsType = {
+  id: number;
+  title: string;
+  description: string;
+  article_path: string;
+  image_paths: json[];
+  user_id: number;
+  faculty_id: number;
+  status: "pending" | "reviewed" | "selected";
+  active_flag: number;
+  created_at: string;
+  updated_at: string;
+  createby: number;
+  updateby: number | null;
+  first_name: string;
+  last_name: string;
+  faculty_name: string;
+  comments?: ArticleComment[];
+};
 
-export type LoginResponse = {
-    token: string
-    role: string
-}
+export type SystemSetting = {
+  id: number;
+  academic_year: string;
+  closure_date: string;
+  final_closure_date: string;
+  active_flag: number;
+  created_at: string;
+  updated_at: string;
+  createby: number;
+  updateby: number | null;
+};
 
-export type FileUploadResponse = {
-    file: string
-}
+export type ArticleResponse = {
+  systemSetting: SystemSetting;
+  contributions: CoordinatorsType[];
+};
+
+export type ArticleComment = {
+  id: number;
+  comment: string;
+  created_at: string;
+  user_id: number;
+  name: string;
+};
+
+export type CommentResponse = {
+  id: number;
+  comment: string;
+  user_id: number;
+  contribution_id: number;
+  createby: number;
+  created_at: string;
+  updated_at: string;
+  name: string;
+};
+
+export type SubmissionType = {
+  id: number;
+  student_name: string;
+  title: string;
+  submitted_at: Date;
+  status: "pending" | "approved" | "rejected";
+};
+
+export type DashboardType = {
+  contributions: CoordinatorsType[];
+  contributionCount: number;
+  pendingCount: number;
+  selectedCount: number;
+  systemSettings: json[];
+};

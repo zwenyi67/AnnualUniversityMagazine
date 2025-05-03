@@ -67,7 +67,7 @@ export default function ManagerFormView() {
         navigate("/admin/user-management/managers");
       },
       onError: (error) => {
-        form.setError("first_name", { type: "custom", message: error.message });
+        form.setError("email", { type: "custom", message: error.message });
         toast({
           title: error.message,
           variant: "destructive",
@@ -88,10 +88,10 @@ export default function ManagerFormView() {
           title: "Manager updated successfully",
           variant: "success",
         });
-        navigate("/admin/admin/user-management/managers");
+        navigate("/admin/user-management/managers");
       },
       onError: (error) => {
-        form.setError("first_name", { type: "custom", message: error.message });
+        form.setError("email", { type: "custom", message: error.message });
         toast({
           title: error.message,
           variant: "destructive",

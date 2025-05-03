@@ -1,6 +1,55 @@
 import { CommonUserPayload, TimeStamps } from "@/shared/types";
 
 
+// Dashboard Data
+
+export type DashboardDataType = {
+  managers: number;
+  coordinators: number;
+  students: number;
+  guests: number;
+  faculties: number;
+  contributions: number;
+  approved: number;
+  rejected: number;
+  setting: Setting;
+  contributionData: ContributionChartData[];
+  contributionDataByFaculty: ContributionDataByFaculty[];
+  contributionWithoutComment: ContributionWithoutComment[];
+  contributionWithoutCommentAfter14: ContributionWithoutComment[];
+  most_active_user: string;
+  most_used_table: string;
+  most_used_browser: string;
+}
+
+export type ContributionWithoutComment = {
+  id: number;
+  title: string,
+  description: string,
+  faculty: string;
+  contributor: string;
+  created_at: string,
+}
+
+export type Setting = {
+  academic_year: string,
+  closure_date: Date,
+  final_closure_date: Date,
+}
+
+export type ContributionChartData = {
+  name: string;
+  value: number;
+};
+
+export type ContributionDataByFaculty = {
+  name: string;
+  year: number;
+  value: number;
+  percentage: number;
+  contributors: number;
+};
+
 // Admin Management Type
 
 export interface getAdminsType extends TimeStamps, CommonUserPayload {

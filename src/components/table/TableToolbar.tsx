@@ -27,14 +27,15 @@ type TableToolbarProps = {
   setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
   globalFilter: string | number;
   selectedOpt: "Newest" | "Oldest";
-  filterColumns: string[],
-  setColumnFilters: React.Dispatch<SetStateAction<ColumnFiltersState>>
+  filterColumns: string[];
+  setColumnFilters: React.Dispatch<SetStateAction<ColumnFiltersState>>;
   classNames: string;
   sortSelectNewLine?: boolean;
   setSelectedOpt: (value: "Oldest" | "Newest") => void;
 
   selectOptions?: { label: string; value: string }[];
   children: React.ReactNode;
+  allowAdd?: boolean;
 };
 
 const TableToolbar = ({
@@ -52,7 +53,6 @@ const TableToolbar = ({
   classNames = "",
   children,
 }: TableToolbarProps) => {
-
   useEffect(() => {
     setColumnFilters(
       (prev: ColumnFiltersState): ColumnFiltersState => [
@@ -63,8 +63,6 @@ const TableToolbar = ({
       ]
     );
   }, [globalFilter]);
-
-
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
@@ -95,7 +93,9 @@ const TableToolbar = ({
         )}
         <div
           className={cn(
-            !classNames ? "flex lg:flex-row md:flex-row flex-col lg:justify-end md:justify-end justify-center w-full gap-2" : classNames
+            !classNames
+              ? "flex lg:flex-row md:flex-row flex-col lg:justify-end md:justify-end justify-center w-full gap-2"
+              : classNames
           )}
         >
           {children}

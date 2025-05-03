@@ -75,7 +75,7 @@ export default function StudentFormView() {
         navigate("/admin/user-management/students");
       },
       onError: (error) => {
-        form.setError("first_name", { type: "custom", message: error.message });
+        form.setError("email", { type: "custom", message: error.message });
         toast({
           title: error.message,
           variant: "destructive",
@@ -99,7 +99,7 @@ export default function StudentFormView() {
         navigate("/admin/user-management/students");
       },
       onError: (error) => {
-        form.setError("first_name", { type: "custom", message: error.message });
+        form.setError("email", { type: "custom", message: error.message });
         toast({
           title: error.message,
           variant: "destructive",

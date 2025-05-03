@@ -1,11 +1,17 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-const TableHeaderCell = ({children,className}: {
-	children: string
-	className?: string
+const TableHeaderCell = ({
+  children,
+  className,
+}: {
+  children: string;
+  className?: string;
 }) => {
+  return (
+    <div className={cn("text-sm font-normal px-4", className)}>
+      {children}
+    </div>
+  );
+};
 
-	return <div className={cn("text-sm font-normal", className)}>{children}</div>
-}
-
-export default TableHeaderCell
+export default TableHeaderCell;

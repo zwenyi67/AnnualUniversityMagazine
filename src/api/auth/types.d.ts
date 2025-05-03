@@ -26,6 +26,7 @@ export type UserData = {
     is_password_change?: boolean;
     last_login_at?: Date;
     last_login_ip?: string;
+    is_login: boolean;
 }
 
 export interface PasswordUpdatePayload {
