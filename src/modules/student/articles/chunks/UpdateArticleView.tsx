@@ -156,7 +156,7 @@ const UpdateArticleView = () => {
   return (
     <section className="m-4">
       <FormHeader
-        title="Add Article"
+        title="Update Article"
         onRefresh={refreshForm}
         isShowBackButton={true}
         // isLoading={isFetching || isRefetching}
