@@ -120,7 +120,7 @@ const AdminDashboardView = () => {
       </div>
 
       <div className="grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-4 mb-6">
-        {/* Most Viewed Page */}
+        {/* Most Viewed Page update */}
         <Card className="shadow-lg p-5 rounded-lg bg-white">
           <CardContent className="flex items-center gap-4">
             <div className="p-3 rounded-full bg-blue-100 text-blue-600 text-xl">
