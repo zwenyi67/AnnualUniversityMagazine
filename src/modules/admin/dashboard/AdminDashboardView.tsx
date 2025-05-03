@@ -119,7 +119,7 @@ const AdminDashboardView = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-4 mb-6">
         {/* Most Viewed Page */}
         <Card className="shadow-lg p-5 rounded-lg bg-white">
           <CardContent className="flex items-center gap-4">
@@ -128,7 +128,7 @@ const AdminDashboardView = () => {
             </div>
             <div>
               <h4 className="text-sm text-gray-500">Most Viewed Page</h4>
-              <p className="text-lg font-semibold">
+              <p className="text-sm font-semibold">
                 {data?.most_used_table
                   ? `${data.most_used_table.replace(/s$/, '').replace(/^./, c => c.toUpperCase())} Management`
                   : "N/A"}
@@ -145,7 +145,7 @@ const AdminDashboardView = () => {
             </div>
             <div>
               <h4 className="text-sm text-gray-500">Most Used Browser</h4>
-              <p className="text-lg font-semibold">
+              <p className="text-sm font-semibold">
                 {data?.most_used_browser || "N/A"}
               </p>
             </div>
@@ -160,7 +160,7 @@ const AdminDashboardView = () => {
             </div>
             <div>
               <h4 className="text-sm text-gray-500">Most Active User</h4>
-              <p className="text-lg font-semibold">
+              <p className="text-sm font-semibold break-words whitespace-normal">
                 {data?.most_active_user || "No one"}
               </p>
             </div>
@@ -210,92 +210,6 @@ const AdminDashboardView = () => {
           </CardContent>
         </Card>
       </div>
-
-      {/* Contributions without comment */}
-      <Card className="shadow-md p-4 mb-6">
-        <CardContent>
-          <h4 className="text-lg font-bold mb-4">Contribution Without Comments</h4>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white text-sm text-gray-700">
-              <thead className="bg-blue-600 text-white">
-                <tr>
-                  <th className="px-4 py-3 text-left">#</th>
-                  <th className="px-4 py-3 text-left">Title</th>
-                  <th className="px-4 py-3 text-left">Description</th>
-                  <th className="px-4 py-3 text-left">Faculty</th>
-                  <th className="px-4 py-3 text-left">Contributor</th>
-                  <th className="px-4 py-3 text-left">Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.contributionWithoutComment.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
-                      No data available.
-                    </td>
-                  </tr>
-                ) : (
-                  data?.contributionWithoutComment.map((item, index) => (
-                    <tr key={item.id} className="border-t hover:bg-gray-100 transition">
-                      <td className="px-4 py-3">{index + 1}</td>
-                      <td className="px-4 py-3">{item.title}</td>
-                      <td className="px-4 py-3">{item.description}</td>
-                      <td className="px-4 py-3">{item.faculty}</td>
-                      <td className="px-4 py-3">{item.contributor}</td>
-                      <td className="px-4 py-3">
-                        {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Contributions without comment After 14 days */}
-      <Card className="shadow-md p-4 mb-6">
-        <CardContent>
-          <h4 className="text-lg font-bold mb-4">Contribution Without Comments After 14 days of Submission</h4>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white text-sm text-gray-700">
-              <thead className="bg-blue-600 text-white">
-                <tr>
-                  <th className="px-4 py-3 text-left">#</th>
-                  <th className="px-4 py-3 text-left">Title</th>
-                  <th className="px-4 py-3 text-left">Description</th>
-                  <th className="px-4 py-3 text-left">Faculty</th>
-                  <th className="px-4 py-3 text-left">Contributor</th>
-                  <th className="px-4 py-3 text-left">Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.contributionWithoutCommentAfter14.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
-                      No data available.
-                    </td>
-                  </tr>
-                ) : (
-                  data?.contributionWithoutCommentAfter14.map((item, index) => (
-                    <tr key={item.id} className="border-t hover:bg-gray-100 transition">
-                      <td className="px-4 py-3">{index + 1}</td>
-                      <td className="px-4 py-3">{item.title}</td>
-                      <td className="px-4 py-3">{item.description}</td>
-                      <td className="px-4 py-3">{item.faculty}</td>
-                      <td className="px-4 py-3">{item.contributor}</td>
-                      <td className="px-4 py-3">
-                        {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Line Chart */}
       <Card className="shadow-md p-4 mb-6">
@@ -351,6 +265,88 @@ const AdminDashboardView = () => {
               <Bar dataKey="contributors" name="Contributors" fill="#2411f2" /> // Orange
             </BarChart>
           </ResponsiveContainer>
+        </CardContent>
+      </Card>
+
+      {/* Contributions without comment */}
+      <Card className="shadow-md p-4 mb-6">
+        <CardContent>
+          <h4 className="text-lg font-bold mb-4">Contribution Without Comments</h4>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white text-sm text-gray-700">
+              <thead className="bg-blue-600 text-white">
+                <tr>
+                  <th className="px-4 py-3 text-left">#</th>
+                  <th className="px-4 py-3 text-left">Title</th>
+                  <th className="px-4 py-3 text-left">Faculty</th>
+                  <th className="px-4 py-3 text-left">Contributor</th>
+                  <th className="px-4 py-3 text-left">Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.contributionWithoutComment.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                      No data available.
+                    </td>
+                  </tr>
+                ) : (
+                  data?.contributionWithoutComment.map((item, index) => (
+                    <tr key={item.id} className="border-t hover:bg-gray-100 transition">
+                      <td className="px-4 py-3">{index + 1}</td>
+                      <td className="px-4 py-3">{item.title}</td>
+                      <td className="px-4 py-3">{item.faculty}</td>
+                      <td className="px-4 py-3">{item.contributor}</td>
+                      <td className="px-4 py-3">
+                        {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Contributions without comment After 14 days */}
+      <Card className="shadow-md p-4 mb-6">
+        <CardContent>
+          <h4 className="text-lg font-bold mb-4">Contribution Without Comments After 14 days of Submission</h4>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white text-sm text-gray-700">
+              <thead className="bg-blue-600 text-white">
+                <tr>
+                  <th className="px-4 py-3 text-left">#</th>
+                  <th className="px-4 py-3 text-left">Title</th>
+                  <th className="px-4 py-3 text-left">Faculty</th>
+                  <th className="px-4 py-3 text-left">Contributor</th>
+                  <th className="px-4 py-3 text-left">Created At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data?.contributionWithoutCommentAfter14.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                      No data available.
+                    </td>
+                  </tr>
+                ) : (
+                  data?.contributionWithoutCommentAfter14.map((item, index) => (
+                    <tr key={item.id} className="border-t hover:bg-gray-100 transition">
+                      <td className="px-4 py-3">{index + 1}</td>
+                      <td className="px-4 py-3">{item.title}</td>
+                      <td className="px-4 py-3">{item.faculty}</td>
+                      <td className="px-4 py-3">{item.contributor}</td>
+                      <td className="px-4 py-3">
+                        {item.created_at ? format(new Date(item.created_at), "dd MMMM yyyy hh:mm:ss") : "N/A"}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -3,9 +3,6 @@ import {
   CircleChevronLeft,
 } from "lucide-react";
 import FormHeader from "@/components/common/FormHeader";
-import { Button } from "@/components/ui/button";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
 import {
   Tabs,
   TabsContent,
@@ -25,7 +22,7 @@ const GuestArticleDetailView = () => {
     );
   }
 
-  const { article_path, image_paths, title, description, updated_at } = passedData;
+  const { article_path, image_paths, description, updated_at } = passedData;
 
   let imagePaths: string[] = [];
   try {
@@ -34,35 +31,12 @@ const GuestArticleDetailView = () => {
     console.error("Invalid image_paths format:", err);
   }
 
-  const handleDownloadZip = async () => {
-    const zip = new JSZip();
-    try {
-      const articleResponse = await fetch(article_path);
-      const articleBlob = await articleResponse.blob();
-      const articleName = article_path.split("/").pop() || "article.docx";
-      zip.file(articleName, articleBlob);
-
-      for (let i = 0; i < imagePaths.length; i++) {
-        const imgUrl = imagePaths[i];
-        const imgResponse = await fetch(imgUrl);
-        const imgBlob = await imgResponse.blob();
-        const imgName = `image_${i + 1}.${imgUrl.split(".").pop()?.split("?")[0]}`;
-        zip.file(imgName, imgBlob);
-      }
-
-      const zipBlob = await zip.generateAsync({ type: "blob" });
-      saveAs(zipBlob, `${title.replace(/\s+/g, "_")}_ZIP.zip`);
-    } catch (error) {
-      console.error("Error creating ZIP:", error);
-    }
-  };
-
   return (
     <section className="m-4">
       <FormHeader title="Selected Articles" />
       <div className="p-6 bg-white rounded-lg shadow-md">
         <div className="flex mb-6 items-center">
-          <Link to="/manager/articles" className="me-4">
+          <Link to="/guest/articles" className="me-4">
             <CircleChevronLeft className="w-8 h-8 text-secondary hover:text-blue-500" />
           </Link>
           <h2 className="text-lg font-semibold text-secondary">Article Detail</h2>
@@ -72,12 +46,6 @@ const GuestArticleDetailView = () => {
         </div>
 
         <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-            <Button variant="secondary" onClick={handleDownloadZip}>
-              Download ZIP
-            </Button>
-          </div>
 
           <p className="text-gray-600">{description}</p>
 
